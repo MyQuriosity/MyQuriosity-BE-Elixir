@@ -1,0 +1,59 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ur\n"
+"Plural-Forms: nplurals=6\n"
+
+msgid "sunday"
+msgstr "اتوار"
+
+msgid "monday"
+msgstr "پیر"
+
+msgid "tuesday"
+msgstr "منگل"
+
+msgid "wednesday"
+msgstr "بدھ"
+
+msgid "thursday"
+msgstr "جمعرات"
+
+msgid "friday"
+msgstr "جمعہ"
+
+msgid "saturday"
+msgstr "ہفتہ"
+
+## Dynamic Translation for Notifications
+
+msgid "%{name} assign you a role of %{role}\n"
+msgstr "کا کردار تفویض کرتا ہے %{role} آپ کو %{name}"
+
+msgid "%{name} revoke you a role of %{role}\n"
+msgstr "کا کردار منسوخ کرتا ہے %{role} آپ کو %{name}"
+
+msgid "%{name} created your period of %{subject} for section %{section}\n"
+msgstr "کا شیڈول بنایا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"
+
+msgid "%{name} updated your period of %{subject} for section %{section}\n"
+msgstr "کا شیڈول اپ ڈیٹ کیا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"
+
+msgid "%{name} deleted your period of %{subject} for section %{section}\n"
+msgstr "کا شیڈول حذف کردیا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"
+
+msgid "%{name} created your routine of %{subject} for section %{section}\n"
+msgstr "کا معمول بنایا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"
+
+msgid "%{name} updated your routine of %{subject} for section %{section}\n"
+msgstr "کا معمول اپ ڈیٹ کیا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"
+
+msgid "%{name} deleted your routine of %{subject} for section %{section}\n"
+msgstr "کا معمول حذف کردیا %{subject} کے لئے آپ کا %{section} نے کلاس %{name}"

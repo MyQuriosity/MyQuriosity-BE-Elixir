@@ -1,0 +1,82 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ar\n"
+"Plural-Forms: nplurals=6\n"
+
+msgid "sunday"
+msgstr "الأحد"
+
+msgid "monday"
+msgstr "الاثنين"
+
+msgid "tuesday"
+msgstr "يوم الثلاثاء"
+
+msgid "wednesday"
+msgstr "الأربعاء"
+
+msgid "thursday"
+msgstr "يوم الخميس"
+
+msgid "friday"
+msgstr "جمعة"
+
+msgid "saturday"
+msgstr "السبت"
+
+## Translation for Notifications
+
+msgid "Admin assign you a role of campus admin\n"
+msgstr "يعين لك المسؤول دور مسؤول الحرم الجامعي"
+
+msgid "Admin assign you a role of section admin\n"
+msgstr "يعين لك المسؤول دور مشرف الفصل"
+
+msgid "Admin assign you a role of campus moderator\n"
+msgstr "يقوم المسؤول بتعيين لك دور مشرف الحرم الجامعي"
+
+msgid "Admin assign you a role of section moderator\n"
+msgstr "المسؤول يعين لك دور مشرف الفصل"
+
+msgid "Admin assign you a role of section teacher\n"
+msgstr "يقوم المسؤول بتعيين لك دور مدرس الفصل"
+
+msgid "Admin assign you a role of section student\n"
+msgstr "يعين لك المسؤول دور طالب الفصل"
+
+msgid "Admin assign you a role of guardian\n"
+msgstr "يعين لك المسؤول دور الوصي"
+
+## Dynamic Translation for Notifications
+
+msgid "%{name} assign you a role of %{role}\n"
+msgstr "%{role} يعين لك دور %{name}"
+
+msgid "%{name} revoke you a role of %{role}\n"
+msgstr "%{role} يبطل لك دور %{name}"
+
+msgid "%{name} created your period of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} الجدول الزمني الخاص بك لـ %{name} أنشأ"
+
+msgid "%{name} updated your period of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} بتحديث الجدول الزمني الخاص بك لـ %{name} قام"
+
+msgid "%{name} deleted your period of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} بحذف جدولك %{name} قام"
+
+msgid "%{name} created your routine of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} روتينك لـ %{name} أنشأ"
+
+msgid "%{name} updated your routine of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} بتحديث روتينك لـ %{name} قام"
+
+msgid "%{name} deleted your routine of %{subject} for section %{section}\n"
+msgstr "%{section} للفصل %{subject} حذف روتين %{name} قام"

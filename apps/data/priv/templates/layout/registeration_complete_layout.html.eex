@@ -1,0 +1,210 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+    <title>Email Confirmation</title>
+    <style type="text/css">
+        .qampus-style {
+            color: #1d273e;
+        }
+
+        .title {
+            padding: 30px 20px 30px 20px;
+            width: 80%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 29px;
+            font-family: "Roboto", sans-serif;
+            margin: 0;
+        }
+
+        .cust-id,
+        .dear,
+        .emailbox-content,
+        .name {
+            color: #777d8b;
+
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 30px;
+
+            font-family: "Roboto", sans-serif;
+        }
+
+        .id {
+            width: 20px;
+            font-size: 14px;
+            padding-left: 50px;
+        }
+
+        .para-style {
+            padding-right: 20px;
+            line-height: 30px;
+        }
+
+        .dear {
+            width: 30px;
+        }
+
+        .logo-part {
+            padding: 20px 0px;
+            font-size: 24px;
+            line-height: 29px;
+            font-weight: bold;
+            font-family: "Roboto", sans-serif;
+            width: 100%;
+        }
+
+        .home-btn {
+            color: #006600;
+            font-size: 15px;
+            line-height: 10px;
+            background-color: #dcfae4;
+            border-radius: 7px;
+            border: 2px solid #7cba80;
+            width: 95px;
+            padding: 10px 0px;
+        }
+
+        .help-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 600px;
+            padding: 30px 0px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .email-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 600px;
+            padding: 30px 0px;
+            font-size: 24px;
+            line-height: 29px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .border-style {
+            border: 1px solid #e9eaed;
+            border-radius: 12px;
+            margin: 5px 40px;
+            padding: 10px 10px;
+        }
+
+        .help-box__help {
+            color: #1d273e;
+            text-align: center;
+            font-size: 20px;
+            line-height: 17px;
+            letter-spacing: 0.4px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .help-box__link {
+            color: #006600;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.28px;
+            padding-top: 5px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .website-link-color {
+            color: #006600;
+            font-size: 12px;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .heading-link {
+            text-decoration: none;
+        }
+
+        .links {
+            padding-top: 20px;
+        }
+
+        .address {
+            font-size: 14px;
+            color: #777d8b;
+            line-height: 24px;
+            text-align: center;
+            font-weight: normal;
+            padding-bottom: 20px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        @media (max-width: 425px) {
+            .btn-css {
+                width: 115px !important;
+                font-size: 12px !important;
+            }
+
+            .home-btn {
+                font-size: 12px;
+                line-height: 20px;
+                width: 70px;
+            }
+        }
+
+        @media (max-width: 436px) {
+            .border-style {
+                padding: 5px 5px;
+                margin: 5px 10px;
+            }
+
+            .id {
+                padding-left: 20px;
+            }
+
+            .title {
+
+                padding: 10px 20px 12px 20px;
+            }
+
+            .help-box {
+                margin-top: 6px;
+            }
+        }
+
+        .btn-css {
+            font-size: 13px;
+            width: 125px;
+        }
+
+        .emailbox-content {
+            line-height: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .home-btn {
+                font-size: 14px;
+                line-height: 25px;
+                width: 90px;
+                padding: 3px 0px;
+            }
+
+            .helpbox,
+            .email-box {
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%= @inner_content %>
+</body>
+
+</html>

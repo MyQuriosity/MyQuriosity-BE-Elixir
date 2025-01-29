@@ -1,0 +1,374 @@
+<table align="center" border="0" cellpadding="0" cellspacing="0"
+    style="width: 100%; height: 100%; margin: 0 auto; background-color: #f4f5fa">
+    <tbody>
+        <tr>
+            <td style="font-size: 0">&nbsp;</td>
+            <td align="center" style="width: 600px; vertical-align: middle" valign="top">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" class="logo-part">
+                    <tbody>
+                        <tr>
+                            <td align="center" style="padding-bottom: 10px">
+                                <img
+                                    src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/67f52ec2-39b1-4ade-84d8-9eac6f9d3280/47x38.png" />
+                            </td>
+                        </tr>
+                        <tr class="qampus-style">
+                            <td align="center" class="qampus-style">MyQampus</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" class="email-box">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table align="center">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center">
+                                                <img
+                                                    src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/04cd7781-e85d-4344-8b93-2f89b781cbc1/80x57.png" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" class="title">Congratulations!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table align="center" class="border-style">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <table style="padding-top: 10px">
+                                                    <thead>
+                                                        <tr>
+                                                            <td align="left" class="dear">Dear</td>
+                                                            <td class="name">
+                                                                <%= @username %>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <td align="left" class="emailbox-content">
+                                                                We at MyQampus genuinely appreciate and are
+                                                                thankful for your interest in our cloud-based
+                                                                management software. MyQampus has been helping
+                                                                many institutes by successfully managing their
+                                                                A to Z institutional operations. This
+                                                                cloud-based management software is designed to
+                                                                automate your school, college, or academy task
+                                                                precisely and efficiently by eliminating
+                                                                stressful and error-prone methods. In
+                                                                addition, it gives a common platform for
+                                                                administration, teachers, students, and their
+                                                                guardians at an affordable price with
+                                                                promising data protection and privacy setup.
+                                                                To learn more about our software, please
+                                                                visit:
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <td align="left" class="emailbox-content">
+                                                                To learn more about our software, please
+                                                                visit:
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <td align="left" class="emailbox-content">
+                                                                <!-- link is required here -->
+                                                                <a href="https://myqampus.com/home-page">
+                                                                    https://myqampus.com/home-page</a>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <td align="left" class="emailbox-content">
+                                                                By logging in with the information provided
+                                                                below, you may now enjoy MyQampus with all of
+                                                                its user-friendly features.
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="para-style">
+                                    <thead>
+                                        <tr id="userNameSection">
+                                            <td align="left" class="id" style="width: 71px; font-weight: bold">
+                                                Username:
+                                            </td>
+                                            <td id="username" class="cust-id" style="font-weight: bold">
+                                                <%=@username%>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr id="emailSection">
+                                            <td align="left" class="id" style="font-weight: bold">
+                                                Email:
+                                            </td>
+                                            <td id="email" class="cust-id" style="font-weight: bold">
+                                                <%=@email%>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                                <table class="para-style">
+                                    <thead>
+                                        <tr id="phoneSection">
+                                            <td align="left" class="id" style="width: 45px; font-weight: bold">
+                                                Phone:
+                                            </td>
+                                            <td id="phone" class="cust-id" style="font-weight: bold">
+                                                <%=@phone%>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr id="domainSection">
+                                            <td align="left" class="id" style="font-weight: bold">
+                                                Domain:
+                                            </td>
+                                            <td id="domain" class="cust-id"
+                                                style="font-weight: bold; font-weight: bold">
+                                                <%=@sub_domain%>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr id="passwordSection">
+                                            <td align="left" class="id" style="width: 55px; font-weight: bold">
+                                                Password:
+                                            </td>
+                                            <td id="password" class="cust-id" style="font-weight: bold">
+                                                <%=@password%>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px; font-weight: bold">
+                                                You can access your account by using given link
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px; font-weight: bold">
+                                                <!-- link is required here -->
+                                                <a href="<%=@link%>" class="website-link-color" style="text-decoration: none;">
+                                                    Sign in to your account
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px; font-weight: bold">
+                                                Getting Started:
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px">
+                                                To learn more, follow the links below
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px; font-weight: bold">
+                                                <!-- link is required here -->
+                                                <a href="" class="website-link-color heading-link">
+                                                    - MyQampus Overview Doc
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 300px; font-weight: bold">
+                                                <!-- link is required here -->
+                                                <a href="" class="website-link-color heading-link">
+                                                    - MyQampus Overview Video
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 100%">
+                                                You may download PWA from our website. This App is for
+                                                Administration, teachers, students, and guardians to see
+                                                latest updates, time-table, attendance, lesson planning,
+                                                results and much more.
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="para-style">
+                                    <thead>
+                                        <tr>
+                                            <td align="left" class="id" style="width: 100%">
+                                                <!-- link is required -->
+                                                <a href="" style="text-decoration: none">
+                                                    <button class="home-btn">Download</button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table align="center" border="0" cellpadding="0" class="help-box" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td class="help-box__help">Need More Help?</td>
+                        </tr>
+                        <tr>
+                            <td align="center" class="help-box__link">
+                                <!-- link is required here -->
+                                <a href="" class="help-box__link"> We're here on Whatsapp</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table align="center" border="0" cellpadding="0" class="links" cellspacing="10" style="width: 100%">
+                    <tbody>
+                        <tr>
+                            <td style="width: 145px"></td>
+                            <td>
+                                <!-- link is required here -->
+                                <a href="https://www.facebook.com/myqampus" class="help-box__link"><img
+                                        src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/0da4f0ac-cd13-4310-b031-75ccc6b5e116/48x48.png" />
+                                </a>
+                            </td>
+                            <td>
+                                <!-- link is required here -->
+                                <a href="https://twitter.com/myqampus" class="help-box__link">
+                                    <img
+                                        src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/eb322fd3-dad9-43ed-99b8-45441df3a2c6/48x48.png" /></a>
+                            </td>
+                            <td>
+                                <!-- link is required here -->
+                                <a href="https://www.instagram.com/myqampus" class="help-box__link">
+                                    <img
+                                        src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/88842a5b-ddd0-47ae-9095-938b3487a7f6/48x48.png" /></a>
+                            </td>
+                            <td>
+                                <!-- link is required here -->
+                                <a href="https://linkedin.com/company/myqampus-com" class="help-box__link">
+                                    <img
+                                        src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/ddc58618-f99c-4fb6-b609-3dfebfe50c21/48x48.png" /></a>
+                            </td>
+                            <td style="width: 145px"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="address">
+                                30 Riverhead Cl, London, UK
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td style="font-size: 0">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    // Username Section
+    var userName = document.getElementById("username").textContent;
+    if (!checkEmpty(userName == "fa")) {
+        let el = (document.querySelector("#userNameSection").style.display =
+            "none");
+    }
+    // Email Section
+    var emailName = document.getElementById("email").textContent;
+    if (!checkEmpty(!emailName)) {
+        let el = (document.querySelector("#emailSection").style.display = "none");
+    }
+
+    //phoneSection
+    var phoneNumber = document.getElementById("phone").textContent;
+    if (!checkEmpty(phoneNumber)) {
+        let el = (document.querySelector("#phoneSection").style.display = "none");
+    }
+
+    //domainSection
+    var content = document.getElementById("domain").textContent;
+    if (!checkEmpty(!content)) {
+        let el = (document.querySelector("#domainSection").style.display =
+            "none");
+    }
+
+    //passwordSection
+    var content = document.getElementById("password").textContent;
+    if (!checkEmpty(!content)) {
+        let el = (document.querySelector("#passwordSection").style.display =
+            "none");
+    }
+
+    // Check string is empty or not
+
+    function checkEmpty(string) {
+        // var str = "123";
+        var letter = /^[0-9]+$/;
+        var alphabets = /^[A-Za-z]+$/;
+
+        var result = null;
+        for (var i = 0; i < string.length; i++) {
+            if (string[i].match(letter) || string[i].match(alphabets)) {
+                result = "notEmpty";
+            }
+        }
+        if (result === "notEmpty") return true;
+        else return false;
+    }
+</script>
