@@ -2,7 +2,7 @@ defmodule TenantData.Repo.Migrations.CreateNotificationReceiversTable do
   use Ecto.Migration
 
   def change do
-    create table("external_notification_receivers", primary_key: false) do
+    create table(:external_notification_receivers, primary_key: false) do
       add(:id, :uuid, primary_key: true)
       add(:notification_id, references(:notifications, column: :id, type: :uuid))
       add(:receiver_id, references(:users, column: :id, type: :uuid))

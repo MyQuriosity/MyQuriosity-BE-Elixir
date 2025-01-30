@@ -10,6 +10,16 @@ defmodule Data.Repo.Migrations.CreateNotificationTable do
 
       add(:notifier_id, references(:users, column: :id, type: :uuid))
       add(:actor_id, references(:users, column: :id, type: :uuid))
+
+      add(
+        :scheduled_notification_trigger_id,
+        references(:scheduled_notification_triggers, column: :id, type: :uuid)
+      )
+
+      add(
+        :instant_notification_trigger_id,
+        references(:instant_notification_triggers, column: :id, type: :uuid)
+      )
       timestamps()
     end
   end

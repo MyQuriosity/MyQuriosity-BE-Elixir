@@ -52,7 +52,7 @@ defmodule QuizGeneratorWeb do
 
       import Plug.Conn
       import Core.Gettext
-      # import Campus.GuardianHelper
+      import QuizGenerator.GuardianHelper
       import QuizGenerator.ValidationHelper
       import Campus.DateTimeUtils
       alias QuizGeneratorWeb.Router.Helpers, as: Routes
@@ -67,7 +67,7 @@ defmodule QuizGeneratorWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/api_web/templates",
+        root: "lib/quiz_generator_web/templates",
         namespace: QuizGeneratorWeb
 
       # Import convenience functions from controllers

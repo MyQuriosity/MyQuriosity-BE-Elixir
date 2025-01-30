@@ -1,4 +1,4 @@
-defmodule Campus.GuardianHelper do
+defmodule QuizGenerator.GuardianHelper do
   @moduledoc """
   # TODO: Write proper moduledoc
   """
