@@ -61,6 +61,7 @@ defmodule QuizGeneratorWeb do
       alias QuizGenerator.Repo
       import Ecto.Query
       action_fallback(QuizGenerator.FallbackController)
+      plug(QuizGenerator.Plug.TrackerPlug)
     end
   end
 

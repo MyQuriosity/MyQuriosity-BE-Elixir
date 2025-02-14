@@ -21,11 +21,10 @@ config :quiz_generator, QuizGeneratorWeb.Endpoint,
   pubsub_server: QuizGenerator.PubSub,
   live_view: [signing_salt: "174itEJz"]
 
-
 config :quiz_generator, QuizGenerator.Guardian,
-issuer: "quiz_generator_api",
-#  secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
-secret_key: "UZzm1YhuWMQS+VzJGQDwqlduiXzMI9HBJoH20fhdIPBbLi/R0LR0moNLUtGplpCV"
+  issuer: "quiz_generator_api",
+  #  secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
+  secret_key: "UZzm1YhuWMQS+VzJGQDwqlduiXzMI9HBJoH20fhdIPBbLi/R0LR0moNLUtGplpCV"
 
 config :quiz_generator, QuizGenerator.AuthAccessPipeline,
   module: QuizGenerator.Guardian,

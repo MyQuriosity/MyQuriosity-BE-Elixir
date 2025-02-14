@@ -26,6 +26,7 @@ defmodule QuizGenerator.Question do
     |> cast(params, [:title, :quiz_id])
     |> validate_required([:title, :quiz_id])
     |> validate_length(:title, max: 255)
+
     # |> foreign_key_constraint(:topic_id)
     # |> foreign_key_constraint(:syllabus_provider_id)
     # |> foreign_key_constraint(:subject_id)

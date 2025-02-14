@@ -13,6 +13,6 @@ defmodule QuizGenerator.QuizFilterContext do
   end
 
   defp base_query do
-    preload(Quiz, [questions: :options])
+    preload(Quiz, questions: :options)
   end
 end

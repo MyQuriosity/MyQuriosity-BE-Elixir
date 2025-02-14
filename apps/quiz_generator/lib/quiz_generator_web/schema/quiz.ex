@@ -48,6 +48,7 @@ defmodule QuizGenerator.Quiz do
     # |> foreign_key_constraint(:subject_id)
     # |> foreign_key_constraint(:chapter_id)
     |> foreign_key_constraint(:topic_id)
+
     # |> cast_assoc(:options, with: &QuizGenerator.Option.changeset/2)
   end
 end

@@ -16,7 +16,6 @@ defmodule Data.Repo.Migrations.CreateSubjectTableForQuizGenerator do
     create unique_index(:subjects, [:title, :grade_id],
              name: :unique_subjects_grade_index,
              where: "deactivated_at IS NULL"
-
            )
   end
 end

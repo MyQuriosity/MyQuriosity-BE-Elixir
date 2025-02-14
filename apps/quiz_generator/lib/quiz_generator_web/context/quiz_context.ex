@@ -15,26 +15,33 @@ defmodule QuizGenerator.QuizContext do
     Multi.new()
     |> Multi.insert(:quiz, Quiz.changeset(%Quiz{}, additional_info))
     |> Multi.run(:questions, fn _repo, %{quiz: quiz} ->
-      questions_params = Enum.map(questions, fn question ->
-        %{
-          title: question["title"],
-          quiz_id: quiz.id,
-          inserted_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive(),
-          updated_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
-        }
-      end)
+      questions_params =
+        Enum.map(questions, fn question ->
+          %{
+            title: question["title"],
+            quiz_id: quiz.id,
+            inserted_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive(),
+            updated_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
+          }
+        end)
+
       {_, inserted_questions} = Repo.insert_all(Question, questions_params, returning: true)
       {:ok, inserted_questions}
     end)
     |> Multi.run(:options, fn _repo, %{questions: inserted_questions} ->
       options =
-        Enum.flat_map(Enum.zip(inserted_questions, questions), fn {inserted_question, question_params} ->
-            Enum.map(question_params["options"], fn {key, option_params} ->
+        Enum.flat_map(Enum.zip(inserted_questions, questions), fn {inserted_question,
+                                                                   question_params} ->
+          Enum.map(question_params["options"], fn {key, option_params} ->
             answers = question_params["answers"]
 
-            %{title: option_params, is_correct: Enum.member?(answers, key), question_id: inserted_question.id,
-            inserted_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive(),
-            updated_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()}
+            %{
+              title: option_params,
+              is_correct: Enum.member?(answers, key),
+              question_id: inserted_question.id,
+              inserted_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive(),
+              updated_at: DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
+            }
           end)
         end)
 

@@ -15,7 +15,6 @@ defmodule Data.Repo.Migrations.CreateTopicsTableForQuizGenerator do
     create unique_index(:topics, [:title, :chapter_id],
              name: :unique_topics_chapter_index,
              where: "deactivated_at IS NULL"
-
            )
   end
 end
