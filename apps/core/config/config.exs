@@ -68,4 +68,8 @@ config :core, ENDPOINT,
   url_scheme: System.get_env("MYQAMPUS_URL_SCHEME") || "https",
   url_host: System.get_env("MYQAMPUS_URL_HOST") || "be.myqampus.com"
 
+config :cors_plug,
+  origin: ["*"], # Change this to specific origins for security
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+
 import_config "#{config_env()}.exs"

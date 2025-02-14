@@ -1,24 +1,23 @@
-defmodule QuizGeneratorWeb.MCQsController do
+defmodule QuizGeneratorWeb.QuizController do
   use QuizGeneratorWeb, :controller
 
-  alias QuizGenerator.MCQs
+  alias QuizGenerator.QuizContext
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"questions" => questions_params, "additional_info" => additional_info}) do
-    case MCQs.create_mcq_paper(questions_params, additional_info) do
-      {:ok, :mcqs_paper_created} ->
+    case QuizContext.create_quiz_with_questions_and_options(questions_params, additional_info) do
+      {:ok, _} ->
         conn
         |> put_status(:created)
-        |> json(%{message: "MCQ paper created successfully"})
-
-      error ->
-        Campus.FallbackController.call(conn, error)
+        |> json(%{message: "Quiz created successfully"})
     end
   end
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = MCQs.fetch_paginated(params)
+    IO.inspect("-----------")
+    {records, meta} = QuizContext.fetch_paginated(params)
+    IO.inspect(records)
     render(conn, "index.json", records: records, meta: meta)
   end
 end

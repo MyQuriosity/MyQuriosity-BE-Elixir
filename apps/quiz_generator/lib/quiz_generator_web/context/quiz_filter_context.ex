@@ -1,18 +1,18 @@
-defmodule QuizGenerator.MCQsFilterContext do
+defmodule QuizGenerator.QuizFilterContext do
   @moduledoc """
   This module provides context functions for filtering Multiple Choice Questions (MCQs).
   """
   import Ecto.Query
 
-  alias QuizGenerator.Question
-  alias QuizGenerator.MCQsFilters
+  alias QuizGenerator.Quiz
+  alias QuizGenerator.QuizFilters
 
   def filtered_query(params) do
     query = base_query()
-    MCQsFilters.build(query, params["$where"] || %{})
+    QuizFilters.build(query, params["$where"] || %{})
   end
 
   defp base_query do
-    preload(Question, [:options])
+    preload(Quiz, [questions: :options])
   end
 end

@@ -57,8 +57,8 @@ defmodule QuizGeneratorWeb.Router do
     delete("/topics/:id", TopicController, :deactivate)
     get("/chapters/topics/:id", TopicController, :chapter_topics)
 
-    post("/mcqs", MCQsController, :create)
-    post("/mcqs/filters", MCQsController, :index)
+    post("/generate_quiz", QuizController, :create)
+    post("/mcqs/filters", QuizController, :index)
   end
 
   # Enable LiveDashboard in development

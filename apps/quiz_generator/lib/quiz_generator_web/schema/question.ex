@@ -10,26 +10,8 @@ defmodule QuizGenerator.Question do
   schema "questions" do
     field(:title, :string)
 
-    belongs_to(:syllabus_provider, QuizGenerator.SyllabusProvider,
-      foreign_key: :syllabus_provider_id,
-      references: :id,
-      type: :binary_id
-    )
-
-    belongs_to(:subject, QuizGenerator.Subject,
-      foreign_key: :subject_id,
-      references: :id,
-      type: :binary_id
-    )
-
-    belongs_to(:chapter, QuizGenerator.Chapter,
-      foreign_key: :chapter_id,
-      references: :id,
-      type: :binary_id
-    )
-
-    belongs_to(:topic, QuizGenerator.Topic,
-      foreign_key: :topic_id,
+    belongs_to(:quiz, QuizGenerator.Quiz,
+      foreign_key: :quiz_id,
       references: :id,
       type: :binary_id
     )
@@ -41,13 +23,13 @@ defmodule QuizGenerator.Question do
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = question, params) do
     question
-    |> cast(params, [:title, :syllabus_provider_id, :subject_id, :chapter_id, :topic_id])
-    |> validate_required([:title])
+    |> cast(params, [:title, :quiz_id])
+    |> validate_required([:title, :quiz_id])
     |> validate_length(:title, max: 255)
-    |> foreign_key_constraint(:syllabus_provider_id)
-    |> foreign_key_constraint(:subject_id)
-    |> foreign_key_constraint(:chapter_id)
-    |> foreign_key_constraint(:topic_id)
-    |> cast_assoc(:options, with: &QuizGenerator.Option.changeset/2)
+    # |> foreign_key_constraint(:topic_id)
+    # |> foreign_key_constraint(:syllabus_provider_id)
+    # |> foreign_key_constraint(:subject_id)
+    # |> foreign_key_constraint(:chapter_id)
+    # |> cast_assoc(:options, with: &QuizGenerator.Option.changeset/2)
   end
 end

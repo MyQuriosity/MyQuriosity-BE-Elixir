@@ -1,10 +1,14 @@
-defmodule QuizGenerator.MixProject do
+defmodule QuizGeneratorNotifier.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :quiz_generator,
+      app: :quiz_generator_notifier,
       version: "0.1.0",
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -18,7 +22,7 @@ defmodule QuizGenerator.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {QuizGenerator.Application, []},
+      mod: {QuizGeneratorNotifier.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -32,18 +36,17 @@ defmodule QuizGenerator.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.0"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
+      {:phoenix, "~> 1.7.18"},
+      {:phoenix_ecto, "~> 4.5"},
+      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_dashboard, "~> 0.7.2"},
       {:telemetry_metrics, "~> 0.1"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.21.0"},
+      {:gettext, "~> 0.21"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:core, in_umbrella: true},
-      {:data, in_umbrella: true}
+      {:dns_cluster, "~> 0.1.1"},
+      {:bandit, "~> 1.5"}
     ]
   end
 
