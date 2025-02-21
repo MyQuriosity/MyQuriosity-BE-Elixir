@@ -18,28 +18,24 @@ defmodule QuizGeneratorWeb.SubjectController do
         conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Created"}})
 
       error ->
-        Campus.FallbackController.call(conn, error)
+        QuizGeneratorWeb.FallbackController.call(conn, error)
     end
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     case SubjectContext.fetch_by_id(id) do
-      nil -> Campus.FallbackController.call(conn, {:error, :not_found})
+      nil -> QuizGeneratorWeb.FallbackController.call(conn, {:error, :not_found})
       syllabus_provider -> render(conn, "show.json", syllabus_provider: syllabus_provider)
     end
   end
 
   @spec update(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def update(conn, %{"id" => id} = params) do
-    with syllabus_provider when not is_nil(syllabus_provider) <-
-           SubjectContext.fetch_by_id(id),
+    with subject <- SubjectContext.fetch_by_id(id),
          {:ok, _updated_subject} <-
-           SubjectContext.update(syllabus_provider, params) do
+           SubjectContext.update(subject, params) do
       conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Updated"}})
-    else
-      nil -> {:error, :not_found}
-      error -> error
     end
   end
 
@@ -56,9 +52,9 @@ defmodule QuizGeneratorWeb.SubjectController do
     end
   end
 
-  @spec syllabus_provider_subjects(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def syllabus_provider_subjects(conn, %{"id" => id} = params) do
-    {records, meta} = SubjectContext.fetch_paginated_syllabus_provider_subjects(id, params)
+  @spec grade_subjects(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def grade_subjects(conn, %{"id" => id} = params) do
+    {records, meta} = SubjectContext.fetch_paginated_grade_subjects(id, params)
 
     render(conn, "index.json", records: records, meta: meta)
   end

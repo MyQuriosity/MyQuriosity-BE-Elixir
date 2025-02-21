@@ -9,7 +9,7 @@ defmodule QuizGenerator.Option do
   @type t :: %__MODULE__{}
   schema "options" do
     field(:title, :string)
-    field(:is_correct, :boolean)
+    field(:is_correct, :boolean, default: false)
 
     belongs_to(:question, QuizGenerator.Question,
       foreign_key: :question_id,

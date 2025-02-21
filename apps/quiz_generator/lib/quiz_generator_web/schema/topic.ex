@@ -10,6 +10,7 @@ defmodule QuizGenerator.Topic do
   schema "topics" do
     field(:title, :string)
     field(:description, :string)
+    field(:number, :integer)
     field(:deactivated_at, :utc_datetime)
 
     belongs_to(:chapter, QuizGenerator.Chapter,
@@ -24,11 +25,19 @@ defmodule QuizGenerator.Topic do
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = chapter, params) do
     chapter
-    |> cast(params, [:title, :description, :chapter_id, :deactivated_at])
-    |> validate_required([:title, :chapter_id])
+    |> cast(params, [:title, :description, :number, :chapter_id, :deactivated_at])
+    |> validate_required([:title, :chapter_id, :number])
     |> validate_length(:title, max: 150)
     |> validate_length(:description, max: 255)
     |> foreign_key_constraint(:chapter_id)
+    |> unique_constraint(:title,
+      name: :unique_title_number_index,
+      message: "A title number can be assigned to 1 title"
+    )
+    |> unique_constraint(:title,
+      name: :unique_topics_chapter_index,
+      message: "A chapter cannot have 2 topics of same title"
+    )
   end
 
   @spec deactivate_changeset(t(), map()) :: Ecto.Changeset.t()

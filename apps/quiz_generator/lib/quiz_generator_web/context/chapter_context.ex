@@ -1,4 +1,4 @@
-defmodule QuizGenerator.ChapterContext do
+defmodule QuizGeneratorWeb.Context.ChapterContext do
   @moduledoc """
   This module is used as context for `Chapter` providing basic actions to controller
   """
@@ -18,7 +18,7 @@ defmodule QuizGenerator.ChapterContext do
   @spec fetch_by_id(String.t()) :: nil | Chapter.t()
   def fetch_by_id(chapter_id) do
     Chapter
-    |> where([s], s.id == ^chapter_id)
+    |> where([s], s.id == ^chapter_id and is_nil(s.deactivated_at))
     |> Repo.one()
   end
 
@@ -26,6 +26,7 @@ defmodule QuizGenerator.ChapterContext do
   def fetch_active_paginated(params) do
     base_query()
     |> where([s], is_nil(s.deactivated_at))
+    |> preload(subject: :grade)
     |> PaginationUtils.paginate(params)
   end
 

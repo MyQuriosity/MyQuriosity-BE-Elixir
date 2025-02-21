@@ -15,7 +15,7 @@ defmodule Core.Utils.HtmlEmailUtilsTest do
           email: "regbits@yopmail.com"
         }
 
-        url = "http://dev.myqampus.com/signin"
+        url = "http://dev.myquriosity.com/signin"
         tenant = "reg"
         password = "password"
 
@@ -34,7 +34,7 @@ defmodule Core.Utils.HtmlEmailUtilsTest do
           email: "regbits@yopmail.com"
         }
 
-        url = "http://dev.myqampus.com/signin"
+        url = "http://dev.myquriosity.com/signin"
         tenant = "reg"
         password = "password"
 

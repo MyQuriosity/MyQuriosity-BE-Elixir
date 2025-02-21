@@ -2,7 +2,7 @@ defmodule QuizGeneratorWeb.ChapterController do
   use QuizGeneratorWeb, :controller
 
   alias QuizGeneratorWeb.SharedView
-  alias QuizGenerator.ChapterContext
+  alias QuizGeneratorWeb.Context.ChapterContext
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
@@ -18,14 +18,14 @@ defmodule QuizGeneratorWeb.ChapterController do
         conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Created"}})
 
       error ->
-        Campus.FallbackController.call(conn, error)
+        QuizGeneratorWeb.FallbackController.call(conn, error)
     end
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     case ChapterContext.fetch_by_id(id) do
-      nil -> Campus.FallbackController.call(conn, {:error, :not_found})
+      nil -> QuizGeneratorWeb.FallbackController.call(conn, {:error, :not_found})
       syllabus_provider -> render(conn, "show.json", syllabus_provider: syllabus_provider)
     end
   end

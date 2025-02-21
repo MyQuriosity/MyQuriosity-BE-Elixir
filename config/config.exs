@@ -33,11 +33,11 @@ end
 #   tags: %{
 #     env: System.get_env("SENTRY_SERVER_NAME")
 #   },
-#   included_environments: ["be.dev.myqampus.com", "be.stage.myqampus.com", "be.myqampus.com"]
+#   included_environments: ["be.dev.myquriosity.com", "be.stage.myquriosity.com", "be.myquriosity.com"]
 
 # config :notifire, Notifire.FCM,
 #   adapter: Pigeon.FCM,
-#   project_id: "myqampus-dev-ad775",
+#   project_id: "myquriosity-dev-ad775",
 #   service_account_json: File.read!("service-account-dev.json")
 
 # config :segment, Segment.HTTP.Trackable, client: Segment.HTTP.Segment.Client

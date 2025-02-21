@@ -23,7 +23,7 @@ defmodule QuizGenerator.ValidationHelper do
 
     conn
     |> put_status(code[type])
-    |> put_view(WebApi.V1.ErrorView)
+    |> put_view(QuizGenerator.ErrorView)
     |> render("error.json",
       code: code[type],
       message: messages[type]
@@ -49,7 +49,7 @@ defmodule QuizGenerator.ValidationHelper do
 
     conn
     |> put_status(code[type])
-    |> put_view(WebApi.V1.ErrorView)
+    |> put_view(QuizGenerator.ErrorView)
     |> render("error.json",
       code: code[type],
       message: messages[type]

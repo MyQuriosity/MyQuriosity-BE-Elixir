@@ -43,7 +43,7 @@ defmodule QuizGenerator.Utils.Auth do
   def not_authorized(conn, message) do
     conn
     |> put_status(401)
-    |> put_view(WebApi.V1.ErrorView)
+    |> put_view(QuizGenerator.ErrorView)
     |> render("error.json", code: 401, message: message)
   end
 end

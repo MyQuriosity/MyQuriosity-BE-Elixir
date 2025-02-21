@@ -4,9 +4,11 @@ defmodule QuizGeneratorWeb.GradeController do
   alias QuizGeneratorWeb.SharedView
   alias QuizGenerator.GradeContext
 
+  plug QuizGenerator.Plug.SyllabusProviderPlug
+
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = GradeContext.fetch_active_paginated(params)
+    {records, meta} = GradeContext.apply_filter(params)
 
     render(conn, "index.json", records: records, meta: meta)
   end
@@ -18,14 +20,14 @@ defmodule QuizGeneratorWeb.GradeController do
         conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Created"}})
 
       error ->
-        Campus.FallbackController.call(conn, error)
+        QuizGeneratorWeb.FallbackController.call(conn, error)
     end
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     case GradeContext.fetch_by_id(id) do
-      nil -> Campus.FallbackController.call(conn, {:error, :not_found})
+      nil -> QuizGeneratorWeb.FallbackController.call(conn, {:error, :not_found})
       syllabus_provider -> render(conn, "show.json", syllabus_provider: syllabus_provider)
     end
   end
@@ -56,10 +58,8 @@ defmodule QuizGeneratorWeb.GradeController do
     end
   end
 
-  @spec syllabus_provider_subjects(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def syllabus_provider_subjects(conn, %{"id" => id} = params) do
-    {records, meta} = GradeContext.fetch_paginated_syllabus_provider_subjects(id, params)
-
+  def filter(conn, params) do
+    {records, meta} = GradeContext.apply_filter(params)
     render(conn, "index.json", records: records, meta: meta)
   end
 end

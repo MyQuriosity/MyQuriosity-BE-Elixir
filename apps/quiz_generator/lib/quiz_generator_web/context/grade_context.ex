@@ -4,19 +4,15 @@ defmodule QuizGenerator.GradeContext do
   """
   import Ecto.Query
 
+  alias QuizGenerator.GradeFilterContext
   alias QuizGenerator.Grade
   alias QuizGenerator.Repo
   alias QuizGenerator.Utils.PaginationUtils
 
   @spec create(map()) :: {:ok, Grade.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do
-    QuizGeneratorWeb.SyllabusProviderContext.fetch_by_id(params["syllabus_provider_id"])
-    |> IO.inspect()
-
     %Grade{}
-    |> IO.inspect()
     |> Grade.changeset(params)
-    |> IO.inspect()
     |> Repo.insert()
   end
 
@@ -25,13 +21,6 @@ defmodule QuizGenerator.GradeContext do
     Grade
     |> where([g], g.id == ^grade_id)
     |> Repo.one()
-  end
-
-  @spec fetch_active_paginated(map()) :: {list(Grade.t()), map()}
-  def fetch_active_paginated(params) do
-    Grade
-    |> where([s], is_nil(s.deactivated_at))
-    |> PaginationUtils.paginate(params)
   end
 
   @spec deactivate(Grade.t()) ::
@@ -48,11 +37,34 @@ defmodule QuizGenerator.GradeContext do
     |> Repo.update()
   end
 
-  @spec fetch_paginated_grade_subjects(String.t(), map()) ::
+  @spec fetch_paginated_grade(String.t(), map()) ::
           {list(Grade.t()), map()}
-  def fetch_paginated_grade_subjects(grade_id, params) do
+  def fetch_paginated_grade(grade_id, params) do
     Grade
     |> where([s], s.grade_id == ^grade_id)
+    |> PaginationUtils.paginate(params)
+  end
+
+  def apply_filter(%{"$where" => _} = params) do
+    params =
+      update_in(
+        params["$where"],
+        &Map.put(&1, "syllabus_provider_id", %{"$equal" => params["syllabus_provider_id"]})
+      )
+
+    params
+    |> GradeFilterContext.filtered_query()
+    |> PaginationUtils.paginate(params)
+  end
+
+  def apply_filter(params) do
+    params =
+      Map.put(params, "$where", %{
+        "syllabus_provider_id" => %{"$equal" => params["syllabus_provider_id"]}
+      })
+
+    params
+    |> GradeFilterContext.filtered_query()
     |> PaginationUtils.paginate(params)
   end
 

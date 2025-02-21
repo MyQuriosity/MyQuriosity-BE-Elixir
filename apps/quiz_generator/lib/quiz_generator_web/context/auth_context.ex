@@ -29,7 +29,7 @@ defmodule QuizGenerator.AuthContext do
   #   "testing",
   #   "official",
   #   "regbits",
-  #   "myqampus",
+  #   "myquriosity",
   #   "admin",
   #   "api",
   #   "logs",

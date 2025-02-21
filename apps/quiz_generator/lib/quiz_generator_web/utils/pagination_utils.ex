@@ -12,7 +12,8 @@ defmodule QuizGenerator.Utils.PaginationUtils do
           {[struct()], map()}
   def paginate(query, params) do
     query =
-      from(_q in query,
+      from(q in query,
+        where: is_nil(q.deactivated_at),
         offset: ^(params["skip"] || 0),
         limit: ^(params["limit"] || 10)
       )
