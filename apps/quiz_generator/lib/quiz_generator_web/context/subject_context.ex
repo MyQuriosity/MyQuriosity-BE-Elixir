@@ -26,6 +26,7 @@ defmodule QuizGenerator.SubjectContext do
   def fetch_active_paginated(params) do
     Subject
     |> where([s], is_nil(s.deactivated_at))
+    |> preload(:grade)
     |> PaginationUtils.paginate(params)
   end
 

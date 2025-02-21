@@ -11,7 +11,12 @@ defmodule QuizGeneratorWeb.AuthView do
     }
   end
 
-  def render("login.json", %{jwt: jwt, user: user, exp: exp}) do
+  def render("login.json", %{
+        jwt: jwt,
+        user: user,
+        exp: exp,
+        syllabus_providers: syllabus_providers
+      }) do
     %{
       jwt: jwt,
       user: %{
@@ -21,7 +26,11 @@ defmodule QuizGeneratorWeb.AuthView do
         email: user.email,
         gender: user.gender
       },
-      exp: exp
+      exp: exp,
+      syllabus_providers:
+        render_many(syllabus_providers, QuizGeneratorWeb.SyllabusProviderView, "show.json",
+          as: :syllabus_provider
+        )
     }
   end
 

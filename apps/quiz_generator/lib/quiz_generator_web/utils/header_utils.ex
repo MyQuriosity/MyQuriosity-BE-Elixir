@@ -110,13 +110,14 @@ defmodule QuizGenerator.HeaderUtils do
     {:ok, GuardianHelper.current_user(conn).id}
   end
 
-  @doc """
-  This function gets value from key in the claims
-  """
-  @spec get_claim(Plug.Conn.t(), String.t()) :: String.t() | nil
-  def get_claim(conn, claim_key) do
-    TenantCampus.Guardian.Plug.current_claims(conn)[claim_key]
-  end
+  # @doc """
+  # This function gets value from key in the claims
+  # """
+
+  # @spec get_claim(Plug.Conn.t(), String.t()) :: String.t() | nil
+  # def get_claim(conn, claim_key) do
+  #   TenantCampus.Guardian.Plug.current_claims(conn)[claim_key]
+  # end
 
   @doc """
   This function gets current user from conn

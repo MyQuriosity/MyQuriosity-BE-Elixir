@@ -5,11 +5,11 @@ defmodule QuizGenerator.QuizFilterContext do
   import Ecto.Query
 
   alias QuizGenerator.Quiz
-  alias QuizGenerator.QuizFilters
+  alias QuizGeneratorWeb.Filterable.QuizFilter
 
   def filtered_query(params) do
     query = base_query()
-    QuizFilters.build(query, params["$where"] || %{})
+    QuizFilter.build(query, params["$where"] || %{})
   end
 
   defp base_query do

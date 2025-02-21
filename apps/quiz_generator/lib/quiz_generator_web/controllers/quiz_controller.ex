@@ -15,9 +15,7 @@ defmodule QuizGeneratorWeb.QuizController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    IO.inspect("-----------")
     {records, meta} = QuizContext.fetch_paginated(params)
-    IO.inspect(records)
     render(conn, "index.json", records: records, meta: meta)
   end
 end

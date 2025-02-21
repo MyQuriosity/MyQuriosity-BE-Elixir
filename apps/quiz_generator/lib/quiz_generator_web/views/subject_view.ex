@@ -1,4 +1,5 @@
 defmodule QuizGeneratorWeb.SubjectView do
+  alias QuizGeneratorWeb.GradeView
   use QuizGeneratorWeb, :view
 
   def render("index.json", %{records: records, meta: meta}) do
@@ -14,7 +15,9 @@ defmodule QuizGeneratorWeb.SubjectView do
       title: subject.title,
       course_code: subject.course_code,
       color: subject.color,
-      grade_id: subject.grade_id
+      grade:
+        (Ecto.assoc_loaded?(subject.grade) &&
+           render_one(subject.grade, GradeView, "show.json", as: :grade)) || nil
     }
   end
 end

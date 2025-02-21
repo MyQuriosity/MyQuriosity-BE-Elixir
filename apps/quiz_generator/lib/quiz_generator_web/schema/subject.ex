@@ -26,7 +26,7 @@ defmodule QuizGenerator.Subject do
   def changeset(%__MODULE__{} = subject, params) do
     subject
     |> cast(params, [:title, :course_code, :color, :grade_id])
-    |> validate_required([:title])
+    |> validate_required([:title, :course_code])
     |> validate_length(:title, max: 255)
     |> validate_length(:course_code, max: 255)
     |> validate_length(:color, max: 255)

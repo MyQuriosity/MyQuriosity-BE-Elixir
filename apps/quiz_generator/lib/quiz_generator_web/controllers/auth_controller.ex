@@ -89,8 +89,7 @@ defmodule QuizGeneratorWeb.AuthController do
   end
 
   defp authenticate_user(conn, user) do
-    IO.inspect(conn, label: "conn--------")
-    conn = GuardianPlug.sign_in(conn, user) |> IO.inspect()
+    conn = GuardianPlug.sign_in(conn, user)
     jwt = GuardianPlug.current_token(conn)
     claims = GuardianPlug.current_claims(conn)
     exp = Map.get(claims, "exp")
@@ -100,10 +99,14 @@ defmodule QuizGeneratorWeb.AuthController do
       |> put_resp_header("authorization", "Bearer #{jwt}")
       |> put_resp_header("x-expires", "#{exp}")
 
+    {syllabus_providers, _meta} =
+      QuizGeneratorWeb.SyllabusProviderContext.fetch_active_paginated(%{})
+
     data = %{
       jwt: jwt,
       user: user,
-      exp: exp
+      exp: exp,
+      syllabus_providers: syllabus_providers
     }
 
     render(conn, "login.json", data)

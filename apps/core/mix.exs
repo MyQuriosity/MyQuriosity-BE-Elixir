@@ -42,7 +42,7 @@ defmodule Core.MixProject do
       {:gettext, "~> 0.21.0"},
       {:ex_machina, "~> 2.7"},
       {:faker, "~> 0.17.0"},
-      {:fat_ecto, github: "tanweerdev/fat_ecto", branch: "master"},
+      {:fat_ecto, "~> 1.0.0"},
       {:timex, "~> 3.7"},
       {:triplex, "~> 1.3"},
       {:phoenix, "~> 1.7"},

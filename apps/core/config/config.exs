@@ -1,9 +1,9 @@
 import Config
 
-# config :api, :fat_ecto,
-#   repo: Data.Repo,
-#   default_limit: 100,
-#   max_limit: 200
+config :quiz_generator, :fat_ecto,
+  repo: QuizGenerator.Repo,
+  default_limit: 100,
+  max_limit: 200
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
@@ -67,11 +67,5 @@ config :logger,
 config :core, ENDPOINT,
   url_scheme: System.get_env("MYQAMPUS_URL_SCHEME") || "https",
   url_host: System.get_env("MYQAMPUS_URL_HOST") || "be.myqampus.com"
-
-config :cors_plug,
-  # Change this to specific origins for security
-  origin: ["*"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  headers: ["AUTHORIZATION", "Content-Type"]
 
 import_config "#{config_env()}.exs"
