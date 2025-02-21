@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :quiz_generator_notifier, QuizGenerator.Repo,
+config :quiz_generator, QuizGenerator.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -44,7 +44,7 @@ config :quiz_generator, QuizGeneratorWeb.Endpoint,
 # different ports.
 
 # Enable dev routes for dashboard and mailbox
-config :quiz_generator_notifier, dev_routes: true
+config :quiz_generator, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

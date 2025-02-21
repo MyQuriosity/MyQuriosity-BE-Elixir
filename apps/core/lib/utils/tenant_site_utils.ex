@@ -13,8 +13,8 @@ defmodule Core.Utils.TenantSiteUtils do
   end
 
   @doc false
-  @spec myqampus_site(String.t()) :: String.t()
-  def myqampus_site(sub_domain) do
+  @spec myquriosity_site(String.t()) :: String.t()
+  def myquriosity_site(sub_domain) do
     "#{endpoint_configs()[:url_scheme]}://#{sub_domain}.#{site_base_url_without_sub_domain()}"
   end
 end

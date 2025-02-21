@@ -24,3 +24,5 @@ erl_crash.dump
 /tmp/
 
 .env
+builds/
+apps/core/priv/version_info.json

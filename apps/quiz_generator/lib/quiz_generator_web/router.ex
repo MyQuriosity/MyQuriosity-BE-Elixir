@@ -13,6 +13,11 @@ defmodule QuizGeneratorWeb.Router do
     plug(Campus.Plug.ValidateUUID)
   end
 
+  scope "/", QuizGeneratorWeb do
+    pipe_through [:api]
+    get("/info", PublicInfoController, :version_info)
+  end
+
   scope "/api/v1", QuizGeneratorWeb do
     pipe_through :api
     post("/signup", AuthController, :signup)

@@ -12,8 +12,8 @@
                                     src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/67f52ec2-39b1-4ade-84d8-9eac6f9d3280/47x38.png" />
                             </td>
                         </tr>
-                        <tr class="qampus-style">
-                            <td align="center" class="qampus-style">MyQampus</td>
+                        <tr class="quriosity-style">
+                            <td align="center" class="quriosity-style">MyQampus</td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,8 +86,8 @@
                                                         <tr>
                                                             <td align="left" class="emailbox-content">
                                                                 <!-- link is required here -->
-                                                                <a href="https://myqampus.com/home-page">
-                                                                    https://myqampus.com/home-page</a>
+                                                                <a href="https://myquriosity.com/home-page">
+                                                                    https://myquriosity.com/home-page</a>
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -282,25 +282,25 @@
                             <td style="width: 145px"></td>
                             <td>
                                 <!-- link is required here -->
-                                <a href="https://www.facebook.com/myqampus" class="help-box__link"><img
+                                <a href="https://www.facebook.com/myquriosity" class="help-box__link"><img
                                         src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/0da4f0ac-cd13-4310-b031-75ccc6b5e116/48x48.png" />
                                 </a>
                             </td>
                             <td>
                                 <!-- link is required here -->
-                                <a href="https://twitter.com/myqampus" class="help-box__link">
+                                <a href="https://twitter.com/myquriosity" class="help-box__link">
                                     <img
                                         src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/eb322fd3-dad9-43ed-99b8-45441df3a2c6/48x48.png" /></a>
                             </td>
                             <td>
                                 <!-- link is required here -->
-                                <a href="https://www.instagram.com/myqampus" class="help-box__link">
+                                <a href="https://www.instagram.com/myquriosity" class="help-box__link">
                                     <img
                                         src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/88842a5b-ddd0-47ae-9095-938b3487a7f6/48x48.png" /></a>
                             </td>
                             <td>
                                 <!-- link is required here -->
-                                <a href="https://linkedin.com/company/myqampus-com" class="help-box__link">
+                                <a href="https://linkedin.com/company/myquriosity-com" class="help-box__link">
                                     <img
                                         src="http://cdn.mcauto-images-production.sendgrid.net/3726832b45872c91/ddc58618-f99c-4fb6-b609-3dfebfe50c21/48x48.png" /></a>
                             </td>
