@@ -43,10 +43,13 @@ defmodule Quriosity.MixProject do
   defp put_version(rel) do
     app_version = version()
     # Copy it to somewhere predictable
-    {:ok, core_app_version} = :application.get_key(:core, :vsn)
+    # {:ok, core_app_version} = :application.get_key(:core, :vsn)
 
-    build_path =
-      "#{rel.path}/lib/core-#{to_string(core_app_version)}/priv/version_info.json"
+    # build_path =
+    #   "#{rel.path}/lib/core-#{to_string(core_app_version)}/priv/version_info.json"
+    build_path = to_string(:code.priv_dir(:core)) <> "/version_info.json"
+    # IO.inspect("****** build_path *******")
+    # IO.inspect(build_path)
 
     local_path = "apps/core/priv/version_info.json"
 
