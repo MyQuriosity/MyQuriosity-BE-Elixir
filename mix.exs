@@ -53,9 +53,30 @@ defmodule Quriosity.MixProject do
 
     local_path = "apps/core/priv/version_info.json"
 
-    Version.write_version_info(app_version, local_path, build_path)
+    write_version_info(app_version, local_path, build_path)
 
     rel
+  end
+
+
+  @spec write_version_info(
+          String.t() | atom() | nil,
+          String.t(),
+          String.t()
+        ) :: {:ok, [binary()]} | {:error, atom(), binary()}
+  def write_version_info(app_version, local_path, build_path) do
+    info = Version.get_version_info()
+    info = Map.put(info, :app_version, app_version)
+
+    content = Jason.encode!(info)
+    # Lets write to local path for development server
+    File.write(local_path, content)
+
+    # Lets write to release
+    File.cp_r(
+      build_path,
+      content
+    )
   end
 
   defp version do
