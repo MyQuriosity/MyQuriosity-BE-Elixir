@@ -45,7 +45,7 @@ if config_env() == :prod do
     port: "MYQURIOSITY_DB_PORT" |> System.get_env("5432") |> String.to_integer(),
     pool_size: 10
 
-  config :data, Data.Repo,
+  config :data, QuizGenerator.Repo,
     # ssl: true,
     # TODO: only enable it for dev+stage server via config
     show_sensitive_data_on_connection_error: true,

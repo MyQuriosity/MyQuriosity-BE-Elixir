@@ -21,7 +21,7 @@
 #         )
 
 #       records_count =
-#         Data.Repo.one(query)
+#         QuizGenerator.Repo.one(query)
 
 #       records_count > 0
 #     rescue
@@ -38,7 +38,7 @@
 #       from(q in SettingsForAllTenants,
 #         where: q.tenant_information_id == ^tenant_info_id
 #       )
-#       |> Data.Repo.one()
+#       |> QuizGenerator.Repo.one()
 #       |> case do
 #         nil ->
 #           nil
@@ -63,7 +63,7 @@
 #       from(q in SettingsForAllTenants,
 #         where: q.tenant_information_id == ^tenant_info_id
 #       )
-#       |> Data.Repo.one()
+#       |> QuizGenerator.Repo.one()
 #       |> case do
 #         nil ->
 #           nil
@@ -89,7 +89,7 @@
 #       q.tenant_information_id == ^tenant_info_id and not is_nil(q.approved_at) and
 #         is_nil(q.tenant_deactivated_at)
 #     )
-#     |> Data.Repo.one()
+#     |> QuizGenerator.Repo.one()
 #   end
 
 #   @doc """
@@ -102,7 +102,7 @@
 #         where: q.tenant_information_id == ^tenant_info_id and not is_nil(q.approved_at),
 #         select: count(q)
 #       )
-#       |> Data.Repo.one()
+#       |> QuizGenerator.Repo.one()
 #       |> case do
 #         0 ->
 #           false
@@ -129,7 +129,7 @@
 #         )
 
 #       records_count =
-#         Data.Repo.one(query)
+#         QuizGenerator.Repo.one(query)
 
 #       records_count > 0
 #     rescue
@@ -152,7 +152,7 @@
 #         )
 
 #       records_count =
-#         Data.Repo.one(query)
+#         QuizGenerator.Repo.one(query)
 
 #       records_count > 0
 #     rescue
@@ -166,7 +166,7 @@
 #   @spec get_subdomains() :: [String.t()]
 #   def get_subdomains do
 #     Data.TenantInformation
-#     |> Data.Repo.all()
+#     |> QuizGenerator.Repo.all()
 #     |> Enum.reduce([], fn tenant_info, acc ->
 #       [tenant_info.sub_domain | acc]
 #     end)
@@ -302,7 +302,7 @@
 #     from(q in Core.MigrationsForAllTenants,
 #       where: q.schema_prefix == ^tenant_prefix and q.version == ^version
 #     )
-#     |> Data.Repo.one()
+#     |> QuizGenerator.Repo.one()
 #     |> case do
 #       nil -> false
 #       _records -> true

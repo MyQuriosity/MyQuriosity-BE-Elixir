@@ -6,7 +6,7 @@ defmodule Data.Utils.PaginationUtils do
   """
   import Ecto.Query
   alias Core.Paginator
-  alias Data.Repo
+  alias QuizGenerator.Repo
 
   @spec paginate(Ecto.Query.t(), maybe_improper_list | map) ::
           {[struct()], map()}

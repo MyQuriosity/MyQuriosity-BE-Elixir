@@ -18,7 +18,7 @@ defmodule Data.DataCase do
 
   using do
     quote do
-      alias Data.Repo
+      alias QuizGenerator.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -28,10 +28,10 @@ defmodule Data.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Data.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(QuizGenerator.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Data.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(QuizGenerator.Repo, {:shared, self()})
     end
 
     :ok

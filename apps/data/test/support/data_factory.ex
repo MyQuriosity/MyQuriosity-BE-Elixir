@@ -3,7 +3,7 @@
 #   # TODO: Write proper moduledoc
 #   """
 
-#   use ExMachina.Ecto, repo: Data.Repo
+#   use ExMachina.Ecto, repo: QuizGenerator.Repo
 #   alias Data.TeamUser
 #   alias Data.TenantInformation
 #   alias Data.User

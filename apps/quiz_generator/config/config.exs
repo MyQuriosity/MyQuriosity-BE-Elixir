@@ -28,7 +28,7 @@ config :quiz_generator, QuizGenerator.Guardian,
 
 config :quiz_generator, QuizGenerator.AuthAccessPipeline,
   module: QuizGenerator.Guardian,
-  error_handler: Campus.AuthErrorHandler
+  error_handler: QuizGenerator.AuthErrorHandler
 
 # Configures Elixir's Logger
 config :logger, :console,

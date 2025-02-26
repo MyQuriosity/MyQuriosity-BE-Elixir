@@ -12,7 +12,7 @@ defmodule Data.QueryRepo do
   @spec all(Ecto.Query.t(), keyword()) :: integer() | [struct()]
   def all(query, options \\ []) do
     {query, options} = prepare_query(:all, query, options)
-    Data.Repo.all(query, options)
+    QuizGenerator.Repo.all(query, options)
   end
 
   @doc """
@@ -21,7 +21,7 @@ defmodule Data.QueryRepo do
   @spec one(Ecto.Query.t(), keyword()) :: integer() | struct()
   def one(query, options \\ []) do
     {query, options} = prepare_query(:one, query, options)
-    Data.Repo.one(query, options)
+    QuizGenerator.Repo.one(query, options)
   end
 
   defp prepare_query(_operation, query, opts) do

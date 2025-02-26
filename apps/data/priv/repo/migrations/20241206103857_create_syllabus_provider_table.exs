@@ -1,4 +1,4 @@
-defmodule Data.Repo.Migrations.CreateSyllabusProviderTableForQuestionBank do
+defmodule QuizGenerator.Repo.Migrations.CreateSyllabusProviderTableForQuestionBank do
   use Ecto.Migration
 
   def change do

@@ -26,13 +26,13 @@ defmodule QuizGenerator.Guardian do
     # the resource id so here we'll rely on that to look it up.
     id = claims["sub"]
 
-    case Data.Repo.get(QuizGenerator.User, id) do
+    case QuizGenerator.Repo.get(QuizGenerator.User, id) do
       nil -> {:error, :not_found}
       user -> {:ok, user}
     end
 
     # resource = MyApp.get_resource_by_id(id)
-    # {:ok, Data.Repo.get(Data.InstituteUser, id)}
+    # {:ok, QuizGenerator.Repo.get(Data.InstituteUser, id)}
   end
 
   # def resource_from_claims(_claims) do

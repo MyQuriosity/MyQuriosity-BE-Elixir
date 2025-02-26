@@ -1,4 +1,4 @@
-defmodule Campus.AuthErrorHandler do
+defmodule QuizGenerator.AuthErrorHandler do
   @moduledoc """
   # TODO: Write proper moduledoc
   """

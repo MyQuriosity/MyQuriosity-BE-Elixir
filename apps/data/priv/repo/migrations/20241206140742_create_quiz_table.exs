@@ -1,4 +1,4 @@
-defmodule Data.Repo.Migrations.CreateQuizTable do
+defmodule QuizGenerator.Repo.Migrations.CreateQuizTable do
   use Ecto.Migration
 
   def change do

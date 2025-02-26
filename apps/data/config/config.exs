@@ -8,15 +8,15 @@
 import Config
 
 config :data,
-  ecto_repos: [Data.Repo]
+  ecto_repos: [QuizGenerator.Repo]
 
 # Pipeline for token auth
 config :data, Data.Auth.Pipeline.ApiAuthAccessPipeline,
   module: QuizGenerator.Guardian,
-  error_handler: Campus.AuthErrorHandler
+  error_handler: QuizGenerator.AuthErrorHandler
 
 # Configure your database
-config :data, Data.Repo,
+config :data, QuizGenerator.Repo,
   migration_timestamps: [type: :utc_datetime],
   adapter: Ecto.Adapters.Postgres
 

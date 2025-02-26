@@ -4,7 +4,7 @@ defmodule QuizGenerator.AuthContext do
   """
   # import Ecto.Query
   alias Campus.EmailUtils
-  # alias Data.Repo
+  # alias QuizGenerator.Repo
   # alias Data.TenantInformation
   alias QuizGenerator.User
   alias QuizGenerator.UserContext
