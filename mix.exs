@@ -58,7 +58,6 @@ defmodule Quriosity.MixProject do
     rel
   end
 
-
   @spec write_version_info(
           String.t() | atom() | nil,
           String.t(),

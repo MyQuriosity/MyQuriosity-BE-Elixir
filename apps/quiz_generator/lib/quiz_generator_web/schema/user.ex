@@ -15,6 +15,7 @@ defmodule QuizGenerator.User do
     field(:password, :string, virtual: true)
     field(:hashed_password, :string)
     field(:gender, :string)
+    field(:is_admin, :boolean, default: false)
     field(:email_verified_at, :utc_datetime)
     field(:deactivated_at, :utc_datetime)
     field(:institute_name, :string)
@@ -49,6 +50,7 @@ defmodule QuizGenerator.User do
       :email_verify_token,
       :institute_name,
       :gender,
+      :is_admin,
       :hashed_password,
       :password,
       :designation,
@@ -67,8 +69,8 @@ defmodule QuizGenerator.User do
   end
 
   @spec deactivate_changeset(t(), map()) :: Ecto.Changeset.t()
-  def deactivate_changeset(%__MODULE__{} = syllabus_provider, params) do
-    syllabus_provider
+  def deactivate_changeset(%__MODULE__{} = user, params) do
+    user
     |> cast(params, [:deactivated_at])
     |> validate_required([:deactivated_at])
   end

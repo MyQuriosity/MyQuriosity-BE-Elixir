@@ -39,7 +39,7 @@ defmodule Data.MixProject do
   defp deps do
     [
       {:core, in_umbrella: true}
-      # {:phecto_acl, in_umbrella: true}
+      # {:quiz_generator, in_umbrella: true}
     ]
   end
 

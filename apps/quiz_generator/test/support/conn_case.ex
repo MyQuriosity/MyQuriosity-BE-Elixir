@@ -25,9 +25,10 @@ defmodule QuizGeneratorWeb.ConnCase do
       use QuizGeneratorWeb, :verified_routes
 
       # Import conveniences for testing with connections
-      import Plug.Conn
       import Phoenix.ConnTest
+      import Plug.Conn
       import QuizGeneratorWeb.ConnCase
+      import TenantData.Support.Factory
     end
   end
 

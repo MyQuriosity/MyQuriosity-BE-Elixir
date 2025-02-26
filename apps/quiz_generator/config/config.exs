@@ -30,6 +30,9 @@ config :quiz_generator, QuizGenerator.AuthAccessPipeline,
   module: QuizGenerator.Guardian,
   error_handler: QuizGenerator.AuthErrorHandler
 
+config :quiz_generator, :env,
+  quiz_admin_password: System.get_env("QUIZ_ADMIN_PASSWORD") || "password"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

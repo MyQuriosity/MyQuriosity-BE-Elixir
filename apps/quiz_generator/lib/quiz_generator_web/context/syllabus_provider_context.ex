@@ -4,8 +4,9 @@ defmodule QuizGeneratorWeb.SyllabusProviderContext do
   """
   import Ecto.Query
 
-  alias QuizGenerator.SyllabusProvider
   alias QuizGenerator.Repo
+  alias QuizGenerator.SyllabusProvider
+  alias QuizGenerator.SyllabusProviderFilterContext
   alias QuizGenerator.Utils.PaginationUtils
 
   @spec create(map()) :: {:ok, SyllabusProvider.t()} | {:error, Ecto.Changeset.t()}
@@ -13,6 +14,16 @@ defmodule QuizGeneratorWeb.SyllabusProviderContext do
     %SyllabusProvider{}
     |> SyllabusProvider.changeset(params)
     |> Repo.insert()
+  end
+
+  def apply_filter(params) do
+    IO.inspect(params)
+
+    params
+    |> SyllabusProviderFilterContext.filtered_query()
+    |> IO.inspect(label: "After filtered query in context-------")
+
+    # |> PaginationUtils.paginate(params)
   end
 
   @spec fetch_by_id(String.t()) :: nil | SyllabusProvider.t()

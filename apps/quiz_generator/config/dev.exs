@@ -7,7 +7,7 @@ config :quiz_generator, QuizGenerator.Repo,
   hostname: "localhost",
   database: "myquriosity_dev",
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
+  show_sensitive_data_on_connection_error: false,
   pool_size: 10
 
 # For development, we disable any cache and enable

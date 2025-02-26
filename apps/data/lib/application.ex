@@ -12,7 +12,7 @@ defmodule Data.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      QuizGenerator.Repo
+      # QuizGenerator.Repo
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

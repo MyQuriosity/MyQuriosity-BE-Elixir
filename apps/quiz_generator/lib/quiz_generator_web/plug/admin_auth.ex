@@ -1,4 +1,4 @@
-defmodule Data.Auth.Pipeline.AuthPublicAdmin do
+defmodule QuizGenerator.Plug.AdminAuth do
   @moduledoc """
   # TODO: Write proper moduledoc
   """

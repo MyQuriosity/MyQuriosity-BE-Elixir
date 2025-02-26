@@ -11,6 +11,7 @@ defmodule QuizGenerator.Repo.Migrations.AddQuizGeneratorUserTable do
       add(:email_verified_at, :utc_datetime)
       add(:hashed_password, :string)
       add(:gender, :string)
+      add(:is_admin, :boolean, default: false)
       add(:deactivated_at, :utc_datetime)
       add(:institute_name, :string)
       add(:designation, :string)

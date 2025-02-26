@@ -6,9 +6,10 @@ defmodule QuizGeneratorWeb.SyllabusProviderController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = SyllabusProviderContext.fetch_active_paginated(params)
+    {records, meta} = {1, 2}
+    SyllabusProviderContext.apply_filter(params) |> IO.inspect(label: "In controller")
 
-    render(conn, "index.json", records: records, meta: meta)
+    # render(conn, "index.json", records: records, meta: meta)
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
