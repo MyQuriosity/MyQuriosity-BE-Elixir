@@ -17,13 +17,9 @@ defmodule QuizGeneratorWeb.SyllabusProviderContext do
   end
 
   def apply_filter(params) do
-    IO.inspect(params)
-
     params
     |> SyllabusProviderFilterContext.filtered_query()
-    |> IO.inspect(label: "After filtered query in context-------")
-
-    # |> PaginationUtils.paginate(params)
+    |> PaginationUtils.paginate(params)
   end
 
   @spec fetch_by_id(String.t()) :: nil | SyllabusProvider.t()
@@ -31,6 +27,10 @@ defmodule QuizGeneratorWeb.SyllabusProviderContext do
     SyllabusProvider
     |> where([s], s.id == ^syllabus_provider_id)
     |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      syllabus_provider -> {:ok, syllabus_provider}
+    end
   end
 
   @spec fetch_active_paginated(map()) :: {list(SyllabusProvider.t()), map()}

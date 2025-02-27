@@ -16,7 +16,6 @@ defmodule Core.Utils.AuthUtils do
 
   @spec hash_password(binary) :: any
   def hash_password(plaintext) do
-    IO.inspect("hhhs")
     Bcrypt.hash_pwd_salt(plaintext)
   end
 end

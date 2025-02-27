@@ -8,7 +8,6 @@ defmodule Mix.Tasks.SuperAdminSeed do
   alias Core.Utils.AuthUtils, as: AuthUtils
 
   def run(_args) do
-    IO.inspect("heree")
     Enum.each([:postgrex, :ecto, :ecto_sql], &Application.ensure_all_started/1)
 
     QuizGenerator.Repo.start_link()

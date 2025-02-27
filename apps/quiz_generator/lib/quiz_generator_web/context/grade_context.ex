@@ -21,6 +21,10 @@ defmodule QuizGenerator.GradeContext do
     Grade
     |> where([g], g.id == ^grade_id)
     |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      grade -> {:ok, grade}
+    end
   end
 
   @spec deactivate(Grade.t()) ::
@@ -45,24 +49,7 @@ defmodule QuizGenerator.GradeContext do
     |> PaginationUtils.paginate(params)
   end
 
-  def apply_filter(%{"$where" => _} = params) do
-    params =
-      update_in(
-        params["$where"],
-        &Map.put(&1, "syllabus_provider_id", %{"$equal" => params["syllabus_provider_id"]})
-      )
-
-    params
-    |> GradeFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
-  end
-
   def apply_filter(params) do
-    params =
-      Map.put(params, "$where", %{
-        "syllabus_provider_id" => %{"$equal" => params["syllabus_provider_id"]}
-      })
-
     params
     |> GradeFilterContext.filtered_query()
     |> PaginationUtils.paginate(params)

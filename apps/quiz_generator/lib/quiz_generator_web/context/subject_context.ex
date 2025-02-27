@@ -5,6 +5,7 @@ defmodule QuizGenerator.SubjectContext do
   import Ecto.Query
 
   alias QuizGenerator.Subject
+  alias QuizGenerator.SubjectFilterContext
   alias QuizGenerator.Repo
   alias QuizGenerator.Utils.PaginationUtils
 
@@ -20,6 +21,16 @@ defmodule QuizGenerator.SubjectContext do
     Subject
     |> where([s], s.id == ^subject_id)
     |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      subject -> {:ok, subject}
+    end
+  end
+
+  def apply_filter(params) do
+    params
+    |> SubjectFilterContext.filtered_query()
+    |> PaginationUtils.paginate(params)
   end
 
   @spec fetch_active_paginated(map()) :: {list(Subject.t()), map()}

@@ -1,5 +1,7 @@
 defmodule TenantData.Support.Factory do
   use ExMachina.Ecto, repo: QuizGenerator.Repo
+  alias QuizGenerator.Grade
+  alias QuizGenerator.Subject
   alias QuizGenerator.SyllabusProvider
   alias QuizGenerator.User
 
@@ -18,6 +20,21 @@ defmodule TenantData.Support.Factory do
     %SyllabusProvider{
       title: "Punjab Textbook Board",
       description: "For Punjab schools"
+    }
+  end
+
+  def grade_factory do
+    %Grade{
+      title: "Grade 1",
+      description: "Primary class"
+    }
+  end
+
+  def subject_factory do
+    %Subject{
+      title: "English",
+      course_code: "Eng",
+      color: "primary-purple"
     }
   end
 end

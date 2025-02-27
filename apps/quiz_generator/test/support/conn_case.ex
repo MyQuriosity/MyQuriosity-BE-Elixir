@@ -29,6 +29,7 @@ defmodule QuizGeneratorWeb.ConnCase do
       import Plug.Conn
       import QuizGeneratorWeb.ConnCase
       import TenantData.Support.Factory
+      alias QuizGeneratorWeb.Router, as: Routes
     end
   end
 

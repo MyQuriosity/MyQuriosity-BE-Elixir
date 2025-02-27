@@ -1,22 +1,23 @@
-defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
+defmodule QuizGeneratorWeb.GradeControllerTest do
   use QuizGeneratorWeb.ConnCase
   import Phoenix.ConnTest
 
   alias QuizGenerator.Guardian.Plug, as: GuardianPlug
 
-  describe "create syllabus_provider" do
+  describe "create grade" do
     setup [
       :create_user,
+      :create_syllabus_provider,
       :create_conn
     ]
 
     test "Returns created message", %{conn: conn} do
-      resp = post(conn, "/api/v1/syllabus_providers", %{"title" => "Punjab Textbook Board"})
+      resp = post(conn, "/api/v1/grades", %{"title" => "Grade 1"})
       assert %{"message" => "Created"} == json_response(resp, 200)
     end
 
     test "Return error without title", %{conn: conn} do
-      resp = post(conn, "/api/v1/syllabus_providers", %{"description" => "Punjab Textbook Board"})
+      resp = post(conn, "/api/v1/grades", %{"description" => "Punjab Textbook Board"})
 
       assert %{
                "error" => %{
@@ -29,27 +30,28 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
     end
   end
 
-  describe "update syllabus_provider" do
+  describe "update grade" do
     setup [
       :create_user,
+      :create_syllabus_provider,
       :create_conn,
-      :create_syllabus_provider
+      :create_grade
     ]
 
-    test "Returns updated syllabus provider", %{conn: conn, syllabus_provider: syllabus_provider} do
+    test "Returns updated message", %{conn: conn, grade: grade} do
       resp =
-        put(conn, "/api/v1/syllabus_providers/#{syllabus_provider.id}", %{
-          title: "Updated Syllabus Provider",
+        put(conn, "/api/v1/grades/#{grade.id}", %{
+          title: "Updated Grade",
           description: "Updated Description"
         })
 
-      assert %{"message" => "Updated"} == json_response(resp, 200)
+      assert %{"message" => "Grade successfully updated"} == json_response(resp, 200)
     end
 
     test "Return error with incorrect id", %{conn: conn, user: user} do
       resp =
-        put(conn, "/api/v1/syllabus_providers/#{user.id}", %{
-          title: "updated_test_topic",
+        put(conn, "/api/v1/grades/#{user.id}", %{
+          title: "updated_grade",
           description: "updated_test_description"
         })
 
@@ -65,37 +67,50 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
   describe "filter syllabus_provider" do
     setup [
       :create_user,
+      :create_syllabus_provider,
       :create_conn,
-      :create_syllabus_provider
+      :create_grade
     ]
 
-    test "filter syllabus_provider with title", %{
+    test "filter grade with title", %{
       conn: conn,
+      grade: grade,
       syllabus_provider: syllabus_provider
     } do
       resp =
         conn
-        |> post("/api/v1/syllabus_providers/filters", %{"title" => %{"$ILIKE" => "%a%"}})
+        |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%a%"}})
 
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "description" => "For Punjab schools",
-                   "id" => syllabus_provider.id,
-                   "title" => "Punjab Textbook Board"
+                   "description" => "Primary class",
+                   "id" => grade.id,
+                   "title" => "Grade 1",
+                   "syllabus_provider_id" => syllabus_provider.id
                  }
                ]
-             } == json_response(resp, 200)
+             } ==
+               json_response(resp, 200)
     end
 
-    test "filter syllabus_provider with inserted_at", %{conn: conn} do
-      syllabus_provider_2 =
-        insert(:syllabus_provider, inserted_at: DateTime.add(DateTime.utc_now(), 2, :day))
+    test "filter grade with wrong title word", %{conn: conn} do
+      resp =
+        conn
+        |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%primary%"}})
+
+      assert %{"meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0}, "records" => []} ==
+               json_response(resp, 200)
+    end
+
+    test "filter grade with inserted_at", %{conn: conn, syllabus_provider: syllabus_provider} do
+      grade_2 =
+        insert(:grade, syllabus_provider_id: syllabus_provider.id, inserted_at: DateTime.add(DateTime.utc_now(), 2, :day))
 
       resp =
         conn
-        |> post("/api/v1/syllabus_providers/filters", %{
+        |> post("/api/v1/grades/filters", %{
           "inserted_at" => %{"$GT" => DateTime.utc_now()}
         })
 
@@ -104,7 +119,7 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
                "records" => [
                  %{
                    "description" => "For Punjab schools",
-                   "id" => syllabus_provider_2.id,
+                   "id" => grade_2.id,
                    "title" => "Punjab Textbook Board"
                  }
                ]
@@ -115,17 +130,18 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
   describe "Deactivate syllabus_provider" do
     setup [
       :create_user,
-      :create_conn,
-      :create_syllabus_provider
+      :create_syllabus_provider,
+      :create_conn,\
+      :create_grade
     ]
 
-    test "Returns updated syllabus provider", %{conn: conn, syllabus_provider: syllabus_provider} do
-      resp = delete(conn, "/api/v1/syllabus_providers/#{syllabus_provider.id}")
-      assert %{"message" => "Deactivated"} == json_response(resp, 200)
+    test "Returns deactivated message", %{conn: conn, grade: grade} do
+      resp = delete(conn, "/api/v1/grades/#{grade.id}")
+      assert %{"message" => "Grade deactivated successfully"} == json_response(resp, 200)
     end
 
     test "Return error with incorrect id", %{conn: conn, user: user} do
-      resp = delete(conn, "/api/v1/syllabus_providers/#{user.id}")
+      resp = delete(conn, "/api/v1/grades/#{user.id}")
 
       assert %{
                "error" => %{
@@ -134,6 +150,10 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
                }
              } == json_response(resp, 404)
     end
+  end
+
+  defp create_grade(context) do
+    {:ok, grade: insert(:grade, syllabus_provider_id: context.syllabus_provider.id)}
   end
 
   defp create_syllabus_provider(_) do
@@ -145,6 +165,10 @@ defmodule QuizGeneratorWeb.SyllabusProviderControllerTest do
   end
 
   defp create_conn(context) do
-    {:ok, conn: GuardianPlug.sign_in(build_conn(), context.user)}
+    {:ok,
+     conn:
+       build_conn()
+       |> GuardianPlug.sign_in(context.user)
+       |> put_req_header("x-syllabus-provider-id", "#{context.syllabus_provider.id}")}
   end
 end

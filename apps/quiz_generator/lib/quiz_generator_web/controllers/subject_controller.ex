@@ -6,49 +6,39 @@ defmodule QuizGeneratorWeb.SubjectController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = SubjectContext.fetch_active_paginated(params)
+    {records, meta} = SubjectContext.apply_filter(params)
 
     render(conn, "index.json", records: records, meta: meta)
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
-    case SubjectContext.create(params) do
-      {:ok, _syllabus_provider} ->
+    with {:ok, _syllabus_provider} <- SubjectContext.create(params) do
         conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Created"}})
-
-      error ->
-        QuizGeneratorWeb.FallbackController.call(conn, error)
     end
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
-    case SubjectContext.fetch_by_id(id) do
-      nil -> QuizGeneratorWeb.FallbackController.call(conn, {:error, :not_found})
-      syllabus_provider -> render(conn, "show.json", syllabus_provider: syllabus_provider)
+    with {:ok, subject} <- SubjectContext.fetch_by_id(id) do
+        render(conn, "show.json", subject: subject)
     end
   end
 
   @spec update(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def update(conn, %{"id" => id} = params) do
-    with subject <- SubjectContext.fetch_by_id(id),
+    with {:ok, subject} <- SubjectContext.fetch_by_id(id),
          {:ok, _updated_subject} <-
            SubjectContext.update(subject, params) do
-      conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Updated"}})
+      conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Subject successfully updated"}})
     end
   end
 
   @spec deactivate(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def deactivate(conn, %{"id" => id}) do
-    with syllabus_provider when not is_nil(syllabus_provider) <-
-           SubjectContext.fetch_by_id(id),
-         {:ok, _deactivated_subject} <-
-           SubjectContext.deactivate(syllabus_provider) do
-      conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Deactivated"}})
-    else
-      nil -> {:error, :not_found}
-      error -> error
+    with {:ok, subject} <- SubjectContext.fetch_by_id(id),
+         {:ok, _deactivated_subject} <- SubjectContext.deactivate(subject) do
+      conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Subject successfully deactivated"}})
     end
   end
 

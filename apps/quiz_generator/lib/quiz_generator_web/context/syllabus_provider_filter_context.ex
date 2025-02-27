@@ -6,11 +6,11 @@ defmodule QuizGenerator.SyllabusProviderFilterContext do
   alias QuizGenerator.SyllabusProvider
   alias QuizGeneratorWeb.Filterable.SyllabusProviderFilter
 
-  @spec filtered_query(any()) :: none()
+  import Ecto.Query
+
+  @spec filtered_query(map()) :: Ecto.Query.t()
   def filtered_query(params) do
-    IO.inspect("params::::: #{inspect(params)}")
-    restult = SyllabusProviderFilter.build(params)
-    IO.inspect("restult::::: #{inspect(restult)}")
-    restult
+    result = SyllabusProviderFilter.build(params)
+    where(SyllabusProvider, ^result)
   end
 end

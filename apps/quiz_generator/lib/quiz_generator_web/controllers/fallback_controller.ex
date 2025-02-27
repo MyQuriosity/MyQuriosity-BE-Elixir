@@ -1,4 +1,4 @@
-defmodule QuizGeneratorWeb.FallbackController do
+defmodule QuizGenerator.FallbackController do
   use QuizGeneratorWeb, :controller
 
   def call(conn, {:error, :not_found}) do
