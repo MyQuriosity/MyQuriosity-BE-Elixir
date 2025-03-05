@@ -1,8 +1,10 @@
 defmodule TenantData.Support.Factory do
   use ExMachina.Ecto, repo: QuizGenerator.Repo
+  alias QuizGenerator.Chapter
   alias QuizGenerator.Grade
   alias QuizGenerator.Subject
   alias QuizGenerator.SyllabusProvider
+  alias QuizGenerator.Topic
   alias QuizGenerator.User
 
   def user_factory do
@@ -35,6 +37,20 @@ defmodule TenantData.Support.Factory do
       title: "English",
       course_code: "Eng",
       color: "primary-purple"
+    }
+  end
+
+  def chapter_factory do
+    %Chapter{
+      title: "Short Tales",
+      number: 1
+    }
+  end
+
+  def topic_factory do
+    %Topic{
+      title: "The Riding Hood",
+      number: 1
     }
   end
 end

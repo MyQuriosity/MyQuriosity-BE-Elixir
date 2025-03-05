@@ -4,6 +4,7 @@ defmodule QuizGeneratorWeb.Context.ChapterContext do
   """
   import Ecto.Query
 
+  alias QuizGenerator.ChapterFilterContext
   alias QuizGenerator.Chapter
   alias QuizGenerator.Repo
   alias QuizGenerator.Utils.PaginationUtils
@@ -20,6 +21,16 @@ defmodule QuizGeneratorWeb.Context.ChapterContext do
     Chapter
     |> where([s], s.id == ^chapter_id and is_nil(s.deactivated_at))
     |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      chapter -> {:ok, chapter}
+    end
+  end
+
+  def apply_filter(params) do
+    params
+    |> ChapterFilterContext.filtered_query()
+    |> PaginationUtils.paginate(params)
   end
 
   @spec fetch_active_paginated(map()) :: {list(Chapter.t()), map()}

@@ -24,7 +24,8 @@ defmodule QuizGeneratorWeb.AuthView do
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        gender: user.gender
+        gender: user.gender,
+        is_admin: user.is_admin
       },
       exp: exp,
       syllabus_providers:

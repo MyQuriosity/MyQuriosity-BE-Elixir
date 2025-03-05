@@ -4,7 +4,7 @@ defmodule QuizGeneratorWeb.GradeController do
   alias QuizGeneratorWeb.SharedView
   alias QuizGenerator.GradeContext
 
-  plug QuizGenerator.Plug.SyllabusProviderPlug
+  plug QuizGenerator.Plug.SyllabusProviderPlug when action in [:create]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
@@ -41,7 +41,9 @@ defmodule QuizGeneratorWeb.GradeController do
   def deactivate(conn, %{"id" => id}) do
     with {:ok, grade} <- GradeContext.fetch_by_id(id),
          {:ok, _deactivated_grade} <- GradeContext.deactivate(grade) do
-      conn |> put_view(SharedView) |> render("success.json", %{data: %{message: "Grade deactivated successfully"}})
+      conn
+      |> put_view(SharedView)
+      |> render("success.json", %{data: %{message: "Grade deactivated successfully"}})
     end
   end
 

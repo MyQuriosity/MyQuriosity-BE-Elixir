@@ -15,6 +15,7 @@ defmodule QuizGeneratorWeb.SubjectView do
       title: subject.title,
       course_code: subject.course_code,
       color: subject.color,
+      grade_id: subject.grade_id,
       grade:
         (Ecto.assoc_loaded?(subject.grade) &&
            render_one(subject.grade, GradeView, "show.json", as: :grade)) || nil

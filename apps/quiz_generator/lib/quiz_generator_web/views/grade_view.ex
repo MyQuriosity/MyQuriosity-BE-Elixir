@@ -13,7 +13,12 @@ defmodule QuizGeneratorWeb.GradeView do
       id: grade.id,
       title: grade.title,
       description: grade.description,
-      syllabus_provider_id: grade.syllabus_provider_id
+      syllabus_provider_id: grade.syllabus_provider_id,
+      syllabus_provider:
+        (Ecto.assoc_loaded?(grade.syllabus_provider) &&
+           render_one(grade.syllabus_provider, QuizGeneratorWeb.SyllabusProviderView, "show.json",
+             as: :syllabus_provider
+           )) || nil
     }
   end
 end

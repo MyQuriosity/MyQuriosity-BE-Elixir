@@ -13,6 +13,10 @@ defmodule QuizGeneratorWeb.Router do
     plug(Campus.Plug.ValidateUUID)
   end
 
+  pipeline :syllabus_provider_filter do
+    plug(QuizGenerator.Plug.SyllabusProviderFilter)
+  end
+
   scope "/", QuizGeneratorWeb do
     pipe_through [:api]
     get("/info", PublicInfoController, :version_info)
@@ -26,45 +30,49 @@ defmodule QuizGeneratorWeb.Router do
   end
 
   scope "/api/v1", QuizGeneratorWeb do
+    pipe_through [:api, :validate_uuid, :token_auth, :syllabus_provider_filter]
+    post("/syllabus_providers/filters", SyllabusProviderController, :index)
+    post("/grades/filters", GradeController, :index)
+    post("/subjects/filters", SubjectController, :index)
+    post("/chapters/filters", ChapterController, :index)
+    post("/topics/filters", TopicController, :index)
+    post("/mcqs/filters", QuizController, :index)
+  end
+
+  scope "/api/v1", QuizGeneratorWeb do
     pipe_through [:api, :validate_uuid, :token_auth]
 
     post("/logout", AuthController, :logout)
     post("/syllabus_providers", SyllabusProviderController, :create)
-    post("/syllabus_providers/filters", SyllabusProviderController, :index)
     get("/syllabus_providers", SyllabusProviderController, :index)
     get("/syllabus_providers/:id", SyllabusProviderController, :show)
     put("/syllabus_providers/:id", SyllabusProviderController, :update)
     delete("/syllabus_providers/:id", SyllabusProviderController, :deactivate)
 
     post("/grades", GradeController, :create)
-    post("/grades/filters", GradeController, :index)
     get("/grades/:id", GradeController, :show)
     put("/grades/:id", GradeController, :update)
     delete("/grades/:id", GradeController, :deactivate)
 
     post("/subjects", SubjectController, :create)
-    post("/subjects/filters", SubjectController, :index)
     get("/subjects/:id", SubjectController, :show)
     put("/subjects/:id", SubjectController, :update)
     delete("/subjects/:id", SubjectController, :deactivate)
     get("/grade_subjects/:id", SubjectController, :grade_subjects)
 
     post("/chapters", ChapterController, :create)
-    post("/chapters/filters", ChapterController, :index)
     get("/chapters/:id", ChapterController, :show)
     put("/chapters/:id", ChapterController, :update)
     delete("/chapters/:id", ChapterController, :deactivate)
     get("/subjects_chapters/:id", ChapterController, :subject_chapters)
 
     post("/topics", TopicController, :create)
-    post("/topics/filters", TopicController, :index)
     get("/topics/:id", TopicController, :show)
     put("/topics/:id", TopicController, :update)
     delete("/topics/:id", TopicController, :deactivate)
     get("/chapters_topics/:id", TopicController, :chapter_topics)
 
     post("/generate_quiz", QuizController, :create)
-    post("/mcqs/filters", QuizController, :index)
   end
 
   # Enable LiveDashboard in development

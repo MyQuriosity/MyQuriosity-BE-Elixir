@@ -4,8 +4,9 @@ defmodule QuizGenerator.TopicContext do
   """
   import Ecto.Query
 
-  alias QuizGenerator.Topic
   alias QuizGenerator.Repo
+  alias QuizGenerator.Topic
+  alias QuizGenerator.TopicFilterContext
   alias QuizGenerator.Utils.PaginationUtils
 
   @spec create(map()) :: {:ok, Topic.t()} | {:error, Ecto.Changeset.t()}
@@ -15,11 +16,15 @@ defmodule QuizGenerator.TopicContext do
     |> Repo.insert()
   end
 
-  @spec fetch_by_id(String.t()) :: nil | Topic.t()
+  @spec fetch_by_id(String.t()) :: {:error, :not_found} | {:ok, Topic.t()}
   def fetch_by_id(topic_id) do
     Topic
     |> where([s], s.id == ^topic_id)
     |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      topic -> {:ok, topic}
+    end
   end
 
   @spec fetch_active_paginated(map()) :: {list(Topic.t()), map()}
@@ -28,6 +33,14 @@ defmodule QuizGenerator.TopicContext do
     |> where([s], is_nil(s.deactivated_at))
     |> preload(chapter: [subject: :grade])
     |> PaginationUtils.paginate(params)
+  end
+
+  @spec apply_filter(map()) :: {list(Topic.t()), map()}
+  def apply_filter(params) do
+    params
+    |> TopicFilterContext.filtered_query()
+    |> PaginationUtils.paginate(params)
+    |> IO.inspect()
   end
 
   @spec deactivate(Topic.t()) ::

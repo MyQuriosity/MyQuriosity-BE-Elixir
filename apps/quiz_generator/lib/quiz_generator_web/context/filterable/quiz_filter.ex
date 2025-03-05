@@ -1,11 +1,15 @@
 defmodule QuizGeneratorWeb.Filterable.QuizFilter do
-  use FatEcto.FatQuery.Whereable,
+  import Ecto.Query
+
+  use FatEcto.Dynamics.FatBuildable,
     filterable_fields: %{
-      "title" => "$ilike",
-      "topic_id" => "$equal",
-      "id" => "$equal"
+      "title" => "$ILIKE",
+      "topic_id" => "$EQUAL",
+      "id" => "$EQUAL"
     },
     overrideable_fields: [
+      "syllabus_provider_id",
+      "grade_id",
       "subject_id",
       "chapter_id",
       "topic_title",
@@ -21,36 +25,35 @@ defmodule QuizGeneratorWeb.Filterable.QuizFilter do
       "id" => ["", nil]
     }
 
-  import Ecto.Query
-
-  def override_whereable(query, "topic_title", "$ilike", value) when is_binary(value) do
-    query
-    |> join(:inner, [q], t in QuizGenerator.Topic, on: t.id == q.topic_id, as: :topic)
-    |> where([q, t], ilike(t.title, ^"%#{value}%"))
+  @impl true
+  def after_whereable(dynamics) do
+    if dynamics, do: dynamics, else: true
   end
 
-  # def override_whereable(query, "chapter_id", "$equal", value) when is_binary(value) do
-  #   query
-  #   |> join(:inner, [q], t in QuizGenerator.Topic, on: t.id == q.topic_id, as: :topic)
-  #   |> join(:inner, [q, t], ch in QuizGenerator.Chapter, on: ch.id == t.chapter_id, as: :chapter)
-  #   |> where([q, t, ch], ch.id == ^value)
-  # end
-
-  def override_whereable(query, "subject_id", "$equal", value) do
-    query
-    |> join(:inner, [q], t in QuizGenerator.Topic, on: t.id == q.topic_id, as: :topic)
-    |> join(:inner, [q, t], ch in QuizGenerator.Chapter, on: ch.id == t.chapter_id, as: :chapter)
-    |> join(:inner, [q, t, ch], s in QuizGenerator.Subject,
-      on: s.id == ch.subject_id,
-      as: :subject
-    )
-    |> where([q, t, ch, s], s.id == ^value)
+  @impl true
+  def override_whereable(_dynamics, "syllabus_provider_id", "$EQUAL", value) do
+    dynamic([syllabus_provider: syllabus_provider], syllabus_provider.id == ^value)
   end
 
-  def override_whereable(query, "inserted_at", "$equal", value) do
-    {:ok, date} = Date.from_iso8601(value)
-    where(query, [q], fragment("?::date", q.inserted_at) == ^date)
+  def override_whereable(_dynamics, "grade_id", "$EQUAL", value) do
+    dynamic([grade: grade], grade.id == ^value)
   end
 
-  def override_whereable(query, _, _, _), do: query
+  def override_whereable(_dynamics, "subject_id", "$EQUAL", value) do
+    dynamic([subject: subject], subject.id == ^value)
+  end
+
+  def override_whereable(_dynamics, "chapter_id", "$EQUAL", value) do
+    dynamic([chapter: chapter], chapter.id == ^value)
+  end
+
+  def override_whereable(_dynamics, "topic_id", "$EQUAL", value) do
+    dynamic([topic: topic], topic.id == ^value)
+  end
+
+  def override_whereable(_dynamics, "topic_title", "$ILIKE", value) do
+    dynamic([topic: topic], ilike(fragment("(?)::TEXT", topic.title), ^value))
+  end
+
+  def override_whereable(dynamics, _field, _operator, _value), do: dynamics
 end

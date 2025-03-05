@@ -1,4 +1,4 @@
-defmodule QuizGenerator.Plug.SyllabusProviderPlug do
+defmodule QuizGenerator.Plug.SyllabusProviderFilter do
   import Plug.Conn
 
   def init(default), do: default
@@ -10,7 +10,7 @@ defmodule QuizGenerator.Plug.SyllabusProviderPlug do
     updated_params =
       case syllabus_provider_id do
         nil -> conn.params
-        id -> Map.merge(conn.params, %{"syllabus_provider_id" => id})
+        id -> Map.merge(conn.params, %{"syllabus_provider_id" => %{"$EQUAL" => id}})
       end
 
     %{conn | params: updated_params}

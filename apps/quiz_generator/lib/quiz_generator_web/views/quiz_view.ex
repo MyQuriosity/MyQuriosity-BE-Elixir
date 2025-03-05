@@ -1,4 +1,5 @@
 defmodule QuizGeneratorWeb.QuizView do
+  alias QuizGeneratorWeb.TopicView
   use QuizGeneratorWeb, :view
 
   def render("index.json", %{records: records, meta: meta}) do
@@ -13,6 +14,9 @@ defmodule QuizGeneratorWeb.QuizView do
       id: quiz.id,
       title: quiz.title,
       topic_id: quiz.topic_id,
+      topic:
+        (Ecto.assoc_loaded?(quiz.topic) &&
+           render_one(quiz.topic, TopicView, "show.json", as: :topic)) || nil,
       questions: render_many(quiz.questions, __MODULE__, "question.json", as: :question)
     }
   end

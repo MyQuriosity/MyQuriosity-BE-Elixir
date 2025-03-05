@@ -1,5 +1,5 @@
 defmodule QuizGeneratorWeb.Filterable.SyllabusProviderFilter do
-  use FatEcto.FatQuery.Whereable,
+  use FatEcto.Dynamics.FatBuildable,
     filterable_fields: %{
       "title" => "$ILIKE",
       "id" => "$EQUAL",
@@ -11,4 +11,9 @@ defmodule QuizGeneratorWeb.Filterable.SyllabusProviderFilter do
       "inserted_at" => ["", nil],
       "id" => ["", nil]
     }
+
+  @impl true
+  def after_whereable(dynamics) do
+    if dynamics, do: dynamics, else: true
+  end
 end

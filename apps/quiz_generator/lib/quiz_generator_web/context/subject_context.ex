@@ -9,8 +9,20 @@ defmodule QuizGenerator.SubjectContext do
   alias QuizGenerator.Repo
   alias QuizGenerator.Utils.PaginationUtils
 
+  @colors [
+    "primary-purple",
+    "success",
+    "warning",
+    "secondary-blue-gray",
+    "secondary-blue-light",
+    "secondary-orange",
+    "secondary-indigo"
+  ]
+
   @spec create(map()) :: {:ok, Subject.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do
+    params = maybe_color_in_params(params)
+
     %Subject{}
     |> Subject.changeset(params)
     |> Repo.insert()
@@ -69,5 +81,46 @@ defmodule QuizGenerator.SubjectContext do
     subject
     |> Subject.changeset(params)
     |> Repo.update()
+  end
+
+  defp maybe_color_in_params(%{"color" => color} = params) when not is_nil(color), do: params
+
+  defp maybe_color_in_params(params) do
+    colors =
+      params
+      |> get_last_seven_subject_colors()
+      |> Enum.filter(&(&1 !== nil))
+
+    if length(colors) < 7 and length(colors) > 0 do
+      color = get_unique_color(colors)
+      Map.put(params, "color", color)
+    else
+      Map.put(params, "color", Enum.random(@colors))
+    end
+  end
+
+  defp get_last_seven_subject_colors(%{"grade_id" => grade_id}) do
+    last_seven_subjects_query()
+    |> where([s], s.grade_id == ^grade_id)
+    |> Repo.all()
+  end
+
+  defp get_last_seven_subject_colors(_), do: Repo.all(last_seven_subjects_query())
+
+  defp last_seven_subjects_query do
+    Subject
+    |> select([s], s.color)
+    |> order_by([s], desc: s.inserted_at)
+    |> limit(7)
+  end
+
+  defp get_unique_color(colors) do
+    @colors
+    |> remove_elements(colors)
+    |> Enum.random()
+  end
+
+  defp remove_elements(list1, list2) do
+    Enum.reject(list1, &Enum.member?(list2, &1))
   end
 end

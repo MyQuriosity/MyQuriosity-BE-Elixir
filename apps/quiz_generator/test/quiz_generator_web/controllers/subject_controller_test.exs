@@ -13,7 +13,13 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
     ]
 
     test "Returns created message", %{conn: conn, grade: grade} do
-      resp = post(conn, "/api/v1/subjects", %{"title" => "Science", "course_code" => "Sci", "grade_id" => grade.id})
+      resp =
+        post(conn, "/api/v1/subjects", %{
+          "title" => "Science",
+          "course_code" => "Sci",
+          "grade_id" => grade.id
+        })
+
       assert %{"message" => "Created"} == json_response(resp, 200)
     end
 
@@ -23,7 +29,11 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
       assert %{
                "error" => %{
                  "code" => 422,
-                 "errors" => %{"title" => ["can't be blank"], "course_code" => ["can't be blank"], "grade_id" => ["can't be blank"]},
+                 "errors" => %{
+                   "title" => ["can't be blank"],
+                   "course_code" => ["can't be blank"],
+                   "grade_id" => ["can't be blank"]
+                 },
                  "message" => "Unprocessable entity"
                }
              } ==
@@ -86,7 +96,13 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
-                %{"id" => subject.id, "title" => "English", "color" => "primary-purple", "course_code" => "Eng", "grade" => nil}
+                 %{
+                   "id" => subject.id,
+                   "title" => "English",
+                   "color" => "primary-purple",
+                   "course_code" => "Eng",
+                   "grade" => nil
+                 }
                ]
              } ==
                json_response(resp, 200)
@@ -97,13 +113,18 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
         conn
         |> post("/api/v1/subjects/filters", %{"title" => %{"$ILIKE" => "%sci%"}})
 
-      assert %{"meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0}, "records" => []} ==
+      assert %{
+               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0},
+               "records" => []
+             } ==
                json_response(resp, 200)
     end
 
     test "filter subject with course_code", %{
       conn: conn,
-      subject: subject
+      subject: subject,
+      grade: grade,
+      syllabus_provider: syllabus_provider
     } do
       resp =
         conn
@@ -112,7 +133,24 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
-                %{"id" => subject.id, "title" => "English", "color" => "primary-purple", "course_code" => "Eng", "grade" => nil}
+                 %{
+                   "id" => subject.id,
+                   "title" => "English",
+                   "color" => "primary-purple",
+                   "course_code" => "Eng",
+                   "grade" => %{
+                     "description" => "Primary class",
+                     "id" => grade.id,
+                     "syllabus_provider" => %{
+                       "description" => "For Punjab schools",
+                       "id" => syllabus_provider.id,
+                       "title" => "Punjab Textbook Board"
+                     },
+                     "syllabus_provider_id" => syllabus_provider.id,
+                     "title" => "Grade 1"
+                   },
+                   "grade_id" => grade.id
+                 }
                ]
              } ==
                json_response(resp, 200)
@@ -120,7 +158,12 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
 
     test "filter subject with inserted_at", %{conn: conn, grade: grade} do
       subject_2 =
-        insert(:subject, title: "Science", course_code: "sci", grade_id: grade.id, inserted_at: DateTime.add(DateTime.utc_now(), 2, :day))
+        insert(:subject,
+          title: "Science",
+          course_code: "sci",
+          grade_id: grade.id,
+          inserted_at: DateTime.add(DateTime.utc_now(), 2, :day)
+        )
 
       resp =
         conn
@@ -131,43 +174,34 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
-                %{"id" => subject_2.id, "title" => "Science", "color" => "primary-purple", "course_code" => "sci", "grade" => nil}
-               ]
-             } == json_response(resp, 200)
-    end
-
-    @tag :dev
-    test "filter subject with syllabus_provider_id", %{conn: conn, grade: grade} do
-     resp =
-        conn
-        |> post("/api/v1/subjects/filters", %{
-          "syllabus_provider_id" => %{"$EQUAL" => DateTime.utc_now()}
-        })
-
-      assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
-               "records" => [
-                %{"id" => "subject_2.id", "title" => "Science", "color" => "primary-purple", "course_code" => "sci", "grade" => nil}
+                 %{
+                   "id" => subject_2.id,
+                   "title" => "Science",
+                   "color" => "primary-purple",
+                   "course_code" => "sci",
+                   "grade" => nil
+                 }
                ]
              } == json_response(resp, 200)
     end
   end
 
-  describe "Deactivate syllabus_provider" do
+  describe "Deactivate subject" do
     setup [
       :create_user,
       :create_syllabus_provider,
-      :create_conn,\
-      :create_grade
+      :create_conn,
+      :create_grade,
+      :create_subject
     ]
 
-    test "Returns deactivated message", %{conn: conn, grade: grade} do
-      resp = delete(conn, "/api/v1/grades/#{grade.id}")
-      assert %{"message" => "Grade deactivated successfully"} == json_response(resp, 200)
+    test "Returns deactivated message", %{conn: conn, subject: subject} do
+      resp = delete(conn, "/api/v1/subjects/#{subject.id}")
+      assert %{"message" => "Subject successfully deactivated"} == json_response(resp, 200)
     end
 
     test "Return error with incorrect id", %{conn: conn, user: user} do
-      resp = delete(conn, "/api/v1/grades/#{user.id}")
+      resp = delete(conn, "/api/v1/subjects/#{user.id}")
 
       assert %{
                "error" => %{

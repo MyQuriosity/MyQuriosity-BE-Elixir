@@ -1,5 +1,5 @@
 defmodule QuizGeneratorWeb.Filterable.GradeFilter do
-  use FatEcto.FatQuery.Whereable,
+  use FatEcto.Dynamics.FatBuildable,
     filterable_fields: %{
       "title" => "$ILIKE",
       "syllabus_provider_id" => "$EQUAL",
@@ -14,4 +14,8 @@ defmodule QuizGeneratorWeb.Filterable.GradeFilter do
       "id" => ["", nil]
     }
 
+  @impl true
+  def after_whereable(dynamics) do
+    if dynamics, do: dynamics, else: true
+  end
 end

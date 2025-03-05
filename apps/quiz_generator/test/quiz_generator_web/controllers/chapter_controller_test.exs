@@ -1,28 +1,30 @@
-defmodule QuizGeneratorWeb.GradeControllerTest do
+defmodule QuizGeneratorWeb.ChapterControllerTest do
   use QuizGeneratorWeb.ConnCase
   import Phoenix.ConnTest
 
   alias QuizGenerator.Guardian.Plug, as: GuardianPlug
 
-  describe "create grade" do
+  describe "Create chapter" do
     setup [
       :create_user,
       :create_syllabus_provider,
-      :create_conn
+      :create_conn,
+      :create_grade,
+      :create_subject
     ]
 
-    test "Returns created message", %{conn: conn} do
-      resp = post(conn, "/api/v1/grades", %{"title" => "Grade 1"})
+    test "Returns created message", %{conn: conn, subject: subject} do
+      resp = post(conn, "/api/v1/chapters", %{"title" => "Short Tales", subject_id: subject.id})
       assert %{"message" => "Created"} == json_response(resp, 200)
     end
 
     test "Return error without title", %{conn: conn} do
-      resp = post(conn, "/api/v1/grades", %{"description" => "Punjab Textbook Board"})
+      resp = post(conn, "/api/v1/chapters", %{"description" => "Punjab Textbook Board"})
 
       assert %{
                "error" => %{
                  "code" => 422,
-                 "errors" => %{"title" => ["can't be blank"]},
+                 "errors" => %{"title" => ["can't be blank"], "subject_id" => ["can't be blank"]},
                  "message" => "Unprocessable entity"
                }
              } ==
@@ -30,22 +32,24 @@ defmodule QuizGeneratorWeb.GradeControllerTest do
     end
   end
 
-  describe "update grade" do
+  describe "Update chapter" do
     setup [
       :create_user,
       :create_syllabus_provider,
       :create_conn,
-      :create_grade
+      :create_grade,
+      :create_subject,
+      :create_chapter
     ]
 
-    test "Returns updated message", %{conn: conn, grade: grade} do
+    test "Returns updated message", %{conn: conn, chapter: chapter} do
       resp =
-        put(conn, "/api/v1/grades/#{grade.id}", %{
-          title: "Updated Grade",
+        put(conn, "/api/v1/chapters/#{chapter.id}", %{
+          title: "Updated Chapter",
           description: "Updated Description"
         })
 
-      assert %{"message" => "Grade successfully updated"} == json_response(resp, 200)
+      assert %{"message" => "Chapter successfully updated"} == json_response(resp, 200)
     end
 
     test "Return error with incorrect id", %{conn: conn, user: user} do
@@ -64,42 +68,45 @@ defmodule QuizGeneratorWeb.GradeControllerTest do
     end
   end
 
-  describe "filter syllabus_provider" do
+  describe "filter chapters" do
     setup [
       :create_user,
       :create_syllabus_provider,
       :create_conn,
-      :create_grade
+      :create_grade,
+      :create_subject,
+      :create_chapter
     ]
 
-    test "filter grade with title", %{
+    test "filter chapter with title", %{
       conn: conn,
-      grade: grade,
-      syllabus_provider: syllabus_provider
+      chapter: chapter,
+      subject: subject
     } do
       resp =
         conn
-        |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%a%"}})
+        |> post("/api/v1/chapters/filters", %{"title" => %{"$ILIKE" => "%a%"}})
 
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "description" => "Primary class",
-                   "id" => grade.id,
-                   "title" => "Grade 1",
-                   "syllabus_provider_id" => syllabus_provider.id,
-                   "syllabus_provider" => nil
+                   "description" => nil,
+                   "id" => chapter.id,
+                   "title" => "Short Tales",
+                   "number" => 1,
+                   "subject" => nil,
+                   "subject_id" => subject.id
                  }
                ]
              } ==
                json_response(resp, 200)
     end
 
-    test "filter grade with wrong title word", %{conn: conn} do
+    test "filter chapter with wrong title word", %{conn: conn} do
       resp =
         conn
-        |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%primary%"}})
+        |> post("/api/v1/chapters/filters", %{"title" => %{"$ILIKE" => "%primary%"}})
 
       assert %{
                "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0},
@@ -108,17 +115,17 @@ defmodule QuizGeneratorWeb.GradeControllerTest do
                json_response(resp, 200)
     end
 
-    test "filter grade with inserted_at", %{conn: conn, syllabus_provider: syllabus_provider} do
-      grade_2 =
-        insert(:grade,
-          title: "Grade 2",
-          syllabus_provider_id: syllabus_provider.id,
+    test "filter chapter with inserted_at", %{conn: conn, subject: subject} do
+      chapter_2 =
+        insert(:chapter,
+          title: "Chapter 2",
+          subject_id: subject.id,
           inserted_at: DateTime.add(DateTime.utc_now(), 2, :day)
         )
 
       resp =
         conn
-        |> post("/api/v1/grades/filters", %{
+        |> post("/api/v1/chapters/filters", %{
           "inserted_at" => %{"$GT" => DateTime.utc_now()}
         })
 
@@ -126,33 +133,35 @@ defmodule QuizGeneratorWeb.GradeControllerTest do
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "description" => "Primary class",
-                   "id" => grade_2.id,
-                   "title" => "Grade 2",
-                   "syllabus_provider_id" => syllabus_provider.id,
-                   "syllabus_provider" => nil
+                   "description" => nil,
+                   "id" => chapter_2.id,
+                   "title" => "Chapter 2",
+                   "number" => 1,
+                   "subject" => nil,
+                   "subject_id" => subject.id
                  }
                ]
-             } ==
-               json_response(resp, 200)
+             } == json_response(resp, 200)
     end
   end
 
-  describe "Deactivate syllabus_provider" do
+  describe "Deactivate chapter" do
     setup [
       :create_user,
       :create_syllabus_provider,
       :create_conn,
-      :create_grade
+      :create_grade,
+      :create_subject,
+      :create_chapter
     ]
 
-    test "Returns deactivated message", %{conn: conn, grade: grade} do
-      resp = delete(conn, "/api/v1/grades/#{grade.id}")
-      assert %{"message" => "Grade deactivated successfully"} == json_response(resp, 200)
+    test "Returns deactivated message", %{conn: conn, chapter: chapter} do
+      resp = delete(conn, "/api/v1/chapters/#{chapter.id}")
+      assert %{"message" => "Chapter successfully deactivated"} == json_response(resp, 200)
     end
 
     test "Return error with incorrect id", %{conn: conn, user: user} do
-      resp = delete(conn, "/api/v1/grades/#{user.id}")
+      resp = delete(conn, "/api/v1/chapters/#{user.id}")
 
       assert %{
                "error" => %{
@@ -161,6 +170,14 @@ defmodule QuizGeneratorWeb.GradeControllerTest do
                }
              } == json_response(resp, 404)
     end
+  end
+
+  defp create_chapter(context) do
+    {:ok, chapter: insert(:chapter, subject_id: context.subject.id)}
+  end
+
+  defp create_subject(context) do
+    {:ok, subject: insert(:subject, grade_id: context.grade.id)}
   end
 
   defp create_grade(context) do
