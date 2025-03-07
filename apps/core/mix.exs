@@ -43,7 +43,7 @@ defmodule Core.MixProject do
       {:ex_machina, "~> 2.7"},
       {:faker, "~> 0.17.0"},
       # {:fat_ecto, "~> 1.0.0"},
-      {:fat_ecto, github: "tanweerdev/fat_ecto", branch: "version_utils"},
+      {:fat_ecto, github: "tanweerdev/fat_ecto", branch: "master"},
       # {:fat_ecto, path: "/Users/tanweer/projects/tanweerdev/fat_ecto"},
       {:timex, "~> 3.7"},
       {:triplex, "~> 1.3"},
