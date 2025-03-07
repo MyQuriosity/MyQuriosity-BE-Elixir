@@ -1,11 +1,10 @@
 defmodule Quriosity.MixProject do
   use Mix.Project
-  alias FatUtils.Version
 
   def project do
     [
       apps_path: "apps",
-      version: version(),
+      version: save_and_get_version(),
       start_permanent: Mix.env() == :prod,
       releases: releases(),
       deps: deps(),
@@ -40,57 +39,80 @@ defmodule Quriosity.MixProject do
     []
   end
 
-  defp put_version(rel) do
-    app_version = version()
-    # Copy it to somewhere predictable
-    # {:ok, core_app_version} = :application.get_key(:core, :vsn)
-
-    # build_path =
-    #   "#{rel.path}/lib/core-#{to_string(core_app_version)}/priv/version_info.json"
-    build_path = to_string(:code.priv_dir(:core)) <> "/version_info.json"
-    # IO.inspect("****** build_path *******")
-    # IO.inspect(build_path)
-
-    local_path = "apps/core/priv/version_info.json"
-
-    write_version_info(app_version, local_path, build_path)
-
-    rel
+  defp get_version do
+    System.get_env("RELEASE_VERSION") || "0.1.0"
   end
 
-  @spec write_version_info(
-          String.t() | atom() | nil,
-          String.t(),
-          String.t()
-        ) :: {:ok, [binary()]} | {:error, atom(), binary()}
-  def write_version_info(app_version, local_path, build_path) do
-    info = Version.get_version_info()
-    info = Map.put(info, :app_version, app_version)
+  def save_and_get_version do
+    version = get_version()
 
-    content = Jason.encode!(info)
-    # Lets write to local path for development server
-    File.write(local_path, content)
 
-    # Lets write to release
-    File.cp_r(
-      build_path,
-      content
-    )
+    version_info = get_version_info()
+    version_info = Map.put(version_info, :app_version, version)
+
+    # Save to a common file in the umbrella's `priv` directory
+    save_version_info(version_info, "apps/core/priv/version_info.json")
+
+    version
   end
 
-  defp version do
-    if System.get_env("RELEASE_VERSION") in ["", nil] do
-      git_version()
+  def save_release_info(release) do
+    version = get_version()
+
+
+    version_info = get_version_info()
+    version_info = Map.put(version_info, :app_version, version)
+
+    # Save to a common file in the umbrella's `priv` directory
+    save_version_info(version_info, "apps/core/priv/version_info.json")
+
+    release
+  end
+
+  @doc """
+  Helper function to save version/release info to a file.
+  """
+  def save_version_info(info, file_path) do
+    # Ensure the directory exists
+    File.mkdir_p!(Path.dirname(file_path))
+
+    # Write the info to the file
+    # File.write!(file_path, Poison.encode!(info))
+
+    # Write the info to the file as raw content
+    File.write!(file_path, encode(info))
+  end
+
+  def encode(map) do
+    map
+    |> Enum.map(fn {k, v} -> "\"#{k}\":\"#{v}\"" end)
+    |> Enum.join(",")
+    |> then(&("{#{&1}}"))
+  end
+
+  def get_version_info do
+    with {:ok, commit_hash} <- execute_git_command("show", ["-s", "--pretty=format:%h"]),
+         {:ok, commit_message} <- execute_git_command("show", ["-s", "--pretty=format:%s"]),
+         {:ok, commit_author} <- execute_git_command("show", ["-s", "--pretty=format:%cn"]),
+         {:ok, commit_date} <- execute_git_command("show", ["-s", "--pretty=format:%cd"]),
+         {:ok, branch} <- execute_git_command("rev-parse", ["--abbrev-ref", "HEAD"]) do
+      %{
+        commit_hash: commit_hash,
+        commit_message: commit_message,
+        commit_author: commit_author,
+        commit_date: commit_date,
+        branch: branch
+      }
     else
-      System.get_env("RELEASE_VERSION")
+      _ -> nil
     end
   end
 
-  def git_version do
-    "git"
-    |> System.cmd(["rev-parse", "--short", "HEAD"])
-    |> elem(0)
-    |> String.trim_trailing()
+  def execute_git_command(command, args) do
+    case System.cmd("git", [command | args]) do
+      {output, 0} -> {:ok, String.trim_trailing(output)}
+      _ -> :error
+    end
   end
 
   defp releases do
@@ -104,7 +126,7 @@ defmodule Quriosity.MixProject do
         ],
         path: "builds",
         # have Mix automatically create a tarball after assembly
-        steps: [:assemble, &put_version/1, :tar]
+        steps: [:assemble, &save_release_info/1, :tar]
       ]
     ]
   end
