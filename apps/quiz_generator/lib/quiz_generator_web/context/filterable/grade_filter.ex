@@ -1,4 +1,8 @@
 defmodule QuizGeneratorWeb.Filterable.GradeFilter do
+  @moduledoc """
+    A dynamic filtering module for the `Grade` schema using `FatEcto.Dynamics.FatBuildable`.
+  """
+
   use FatEcto.Dynamics.FatBuildable,
     filterable_fields: %{
       "title" => "$ILIKE",

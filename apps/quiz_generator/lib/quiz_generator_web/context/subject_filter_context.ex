@@ -10,7 +10,6 @@ defmodule QuizGenerator.SubjectFilterContext do
 
   @spec filtered_query(map()) :: Ecto.Query.t()
   def filtered_query(params) do
-    IO.inspect(params)
     dynamics = SubjectFilter.build(params)
 
     query =

@@ -12,6 +12,7 @@ defmodule QuizGenerator.QuizContext do
   alias QuizGenerator.QuizFilterContext
 
   def create_quiz_with_questions_and_options(questions, additional_info) do
+    # credo:disable-for-next-line
     Multi.new()
     |> Multi.insert(:quiz, Quiz.changeset(%Quiz{}, additional_info))
     |> Multi.run(:questions, fn _repo, %{quiz: quiz} ->
@@ -32,6 +33,7 @@ defmodule QuizGenerator.QuizContext do
       options =
         Enum.flat_map(Enum.zip(inserted_questions, questions), fn {inserted_question,
                                                                    question_params} ->
+          # credo:disable-for-next-line
           Enum.map(question_params["options"], fn {key, option_params} ->
             answers = question_params["answers"]
 

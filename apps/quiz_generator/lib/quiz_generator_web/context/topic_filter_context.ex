@@ -10,7 +10,6 @@ defmodule QuizGenerator.TopicFilterContext do
 
   @spec filtered_query(map()) :: Ecto.Query.t()
   def filtered_query(params) do
-    IO.inspect(params)
     dynamic = TopicFilter.build(params)
 
     query =
@@ -24,7 +23,6 @@ defmodule QuizGenerator.TopicFilterContext do
         as: :syllabus_provider
       )
 
-    IO.inspect(dynamic, label: "---dynamic--: ")
     where(query, ^dynamic)
   end
 end

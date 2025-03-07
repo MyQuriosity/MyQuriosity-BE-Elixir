@@ -12,7 +12,7 @@ defmodule QuizGenerator.QuizFilterContext do
 
     query =
       Quiz
-      |> preload([:topic, questions: :options])
+      |> preload(topic: [chapter: :subject], questions: :options)
       |> join(:inner, [q], t in QuizGenerator.Topic, on: t.id == q.topic_id, as: :topic)
       |> join(:inner, [q, t], ch in QuizGenerator.Chapter,
         on: ch.id == t.chapter_id,

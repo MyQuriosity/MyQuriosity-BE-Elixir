@@ -1,4 +1,7 @@
 defmodule QuizGeneratorWeb.Filterable.SyllabusProviderFilter do
+  @moduledoc """
+    A dynamic filtering module for the `Syllabus Provider` schema using `FatEcto.Dynamics.FatBuildable`.
+  """
   use FatEcto.Dynamics.FatBuildable,
     filterable_fields: %{
       "title" => "$ILIKE",

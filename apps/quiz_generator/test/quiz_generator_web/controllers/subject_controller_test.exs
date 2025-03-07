@@ -87,7 +87,9 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
 
     test "filter subject with title", %{
       conn: conn,
-      subject: subject
+      subject: subject,
+      grade: grade,
+      syllabus_provider: syllabus_provider
     } do
       resp =
         conn
@@ -101,7 +103,18 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
                    "title" => "English",
                    "color" => "primary-purple",
                    "course_code" => "Eng",
-                   "grade" => nil
+                   "grade_id" => grade.id,
+                   "grade" => %{
+                     "description" => "Primary class",
+                     "id" => grade.id,
+                     "syllabus_provider" => %{
+                       "description" => "For Punjab schools",
+                       "id" => syllabus_provider.id,
+                       "title" => "Punjab Textbook Board"
+                     },
+                     "syllabus_provider_id" => syllabus_provider.id,
+                     "title" => "Grade 1"
+                   }
                  }
                ]
              } ==
@@ -156,7 +169,11 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
                json_response(resp, 200)
     end
 
-    test "filter subject with inserted_at", %{conn: conn, grade: grade} do
+    test "filter subject with inserted_at", %{
+      conn: conn,
+      grade: grade,
+      syllabus_provider: syllabus_provider
+    } do
       subject_2 =
         insert(:subject,
           title: "Science",
@@ -179,7 +196,18 @@ defmodule QuizGeneratorWeb.SubjectControllerTest do
                    "title" => "Science",
                    "color" => "primary-purple",
                    "course_code" => "sci",
-                   "grade" => nil
+                   "grade_id" => grade.id,
+                   "grade" => %{
+                     "description" => "Primary class",
+                     "id" => grade.id,
+                     "syllabus_provider" => %{
+                       "description" => "For Punjab schools",
+                       "id" => syllabus_provider.id,
+                       "title" => "Punjab Textbook Board"
+                     },
+                     "syllabus_provider_id" => syllabus_provider.id,
+                     "title" => "Grade 1"
+                   }
                  }
                ]
              } == json_response(resp, 200)

@@ -26,7 +26,7 @@ defmodule QuizGeneratorWeb.AuthController do
   end
 
   def setup_password(conn, %{"token" => token} = params) do
-    with {:ok, :valid} <- is_token_valid?(token),
+    with {:ok, :valid} <- token_valid?(token),
          {:ok, user} <- AuthContext.verify_and_update_user(token),
          {:ok, _record} <- AuthContext.setup_password(user, params) do
       conn
@@ -117,9 +117,9 @@ defmodule QuizGeneratorWeb.AuthController do
     {:ok, url}
   end
 
-  defp is_token_valid?(token) when token not in [nil, ""] do
+  defp token_valid?(token) when token not in [nil, ""] do
     {:ok, :valid}
   end
 
-  defp is_token_valid?(_), do: {:error, "Invalid token"}
+  defp token_valid?(_), do: {:error, "Invalid token"}
 end

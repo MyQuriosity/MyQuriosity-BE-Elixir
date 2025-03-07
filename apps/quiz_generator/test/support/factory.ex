@@ -1,4 +1,8 @@
 defmodule TenantData.Support.Factory do
+  @moduledoc """
+    A factory module for generating test data using `ExMachina`.
+  """
+
   use ExMachina.Ecto, repo: QuizGenerator.Repo
   alias QuizGenerator.Chapter
   alias QuizGenerator.Grade
@@ -6,6 +10,7 @@ defmodule TenantData.Support.Factory do
   alias QuizGenerator.SyllabusProvider
   alias QuizGenerator.Topic
   alias QuizGenerator.User
+  alias QuizGenerator.Quiz
 
   def user_factory do
     %User{
@@ -52,5 +57,9 @@ defmodule TenantData.Support.Factory do
       title: "The Riding Hood",
       number: 1
     }
+  end
+
+  def quiz_factory do
+    %Quiz{title: "Quiz 1"}
   end
 end

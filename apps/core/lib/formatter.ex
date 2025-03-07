@@ -16,7 +16,6 @@ defmodule Formatter.Log do
     |> new_line()
   end
 
-  # TODO: handle other cases too
   defp decode(message) when is_binary(message) do
     {:ok, message}
   end

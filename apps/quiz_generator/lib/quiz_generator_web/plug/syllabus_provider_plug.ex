@@ -1,4 +1,9 @@
 defmodule QuizGenerator.Plug.SyllabusProviderPlug do
+  @moduledoc """
+  A Plug to extract the `x-syllabus-provider-id` header from the request
+  and merge it into the connection parameters.
+  """
+
   import Plug.Conn
 
   def init(default), do: default

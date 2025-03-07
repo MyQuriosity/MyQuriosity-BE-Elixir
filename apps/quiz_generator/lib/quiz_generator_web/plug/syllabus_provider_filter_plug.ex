@@ -1,4 +1,9 @@
 defmodule QuizGenerator.Plug.SyllabusProviderFilter do
+  @moduledoc """
+    A Plug that extracts the `x-syllabus-provider-id` from request headers and injects it
+    into `conn.params` in a format suitable for filtering.
+  """
+
   import Plug.Conn
 
   def init(default), do: default

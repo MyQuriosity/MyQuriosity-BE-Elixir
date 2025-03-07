@@ -18,8 +18,7 @@ defmodule QuizGenerator.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {QuizGenerator.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      mod: {QuizGenerator.Application, []}
     ]
   end
 

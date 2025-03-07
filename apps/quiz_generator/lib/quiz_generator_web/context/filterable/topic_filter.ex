@@ -1,4 +1,8 @@
 defmodule QuizGeneratorWeb.Filterable.TopicFilter do
+  @moduledoc """
+    A dynamic filtering module for the `Topic` schema using `FatEcto.Dynamics.FatBuildable`.
+  """
+
   import Ecto.Query
 
   use FatEcto.Dynamics.FatBuildable,
@@ -28,10 +32,10 @@ defmodule QuizGeneratorWeb.Filterable.TopicFilter do
 
   @impl true
   def override_whereable(_dynamics, "syllabus_provider_id", "$EQUAL", value) do
-     dynamic([syllabus_provider: syllabus_provider], syllabus_provider.id == ^value)
+    dynamic([syllabus_provider: syllabus_provider], syllabus_provider.id == ^value)
   end
 
-  def override_whereable(dynamics, "grade_id", "$EQUAL", value) do
+  def override_whereable(_dynamics, "grade_id", "$EQUAL", value) do
     dynamic([grade: grade], grade.id == ^value)
   end
 

@@ -40,7 +40,6 @@ defmodule QuizGenerator.TopicContext do
     params
     |> TopicFilterContext.filtered_query()
     |> PaginationUtils.paginate(params)
-    |> IO.inspect()
   end
 
   @spec deactivate(Topic.t()) ::

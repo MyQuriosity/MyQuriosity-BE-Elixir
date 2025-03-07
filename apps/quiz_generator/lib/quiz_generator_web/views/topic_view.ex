@@ -15,8 +15,9 @@ defmodule QuizGeneratorWeb.TopicView do
       description: topic.description,
       chapter_id: topic.chapter_id,
       chapter:
-        Ecto.assoc_loaded?(topic.chapter) &&
-          render_one(topic.chapter, QuizGeneratorWeb.ChapterView, "show.json", as: :chapter) || nil
+        (Ecto.assoc_loaded?(topic.chapter) &&
+           render_one(topic.chapter, QuizGeneratorWeb.ChapterView, "show.json", as: :chapter)) ||
+          nil
     }
   end
 end

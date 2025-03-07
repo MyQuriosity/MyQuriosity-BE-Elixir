@@ -53,10 +53,8 @@ defmodule QuizGeneratorWeb do
       import Plug.Conn
       import Core.Gettext
       import QuizGenerator.GuardianHelper
-      import QuizGenerator.ValidationHelper
-      import Campus.DateTimeUtils
+      # import QuizGenerator.ValidationHelper
       alias QuizGeneratorWeb.Router.Helpers, as: Routes
-      # alias Campus.Context
       alias CampusApiUtils.Guardian, as: GuardianUtils
       alias QuizGenerator.Repo
       import Ecto.Query

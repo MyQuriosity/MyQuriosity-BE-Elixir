@@ -81,7 +81,9 @@ defmodule QuizGeneratorWeb.ChapterControllerTest do
     test "filter chapter with title", %{
       conn: conn,
       chapter: chapter,
-      subject: subject
+      subject: subject,
+      syllabus_provider: syllabus_provider,
+      grade: grade
     } do
       resp =
         conn
@@ -95,7 +97,24 @@ defmodule QuizGeneratorWeb.ChapterControllerTest do
                    "id" => chapter.id,
                    "title" => "Short Tales",
                    "number" => 1,
-                   "subject" => nil,
+                   "subject" => %{
+                     "color" => "primary-purple",
+                     "course_code" => "Eng",
+                     "grade" => %{
+                       "description" => "Primary class",
+                       "id" => grade.id,
+                       "syllabus_provider" => %{
+                         "description" => "For Punjab schools",
+                         "id" => syllabus_provider.id,
+                         "title" => "Punjab Textbook Board"
+                       },
+                       "syllabus_provider_id" => syllabus_provider.id,
+                       "title" => "Grade 1"
+                     },
+                     "grade_id" => grade.id,
+                     "id" => subject.id,
+                     "title" => "English"
+                   },
                    "subject_id" => subject.id
                  }
                ]
@@ -115,7 +134,12 @@ defmodule QuizGeneratorWeb.ChapterControllerTest do
                json_response(resp, 200)
     end
 
-    test "filter chapter with inserted_at", %{conn: conn, subject: subject} do
+    test "filter chapter with inserted_at", %{
+      conn: conn,
+      subject: subject,
+      grade: grade,
+      syllabus_provider: syllabus_provider
+    } do
       chapter_2 =
         insert(:chapter,
           title: "Chapter 2",
@@ -137,7 +161,24 @@ defmodule QuizGeneratorWeb.ChapterControllerTest do
                    "id" => chapter_2.id,
                    "title" => "Chapter 2",
                    "number" => 1,
-                   "subject" => nil,
+                   "subject" => %{
+                     "color" => "primary-purple",
+                     "course_code" => "Eng",
+                     "grade" => %{
+                       "description" => "Primary class",
+                       "id" => grade.id,
+                       "syllabus_provider" => %{
+                         "description" => "For Punjab schools",
+                         "id" => syllabus_provider.id,
+                         "title" => "Punjab Textbook Board"
+                       },
+                       "syllabus_provider_id" => syllabus_provider.id,
+                       "title" => "Grade 1"
+                     },
+                     "grade_id" => grade.id,
+                     "id" => subject.id,
+                     "title" => "English"
+                   },
                    "subject_id" => subject.id
                  }
                ]

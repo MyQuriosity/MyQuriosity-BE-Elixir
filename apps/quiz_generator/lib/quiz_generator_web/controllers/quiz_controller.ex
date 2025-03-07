@@ -5,13 +5,15 @@ defmodule QuizGeneratorWeb.QuizController do
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"questions" => questions_params, "additional_info" => additional_info}) do
-    case QuizContext.create_quiz_with_questions_and_options(questions_params, additional_info) do
-      {:ok, _} ->
-        conn
-        |> put_status(:created)
-        |> json(%{message: "Quiz created successfully"})
+    with {:ok, _} <-
+           QuizContext.create_quiz_with_questions_and_options(questions_params, additional_info) do
+      conn
+      |> put_status(:created)
+      |> json(%{message: "Quiz created successfully"})
     end
   end
+
+  def create(_conn, _params), do: {:error, "Additional info and questions are missing"}
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do

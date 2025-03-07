@@ -154,8 +154,13 @@ defmodule QuizGeneratorWeb.TopicControllerTest do
                json_response(resp, 200)
     end
 
-    @tag :dev
-    test "filter topic with inserted_at", %{conn: conn, chapter: chapter, grade: grade, subject: subject, syllabus_provider: syllabus_provider} do
+    test "filter topic with inserted_at", %{
+      conn: conn,
+      chapter: chapter,
+      grade: grade,
+      subject: subject,
+      syllabus_provider: syllabus_provider
+    } do
       topic_2 =
         insert(:topic,
           title: "Hansel and Gretel",
@@ -166,43 +171,43 @@ defmodule QuizGeneratorWeb.TopicControllerTest do
       resp =
         conn
         |> post("/api/v1/topics/filters", %{
-          "title" => %{"$ILIKE" => "%Gretel%"}
+          "inserted_at" => %{"$GT" => DateTime.utc_now()}
         })
 
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
-                %{
-                  "description" => nil,
-                  "id" => topic_2.id,
-                  "title" => "The Riding Hood",
-                  "chapter" => %{
-                    "description" => nil,
-                    "id" => chapter.id,
-                    "number" => 1,
-                    "subject" => %{
-                      "color" => "primary-purple",
-                      "course_code" => "Eng",
-                      "grade" => %{
-                        "description" => "Primary class",
-                        "id" => grade.id,
-                        "syllabus_provider" => %{
-                          "description" => "For Punjab schools",
-                          "id" => syllabus_provider.id,
-                          "title" => "Punjab Textbook Board"
-                        },
-                        "syllabus_provider_id" => syllabus_provider.id,
-                        "title" => "Grade 1"
-                      },
-                      "grade_id" => grade.id,
-                      "id" => subject.id,
-                      "title" => "English"
-                    },
-                    "subject_id" => subject.id,
-                    "title" => "Short Tales"
-                  },
-                  "chapter_id" => chapter.id
-                }
+                 %{
+                   "description" => nil,
+                   "id" => topic_2.id,
+                   "title" => "Hansel and Gretel",
+                   "chapter" => %{
+                     "description" => nil,
+                     "id" => chapter.id,
+                     "number" => 1,
+                     "subject" => %{
+                       "color" => "primary-purple",
+                       "course_code" => "Eng",
+                       "grade" => %{
+                         "description" => "Primary class",
+                         "id" => grade.id,
+                         "syllabus_provider" => %{
+                           "description" => "For Punjab schools",
+                           "id" => syllabus_provider.id,
+                           "title" => "Punjab Textbook Board"
+                         },
+                         "syllabus_provider_id" => syllabus_provider.id,
+                         "title" => "Grade 1"
+                       },
+                       "grade_id" => grade.id,
+                       "id" => subject.id,
+                       "title" => "English"
+                     },
+                     "subject_id" => subject.id,
+                     "title" => "Short Tales"
+                   },
+                   "chapter_id" => chapter.id
+                 }
                ]
              } == json_response(resp, 200)
     end

@@ -1,4 +1,8 @@
 defmodule QuizGeneratorWeb.Filterable.SubjectFilter do
+  @moduledoc """
+    A dynamic filtering module for the `Subject` schema using `FatEcto.Dynamics.FatBuildable`.
+  """
+
   import Ecto.Query
 
   use FatEcto.Dynamics.FatBuildable,
