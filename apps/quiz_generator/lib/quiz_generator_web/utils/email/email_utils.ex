@@ -1,4 +1,4 @@
-defmodule Campus.EmailUtils do
+defmodule QuizGenerator.EmailUtils do
   @moduledoc """
   Email utility functions, which can be used by any app
   depending on :data app.
@@ -6,14 +6,14 @@ defmodule Campus.EmailUtils do
   use Bamboo.Template,
     view: Data.Email.AuthView
 
-  alias Data.Utils.ConfigUtils
+  alias QuizGenerator.Utils.ConfigUtils
 
   require Logger
 
   def send_email(params, action) do
     params
     |> email_with_layout(action)
-    |> Data.Mailer.deliver_now()
+    |> QuizGenerator.Mailer.deliver_now()
     |> case do
       {:ok, email} ->
         {:ok, email}

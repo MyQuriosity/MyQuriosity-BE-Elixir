@@ -1,4 +1,4 @@
-defmodule Data.Email do
+defmodule QuizGenerator.Email do
   @moduledoc """
   This module is used to set Bamboo email struct
   """

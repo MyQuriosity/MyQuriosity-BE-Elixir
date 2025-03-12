@@ -33,6 +33,17 @@ config :quiz_generator, QuizGenerator.AuthAccessPipeline,
 config :quiz_generator, :env,
   quiz_admin_password: System.get_env("QUIZ_ADMIN_PASSWORD") || "password"
 
+if System.get_env("MYQAMPUSMAILER_EMAIL_ADAPTER") == "ses" do
+  config :quiz_generator, QuizGenerator.Mailer,
+    adapter: Bamboo.SesAdapter,
+    from_email: System.get_env("MYQAMPUS_DEFAULT_EMAIL")
+else
+  config :quiz_generator, QuizGenerator.Mailer,
+    adapter: Bamboo.SendGridAdapter,
+    api_key: System.get_env("BAMBOO_API_KEY"),
+    from_email: System.get_env("MYQAMPUS_DEFAULT_EMAIL")
+end
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

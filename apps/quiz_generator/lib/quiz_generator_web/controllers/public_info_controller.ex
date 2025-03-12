@@ -5,7 +5,9 @@ defmodule QuizGeneratorWeb.PublicInfoController do
     file_path = Path.join(Application.app_dir(app, "priv"), "version_info.json")
 
     case File.read(file_path) do
-      {:ok, content} -> Jason.decode!(content)
+      {:ok, content} ->
+        Jason.decode!(content)
+
       {:error, error} ->
         {:error, error}
     end

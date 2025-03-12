@@ -1,4 +1,4 @@
-defmodule Data.Utils.ConfigUtils do
+defmodule QuizGenerator.Utils.ConfigUtils do
   @moduledoc """
     Provides utility functions for email.
   """
@@ -8,6 +8,6 @@ defmodule Data.Utils.ConfigUtils do
   """
   @spec from_email() :: String.t() | nil
   def from_email do
-    Application.get_env(:data, Data.Mailer)[:from_email]
+    Application.get_env(:quiz_generator, QuizGenerator.Mailer)[:from_email]
   end
 end

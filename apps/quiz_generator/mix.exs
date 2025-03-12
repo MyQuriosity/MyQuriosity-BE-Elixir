@@ -18,7 +18,8 @@ defmodule QuizGenerator.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {QuizGenerator.Application, []}
+      mod: {QuizGenerator.Application, []},
+      extra_applications: [:bamboo]
     ]
   end
 
@@ -41,8 +42,8 @@ defmodule QuizGenerator.MixProject do
       {:gettext, "~> 0.21.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:core, in_umbrella: true},
-      {:data, in_umbrella: true}
+      {:core, in_umbrella: true}
+      # {:data, in_umbrella: true}
     ]
   end
 

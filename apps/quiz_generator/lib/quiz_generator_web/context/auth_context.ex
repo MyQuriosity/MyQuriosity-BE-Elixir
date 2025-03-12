@@ -3,7 +3,7 @@ defmodule QuizGenerator.AuthContext do
   This context is used to signup the institute
   """
   # import Ecto.Query
-  alias Campus.EmailUtils
+  alias QuizGenerator.EmailUtils
   # alias QuizGenerator.Repo
   # alias Data.TenantInformation
   alias QuizGenerator.User

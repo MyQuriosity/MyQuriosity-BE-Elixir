@@ -46,7 +46,6 @@ defmodule Quriosity.MixProject do
   def save_and_get_version do
     version = get_version()
 
-
     version_info = get_version_info()
     version_info = Map.put(version_info, :app_version, version)
 
@@ -58,7 +57,6 @@ defmodule Quriosity.MixProject do
 
   def save_release_info(release) do
     version = get_version()
-
 
     version_info = get_version_info()
     version_info = Map.put(version_info, :app_version, version)
@@ -87,7 +85,7 @@ defmodule Quriosity.MixProject do
     map
     |> Enum.map(fn {k, v} -> "\"#{k}\":\"#{v}\"" end)
     |> Enum.join(",")
-    |> then(&("{#{&1}}"))
+    |> then(&"{#{&1}}")
   end
 
   def get_version_info do

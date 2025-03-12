@@ -12,9 +12,9 @@ defmodule QuizGeneratorWeb.AuthController do
   @spec login(Plug.Conn.t(), map) :: Plug.Conn.t()
   def login(
         conn,
-        %{"email" => identity, "password" => password} = _params
+        %{"email" => email, "password" => password, "remember_me" => remember_me} = _params
       ) do
-    user_login(conn, identity, password)
+    user_login(conn, email, password, remember_me)
   end
 
   def signup(conn, params) do
@@ -53,11 +53,11 @@ defmodule QuizGeneratorWeb.AuthController do
     )
   end
 
-  @spec user_login(Plug.Conn.t(), String.t(), String.t()) :: Plug.Conn.t()
-  def user_login(conn, identity, password) do
-    case validate_identity(identity) do
+  @spec user_login(Plug.Conn.t(), String.t(), String.t(), boolean()) :: Plug.Conn.t()
+  def user_login(conn, email, password, remember_me) do
+    case validate_identity(email) do
       {:email, email} ->
-        auth_user(conn, password, email, :email)
+        auth_user(conn, password, email, remember_me)
 
       {:error, :email_not_registered} ->
         Auth.not_authorized(conn, "Email not registered")
@@ -74,11 +74,11 @@ defmodule QuizGeneratorWeb.AuthController do
     end
   end
 
-  @spec auth_user(Plug.Conn.t(), String.t(), String.t(), atom()) :: Plug.Conn.t()
-  def auth_user(conn, password, identity, type) do
-    case Auth.auth_user_validate(password, identity, type) do
+  @spec auth_user(Plug.Conn.t(), String.t(), String.t(), boolean()) :: Plug.Conn.t()
+  def auth_user(conn, password, identity, remember_me) do
+    case Auth.auth_user_validate(password, identity) do
       {:ok, user} ->
-        authenticate_user(conn, user)
+        authenticate_user(conn, user, remember_me)
 
       {:error, :password_not_set} ->
         Auth.not_authorized(conn, "Registration setup is not competed")
@@ -88,8 +88,36 @@ defmodule QuizGeneratorWeb.AuthController do
     end
   end
 
-  defp authenticate_user(conn, user) do
-    conn = GuardianPlug.sign_in(conn, user)
+  defp authenticate_user(conn, user, true) do
+    conn =
+      conn
+      |> GuardianPlug.sign_in(user, %{}, ttl: {30, :day})
+      |> GuardianPlug.remember_me(user)
+
+    jwt = GuardianPlug.current_token(conn)
+    claims = GuardianPlug.current_claims(conn)
+    exp = Map.get(claims, "exp")
+
+    conn =
+      conn
+      |> put_resp_header("authorization", "Bearer #{jwt}")
+      |> put_resp_header("x-expires", "#{exp}")
+
+    {syllabus_providers, _meta} =
+      QuizGeneratorWeb.SyllabusProviderContext.fetch_active_paginated(%{})
+
+    data = %{
+      jwt: jwt,
+      user: user,
+      exp: exp,
+      syllabus_providers: syllabus_providers
+    }
+
+    render(conn, "login.json", data)
+  end
+
+  defp authenticate_user(conn, user, false) do
+    conn = GuardianPlug.sign_in(conn, user, %{}, ttl: {1, :day})
     jwt = GuardianPlug.current_token(conn)
     claims = GuardianPlug.current_claims(conn)
     exp = Map.get(claims, "exp")

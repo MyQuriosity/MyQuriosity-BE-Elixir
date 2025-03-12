@@ -12,10 +12,10 @@ defmodule QuizGenerator.Utils.Auth do
     Bcrypt.hash_pwd_salt(plaintext)
   end
 
-  @spec auth_user_validate(String.t(), String.t(), atom()) ::
+  @spec auth_user_validate(String.t(), String.t()) ::
           {:error, :invalid_password | :user_not_found} | {:ok, QuizGenerator.User.t()}
-  def auth_user_validate(plaintext_pw, field_value, field_key) do
-    case get_by_case_insensitive(QuizGenerator.User, field_value, field_key) do
+  def auth_user_validate(plaintext_pw, field_value) do
+    case get_by_case_insensitive(QuizGenerator.User, field_value, :email) do
       {:ok, user} ->
         if Bcrypt.verify_pass(plaintext_pw, user.hashed_password),
           do: {:ok, user},
