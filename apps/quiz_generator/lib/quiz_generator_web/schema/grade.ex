@@ -28,7 +28,8 @@ defmodule QuizGenerator.Grade do
     |> validate_required([:title, :syllabus_provider_id])
     |> validate_length(:title, max: 100)
     |> unique_constraint([:title, :syllabus_provider_id],
-      name: :unique_grades_syllabus_provider_index
+      name: :unique_grades_syllabus_provider_index,
+      message: "Grade already exists for this syllabus provider"
     )
     |> foreign_key_constraint(:syllabus_provider_id)
   end

@@ -13,7 +13,11 @@ defmodule QuizGenerator.Utils.Auth do
   end
 
   @spec auth_user_validate(String.t(), String.t()) ::
-          {:error, :invalid_password | :user_not_found} | {:ok, QuizGenerator.User.t()}
+          {:error, :invalid_password | :user_not_found | :password_not_set}
+          | {:ok, QuizGenerator.User.t()}
+
+  def auth_user_validate(_plaintext_pw, nil), do: {:error, :password_not_set}
+
   def auth_user_validate(plaintext_pw, field_value) do
     case get_by_case_insensitive(QuizGenerator.User, field_value, :email) do
       {:ok, user} ->

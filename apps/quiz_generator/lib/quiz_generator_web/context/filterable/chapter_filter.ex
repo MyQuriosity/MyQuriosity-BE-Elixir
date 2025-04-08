@@ -16,6 +16,9 @@ defmodule QuizGeneratorWeb.Filterable.ChapterFilter do
     overrideable_fields: ["syllabus_provider_id", "grade_id"],
     ignoreable_fields_values: %{
       "title" => ["%%", nil],
+      "subject_id" => ["", nil],
+      "syllabus_provider_id" => ["", nil],
+      "grade_id" => ["", nil],
       "inserted_at" => ["", nil],
       "id" => ["", nil]
     }

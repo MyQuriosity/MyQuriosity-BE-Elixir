@@ -91,7 +91,7 @@ defmodule QuizGeneratorWeb.AuthController do
   defp authenticate_user(conn, user, true) do
     conn =
       conn
-      |> GuardianPlug.sign_in(user, %{}, ttl: {30, :day})
+      |> GuardianPlug.sign_in(user, %{}, ttl: {30, :day}, token_type: "access")
       |> GuardianPlug.remember_me(user)
 
     jwt = GuardianPlug.current_token(conn)

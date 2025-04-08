@@ -66,6 +66,6 @@ config :logger,
 
 config :core, ENDPOINT,
   url_scheme: System.get_env("MYQURIOSITY_URL_SCHEME") || "https",
-  url_host: System.get_env("MYQURIOSITY_URL_HOST") || "be.myquriosity.com"
+  url_host: System.get_env("MYQURIOSITY_URL_HOST") || "be.QuizGenerator.com"
 
 import_config "#{config_env()}.exs"

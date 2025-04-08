@@ -23,8 +23,11 @@ defmodule QuizGenerator.Option do
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = question_option, params) do
     question_option
-    |> cast(params, [:title, :is_correct])
-    |> validate_required([:title, :is_correct])
+    |> cast(params, [:title, :is_correct, :question_id])
+    |> validate_required([:title, :is_correct, :question_id])
     |> validate_length(:title, max: 255)
+    |> unique_constraint([:title, :question_id],
+    name: :unique_title_questions_index
+  )
   end
 end

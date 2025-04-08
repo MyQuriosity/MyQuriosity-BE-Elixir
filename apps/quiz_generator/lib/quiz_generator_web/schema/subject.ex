@@ -31,6 +31,10 @@ defmodule QuizGenerator.Subject do
     |> validate_length(:course_code, max: 255)
     |> validate_length(:color, max: 255)
     |> foreign_key_constraint(:grade_id)
+    |> unique_constraint([:title, :syllabus_provider_id],
+      name: :unique_subjects_grade_index,
+      message: "Subject already exists for this grade"
+    )
   end
 
   @spec deactivate_changeset(t(), map()) :: Ecto.Changeset.t()

@@ -5,7 +5,6 @@ defmodule QuizGenerator.AuthAccessPipeline do
   use Guardian.Plug.Pipeline, otp_app: :quiz_generator
 
   plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
-  plug Guardian.Plug.VerifyCookie, claims: %{"typ" => "access"}
   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
   plug Guardian.Plug.EnsureAuthenticated
 

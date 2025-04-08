@@ -10,7 +10,7 @@ defmodule TenantData.Support.Factory do
   alias QuizGenerator.SyllabusProvider
   alias QuizGenerator.Topic
   alias QuizGenerator.User
-  alias QuizGenerator.Quiz
+  alias QuizGenerator.Question
 
   def user_factory do
     %User{
@@ -59,7 +59,7 @@ defmodule TenantData.Support.Factory do
     }
   end
 
-  def quiz_factory do
-    %Quiz{title: "Quiz 1"}
+  def question_factory do
+    %Question{title: "Quiz 1"}
   end
 end

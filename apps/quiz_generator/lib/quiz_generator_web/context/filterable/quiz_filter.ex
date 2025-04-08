@@ -51,10 +51,6 @@ defmodule QuizGeneratorWeb.Filterable.QuizFilter do
     dynamic([chapter: chapter], chapter.id == ^value)
   end
 
-  def override_whereable(_dynamics, "topic_id", "$EQUAL", value) do
-    dynamic([topic: topic], topic.id == ^value)
-  end
-
   def override_whereable(_dynamics, "topic_title", "$ILIKE", value) do
     dynamic([topic: topic], ilike(fragment("(?)::TEXT", topic.title), ^value))
   end

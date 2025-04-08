@@ -26,6 +26,7 @@ defmodule QuizGeneratorWeb.Router do
     pipe_through :api
     post("/signup", AuthController, :signup)
     post("/setup_password", AuthController, :setup_password)
+    post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/login", AuthController, :login)
   end
 
@@ -36,7 +37,7 @@ defmodule QuizGeneratorWeb.Router do
     post("/subjects/filters", SubjectController, :index)
     post("/chapters/filters", ChapterController, :index)
     post("/topics/filters", TopicController, :index)
-    post("/mcqs/filters", QuizController, :index)
+    post("/mcqs/filters", QuestionController, :index)
   end
 
   scope "/api/v1", QuizGeneratorWeb do
@@ -72,7 +73,8 @@ defmodule QuizGeneratorWeb.Router do
     delete("/topics/:id", TopicController, :deactivate)
     get("/chapters_topics/:id", TopicController, :chapter_topics)
 
-    post("/generate_quiz", QuizController, :create)
+    post("/generate_quiz", QuestionController, :create)
+    put("/mcqs/:id", QuestionController, :update)
   end
 
   # Enable LiveDashboard in development

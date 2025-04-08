@@ -115,7 +115,7 @@ defmodule Quriosity.MixProject do
 
   defp releases do
     [
-      myquriosity: [
+      QuizGenerator: [
         applications: [
           runtime_tools: :permanent,
           core: :permanent,

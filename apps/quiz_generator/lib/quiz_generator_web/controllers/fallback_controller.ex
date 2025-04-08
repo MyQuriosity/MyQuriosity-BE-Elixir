@@ -49,6 +49,28 @@ defmodule QuizGenerator.FallbackController do
     })
   end
 
+  def call(conn, {:error, index, {:error, changeset = %Ecto.Changeset{}}, _whatever}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(QuizGenerator.ErrorView)
+    |> render("errors_with_index.json", %{
+      code: 422,
+      message: "Unprocessable entity",
+      changeset: changeset,
+      index: index
+    })
+  end
+
+  def call(conn, {:error, _index, message, _whatever}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(QuizGenerator.ErrorView)
+    |> render("error.json", %{
+      code: 422,
+      message: message
+    })
+  end
+
   def call(conn, {:error, :request_rate_exceeded, message: message}) do
     conn
     |> put_status(429)

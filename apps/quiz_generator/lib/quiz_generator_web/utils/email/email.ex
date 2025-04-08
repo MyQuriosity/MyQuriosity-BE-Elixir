@@ -3,7 +3,7 @@ defmodule QuizGenerator.Email do
   This module is used to set Bamboo email struct
   """
   import Bamboo.Email
-  alias Data.Utils.ConfigUtils
+  alias QuizGenerator.Utils.ConfigUtils
 
   @spec email(map()) :: Bamboo.Email.t()
   def email(%{"from" => _} = params) do

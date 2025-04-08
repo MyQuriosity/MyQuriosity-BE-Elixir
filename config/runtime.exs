@@ -29,7 +29,7 @@ if config_env() == :prod do
       host: System.fetch_env!("MYQURIOSITY_URL_HOST"),
       port: System.fetch_env!("MYQURIOSITY_URL_PORT")
     ],
-    # check_origin: [System.fetch_env!("MYQURIOSITY_SITE_ORIGINS") || "//*.myquriosity.com"],
+    # check_origin: [System.fetch_env!("MYQURIOSITY_SITE_ORIGINS") || "//*.QuizGenerator.com"],
     # TODO: enable it with some flexible configuration later
     check_origin: false,
     secret_key_base: System.fetch_env!("MYQURIOSITY_SECRET_KEY_BASE")

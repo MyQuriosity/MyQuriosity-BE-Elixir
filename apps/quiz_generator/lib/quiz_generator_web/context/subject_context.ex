@@ -21,14 +21,18 @@ defmodule QuizGenerator.SubjectContext do
 
   @spec create(map()) :: {:ok, Subject.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do
-    params = maybe_color_in_params(params)
+    case maybe_color_in_params(params) do
+      {:error, message} ->
+        {:error, message}
 
-    %Subject{}
-    |> Subject.changeset(params)
-    |> Repo.insert()
+      params ->
+        %Subject{}
+        |> Subject.changeset(params)
+        |> Repo.insert()
+    end
   end
 
-  @spec fetch_by_id(String.t()) :: nil | Subject.t()
+  @spec fetch_by_id(String.t()) :: {:error, :not_found} | {:ok, Subject.t()}
   def fetch_by_id(subject_id) do
     Subject
     |> where([s], s.id == ^subject_id)

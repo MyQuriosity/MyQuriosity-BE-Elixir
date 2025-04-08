@@ -12,6 +12,7 @@ defmodule QuizGeneratorWeb.TopicView do
     %{
       id: topic.id,
       title: topic.title,
+      number: topic.number,
       description: topic.description,
       chapter_id: topic.chapter_id,
       chapter:
