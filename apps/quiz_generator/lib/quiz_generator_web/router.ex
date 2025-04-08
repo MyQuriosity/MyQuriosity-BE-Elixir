@@ -42,7 +42,9 @@ defmodule QuizGeneratorWeb.Router do
 
   scope "/api/v1", QuizGeneratorWeb do
     pipe_through [:api, :validate_uuid, :token_auth]
-
+    put("/user", UserController, :update)
+    put("/user/update_password", UserController, :update_password)
+    put("/user/reset_password", UserController, :reset_password)
     post("/logout", AuthController, :logout)
     post("/syllabus_providers", SyllabusProviderController, :create)
     get("/syllabus_providers", SyllabusProviderController, :index)

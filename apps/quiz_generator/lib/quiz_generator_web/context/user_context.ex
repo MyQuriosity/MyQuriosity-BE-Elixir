@@ -15,16 +15,6 @@ defmodule QuizGenerator.UserContext do
     |> Repo.insert()
   end
 
-  # @spec verify(User.t(), map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-  # def verify(%User{} = user, params) do
-  #   params
-  #   |> append_hash_password()
-  #   |> then(fn updated_params ->
-  #     user
-  #     |> User.verification_changeset(updated_params)
-  #     |> Repo.update()
-  #   end)
-  # end
 
   @spec update(User.t(), map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def update(user, params) do
@@ -37,7 +27,6 @@ defmodule QuizGenerator.UserContext do
   This function is used to update the password of a user
   """
   @spec update_password(User.t(), map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-
   def update_password(user, params) do
     user
     |> User.update_password_changeset(params)
@@ -55,6 +44,19 @@ defmodule QuizGenerator.UserContext do
       user.email_verify_token == ^token and is_nil(user.deactivated_at)
     )
     |> Repo.one()
+  end
+
+  def get_user_by_id(id) do
+    User
+    |> Repo.get(id)
+    |> case do
+      nil ->  {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
+  def verify_password(password, confirmed_password) do
+    if password == confirmed_password, do: {:ok, true}, else: {:error, "Password and confirmed password does not match"}
   end
 
   # defp append_hash_password(%{"password" => password} = params) do

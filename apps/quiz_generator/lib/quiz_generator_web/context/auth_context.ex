@@ -10,7 +10,6 @@ defmodule QuizGenerator.AuthContext do
   alias QuizGenerator.UserContext
   # alias Ecto.Multi
   # alias TeamTenantApi.TenantInfoContext
-  # alias QuizGenerator.UserContext
 
   require Logger
 

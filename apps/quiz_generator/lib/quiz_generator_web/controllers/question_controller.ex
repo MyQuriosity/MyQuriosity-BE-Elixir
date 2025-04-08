@@ -19,8 +19,9 @@ defmodule QuizGeneratorWeb.QuestionController do
   def create(_conn, _params), do: {:error, "Some parameters are missing"}
 
   def update(conn, %{"id" => id} = params) do
-   with {:ok, question} <- QuestionContext.get_question_by_id(id) do
-    QuestionContext.update_question_and_options(question, params)
+   with {:ok, question} <- QuestionContext.get_question_by_id(id),
+    {:ok, _} <- QuestionContext.update_question(question, params) do
+      json(conn, %{message: "Question updated successfully"})
   end
 end
 

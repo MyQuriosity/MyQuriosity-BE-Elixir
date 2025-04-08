@@ -29,7 +29,7 @@ defmodule QuizGenerator.QuestionContext do
 
         case Repo.insert_all(Question, questions_list, on_conflict: :raise, returning: [:id, :title]) do
           {num, inserted_questions} when num > 0 -> {:ok, inserted_questions}
-          error -> IO.inspect(error)
+          _error ->
            {:error, "Failed to insert questions"}
         end
       end)
@@ -62,42 +62,64 @@ defmodule QuizGenerator.QuestionContext do
     end
   end
 
-  def update_question_and_options(question, attrs) do
-    options = Map.get(attrs, "options", [])
-    question_changeset = Question.changeset(question, Map.drop(attrs, ["options"]))
+  def update_question(question, %{"options" => options, "answers" => answers} = params) do
+    current_dt = DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
 
-    Multi.new()
+    multi = Multi.new()
     |> Multi.run(:question, fn _repo, _ ->
-      Repo.update(question_changeset)
+      question
+      |> Question.changeset(params)
+      |> Repo.update()
     end)
     |> Multi.run(:delete_options, fn _repo, %{question: question} ->
-      # options_query = (from o in Option, where: o.question_id == ^question.id)
-      # Repo.delete_all()
-    end)
-    |> Mulit.run(:insert_options, fn _repo, %{question: _question} ->
-      IO.inspect(options)
-    end)
-      # Enum.each(options_attrs, fn opt_attrs ->
-      #   case Map.get(opt_attrs, "id") do
-      #     nil ->
-      #       # New option
-      #       changeset = Option.changeset(%Option{question_id: question.id}, opt_attrs)
-      #       Repo.insert!(changeset)
-      #     id ->
-      #       # Update existing option
-      #       existing_opt = Enum.find(existing_options, &(&1.id == String.to_integer(id)))
-      #       changeset = Option.changeset(existing_opt, opt_attrs)
-      #       Repo.update!(changeset)
-      #   end
-      # end)
+      options_query = (from o in Option, where: o.question_id == ^question.id)
 
-      {:ok, :options_updated}
-    |> Repo.transaction()
+     case Repo.delete_all(options_query, returning: [:id]) do
+      {num, deleted_options} when num > 0 -> {:ok, deleted_options}
+      _ -> {:error, "Failed to insert options"}
+     end
+    end)
+    |> Multi.run(:insert_options, fn _repo, %{question: question} ->
+     options_list = Enum.map(options, fn {key, option_text} ->
+        %{
+          title: option_text,
+          is_correct: Enum.member?(answers, key),
+          question_id: question.id,
+          inserted_at: current_dt,
+          updated_at: current_dt
+        }
+      end)
+
+      case Repo.insert_all(Option, options_list, on_conflict: :raise) do
+        {num, _} when num > 0 -> {:ok, options_list}
+        _ -> {:error, "Failed to insert options"}
+      end
+    end)
+
+    try do
+      Repo.transaction(multi)
+    rescue
+      e in Postgrex.Error ->
+        handle_error(e)
+    end
   end
 
-  def get_question_by_id(id), do: {:ok, Repo.get(Question, id)}
+  def update_question(question, params) do
+    question
+    |> Question.changeset(params)
+    |> Repo.update()
+  end
 
-    def fetch_paginated(params) do
+  def get_question_by_id(id) do
+    Question
+    |> Repo.get(id)
+    |> case do
+      nil -> {:error, :not_found}
+      question -> {:ok, question}
+    end
+  end
+
+  def fetch_paginated(params) do
     params
     |> QuestionFilterContext.filtered_query()
     |> PaginationUtils.paginate(params)
