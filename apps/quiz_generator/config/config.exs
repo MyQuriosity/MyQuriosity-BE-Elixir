@@ -33,7 +33,7 @@ config :quiz_generator, QuizGenerator.AuthAccessPipeline,
 config :quiz_generator, :env,
   quiz_admin_password: System.get_env("QUIZ_ADMIN_PASSWORD") || "password"
 
-if System.get_env("MYQAMPUSMAILER_EMAIL_ADAPTER") == "ses" do
+if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
   config :quiz_generator, QuizGenerator.Mailer,
     adapter: Bamboo.SesAdapter,
     from_email: System.get_env("MYQAMPUS_DEFAULT_EMAIL")

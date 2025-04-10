@@ -1,10 +1,5 @@
 import Config
 
-config :quiz_generator, :fat_ecto,
-  repo: QuizGenerator.Repo,
-  default_limit: 100,
-  max_limit: 200
-
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

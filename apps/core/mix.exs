@@ -46,7 +46,6 @@ defmodule Core.MixProject do
       {:fat_ecto, github: "tanweerdev/fat_ecto", branch: "master"},
       # {:fat_ecto, path: "/Users/tanweer/projects/tanweerdev/fat_ecto"},
       {:timex, "~> 3.7"},
-      {:triplex, "~> 1.3"},
       {:phoenix, "~> 1.7"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix_pubsub, "~> 2.1"},

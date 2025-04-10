@@ -5,7 +5,8 @@ defmodule QuizGeneratorWeb.QuestionController do
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"questions" => questions_params, "topic_id" => topic_id}) do
-    with {:ok, _} <-
+    with {:ok, _} <- QuestionContext.validate_quiz_payload?(questions_params),
+         {:ok, _} <-
            QuestionContext.create_quiz_with_questions_and_options(
              questions_params,
              topic_id
@@ -19,11 +20,11 @@ defmodule QuizGeneratorWeb.QuestionController do
   def create(_conn, _params), do: {:error, "Some parameters are missing"}
 
   def update(conn, %{"id" => id} = params) do
-   with {:ok, question} <- QuestionContext.get_question_by_id(id),
-    {:ok, _} <- QuestionContext.update_question(question, params) do
+    with {:ok, question} <- QuestionContext.get_question_by_id(id),
+         {:ok, _} <- QuestionContext.update_question(question, params) do
       json(conn, %{message: "Question updated successfully"})
+    end
   end
-end
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do

@@ -125,5 +125,17 @@ defmodule QuizGenerator.QuestionContext do
     |> PaginationUtils.paginate(params)
   end
 
-  def handle_error(%Postgrex.Error{postgres: %{detail: detail}}), do: {:error, detail}
+  defp handle_error(%Postgrex.Error{postgres: %{detail: detail}}), do: {:error, detail}
+
+  def validate_quiz_payload?(%{"questions" => questions}) when is_list(questions) do
+   valid? = Enum.all?(questions, fn question ->
+      Map.has_key?(question, "options") and
+      is_map(question["options"]) and
+      Map.has_key?(question, "answers") and
+      is_list(question["answers"])
+    end)
+    if valid?, do: {:ok, true}, else: {:error, "Incomplete parameters for question"}
+  end
+
+  def validate_quiz_payload?(_), do: {:error, "Incomplete parameters for question"}
 end
