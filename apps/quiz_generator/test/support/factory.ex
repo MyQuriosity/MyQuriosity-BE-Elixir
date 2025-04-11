@@ -6,11 +6,12 @@ defmodule TenantData.Support.Factory do
   use ExMachina.Ecto, repo: QuizGenerator.Repo
   alias QuizGenerator.Chapter
   alias QuizGenerator.Grade
+  alias QuizGenerator.Option
+  alias QuizGenerator.Question
   alias QuizGenerator.Subject
   alias QuizGenerator.SyllabusProvider
   alias QuizGenerator.Topic
   alias QuizGenerator.User
-  alias QuizGenerator.Question
 
   def user_factory do
     %User{
@@ -61,5 +62,12 @@ defmodule TenantData.Support.Factory do
 
   def question_factory do
     %Question{title: "Quiz 1"}
+  end
+
+  def option_factory do
+    %Option{
+      title: "Option 1",
+      is_correct: false
+    }
   end
 end

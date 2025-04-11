@@ -14,6 +14,7 @@ defmodule QuizGeneratorWeb.QuestionView do
       id: question.id,
       title: question.title,
       topic_id: question.topic_id,
+      deactivated_at: question.deactivated_at,
       topic:
         (Ecto.assoc_loaded?(question.topic) &&
            render_one(question.topic, TopicView, "show.json", as: :topic)) || nil,
@@ -25,7 +26,8 @@ defmodule QuizGeneratorWeb.QuestionView do
     %{
       id: option.id,
       title: option.title,
-      is_correct: option.is_correct
+      is_correct: option.is_correct,
+      deactivated_at: option.deactivated_at
     }
   end
 end

@@ -15,7 +15,6 @@ defmodule QuizGenerator.UserContext do
     |> Repo.insert()
   end
 
-
   @spec update(User.t(), map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def update(user, params) do
     user
@@ -50,13 +49,15 @@ defmodule QuizGenerator.UserContext do
     User
     |> Repo.get(id)
     |> case do
-      nil ->  {:error, :not_found}
+      nil -> {:error, :not_found}
       user -> {:ok, user}
     end
   end
 
   def verify_password(password, confirmed_password) do
-    if password == confirmed_password, do: {:ok, true}, else: {:error, "Password and confirmed password does not match"}
+    if password == confirmed_password,
+      do: {:ok, true},
+      else: {:error, "Password and confirmed password does not match"}
   end
 
   # defp append_hash_password(%{"password" => password} = params) do

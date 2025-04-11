@@ -23,16 +23,12 @@ defmodule QuizGeneratorWeb.UserController do
         %{"password" => password, "confirmed_password" => confirmed_password} = params
       ) do
     user = HeaderUtils.get_current_user(conn)
+
     with {:ok, true} <- UserContext.verify_password(password, confirmed_password),
          {:ok, _updated_user} <- UserContext.update_password(user, params) do
       conn
       |> put_view(SharedView)
       |> render("success.json", %{data: %{message: "Password updated successfully"}})
     end
-  end
-
-  def reset_password(conn, params) do
-    user = HeaderUtils.get_current_user(conn)
-    IO.inspect(conn)
   end
 end

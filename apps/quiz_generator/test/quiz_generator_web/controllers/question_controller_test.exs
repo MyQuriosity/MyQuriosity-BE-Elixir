@@ -1,4 +1,4 @@
-defmodule QuizGeneratorWeb.QuizControllerTest do
+defmodule QuizGeneratorWeb.QuestionControllerTest do
   use QuizGeneratorWeb.ConnCase
   import Phoenix.ConnTest
 
@@ -18,7 +18,7 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
     test "Returns created message", %{conn: conn, topic: topic} do
       resp =
         post(conn, "/api/v1/generate_quiz", %{
-          "additional_info" => %{"title" => "Quiz 1", "topic_id" => topic.id},
+          "topic_id" => topic.id,
           "questions" => [
             %{
               "title" => "What is the primary purpose of narow growth in crystal formation?",
@@ -46,21 +46,12 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
           "questions" => []
         })
 
-      assert %{
-               "error" => %{
-                 "code" => 422,
-                 "errors" => %{
-                   "topic_id" => ["can't be blank"]
-                 },
-                 "message" => "Unprocessable entity",
-                 "index" => "quiz"
-               }
-             } ==
+      assert %{"error" => %{"code" => 422, "message" => "Some parameters are missing"}} ==
                json_response(resp, 422)
     end
   end
 
-  describe "filter quiz" do
+  describe "Delete question" do
     setup [
       :create_user,
       :create_syllabus_provider,
@@ -69,26 +60,59 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
       :create_subject,
       :create_chapter,
       :create_topic,
-      :create_quiz
+      :create_question,
+      :create_option
     ]
 
-    test "filter quiz with title", %{
+    test "Returns created message", %{conn: conn, question: question} do
+      resp = post(conn, "/api/v1/mcqs/filters", %{"id" => %{"$EQUAL" => question.id}})
+      %{"meta" => _meta, "records" => records} = json_response(resp, 200)
+      fetched_question = List.first(records)
+      assert is_nil(fetched_question["deactivated_at"])
+
+      assert Enum.all?(fetched_question["options"], fn option ->
+               is_nil(option["deactivated_at"])
+             end)
+
+      assert %{"message" => "Question deleted successfully"} ==
+               conn |> delete("/api/v1/mcqs/#{question.id}") |> json_response(200)
+
+      resp = post(conn, "/api/v1/mcqs/filters", %{"id" => %{"$EQUAL" => question.id}})
+      %{"meta" => _meta, "records" => records} = json_response(resp, 200)
+      assert records == []
+    end
+  end
+
+  describe "filter questions" do
+    setup [
+      :create_user,
+      :create_syllabus_provider,
+      :create_conn,
+      :create_grade,
+      :create_subject,
+      :create_chapter,
+      :create_topic,
+      :create_question
+    ]
+
+    test "filter question with title", %{
       conn: conn,
       topic: topic,
       chapter: chapter,
       subject: subject,
       grade: grade,
-      quiz: quiz
+      question: question
     } do
-      resp = post(conn, "/api/v1/mcqs/filters", %{"title" => %{"$ILIKE" => "%quiz%"}})
+      resp =
+        post(conn, "/api/v1/mcqs/filters", %{"title" => %{"$ILIKE" => "%the following elements%"}})
 
       assert %{
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "id" => quiz.id,
-                   "title" => "Quiz 1",
-                   "questions" => [],
+                   "id" => question.id,
+                   "title" =>
+                     "Which of the following elements has the highest electronegativity?",
                    "topic" => %{
                      "chapter" => %{
                        "description" => nil,
@@ -107,10 +131,13 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
                      },
                      "chapter_id" => chapter.id,
                      "description" => nil,
+                     "number" => 1,
                      "id" => topic.id,
                      "title" => "The Riding Hood"
                    },
-                   "topic_id" => topic.id
+                   "topic_id" => topic.id,
+                   "options" => [],
+                   "deactivated_at" => nil
                  }
                ]
              } ==
@@ -136,9 +163,9 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
       subject: subject,
       topic: topic
     } do
-      quiz_2 =
-        insert(:quiz,
-          title: "Quiz 2",
+      question_2 =
+        insert(:question,
+          title: "What is the primary purpose of narow growth in crystal formation?",
           topic_id: topic.id,
           inserted_at: DateTime.add(DateTime.utc_now(), 2, :day)
         )
@@ -153,9 +180,8 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "id" => quiz_2.id,
-                   "title" => "Quiz 2",
-                   "questions" => [],
+                   "id" => question_2.id,
+                   "title" => "What is the primary purpose of narow growth in crystal formation?",
                    "topic" => %{
                      "chapter" => %{
                        "description" => nil,
@@ -174,22 +200,34 @@ defmodule QuizGeneratorWeb.QuizControllerTest do
                      },
                      "chapter_id" => chapter.id,
                      "description" => nil,
+                     "number" => 1,
                      "id" => topic.id,
                      "title" => "The Riding Hood"
                    },
-                   "topic_id" => topic.id
+                   "topic_id" => topic.id,
+                   "options" => [],
+                   "deactivated_at" => nil
                  }
                ]
              } == json_response(resp, 200)
     end
   end
 
-  defp create_quiz(context) do
+  defp create_option(context) do
     {:ok,
-     quiz:
-       insert(:quiz, %{
+     option_1: insert(:option, question_id: context.question.id, title: "Oxygen"),
+     option_2:
+       insert(:option, question_id: context.question.id, title: "Fluorine", is_correct: true),
+     option_3: insert(:option, question_id: context.question.id, title: "Chlorine"),
+     option_4: insert(:option, question_id: context.question.id, title: "Nitrogen")}
+  end
+
+  defp create_question(context) do
+    {:ok,
+     question:
+       insert(:question, %{
          topic_id: context.topic.id,
-         title: "Quiz 1"
+         title: "Which of the following elements has the highest electronegativity?"
        })}
   end
 

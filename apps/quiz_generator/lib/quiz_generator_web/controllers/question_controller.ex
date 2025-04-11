@@ -26,6 +26,13 @@ defmodule QuizGeneratorWeb.QuestionController do
     end
   end
 
+  def deactivate(conn, %{"id" => id}) do
+    with {:ok, question} <- QuestionContext.get_question_by_id(id),
+         {:ok, _} <- QuestionContext.delete_question(question) do
+      json(conn, %{message: "Question deleted successfully"})
+    end
+  end
+
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
     {records, meta} = QuestionContext.fetch_paginated(params)

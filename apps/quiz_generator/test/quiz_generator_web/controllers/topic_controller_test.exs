@@ -110,6 +110,7 @@ defmodule QuizGeneratorWeb.TopicControllerTest do
                    "description" => nil,
                    "id" => topic.id,
                    "title" => "The Riding Hood",
+                   "number" => 1,
                    "chapter" => %{
                      "description" => nil,
                      "id" => chapter.id,
@@ -181,6 +182,7 @@ defmodule QuizGeneratorWeb.TopicControllerTest do
                    "description" => nil,
                    "id" => topic_2.id,
                    "title" => "Hansel and Gretel",
+                   "number" => 1,
                    "chapter" => %{
                      "description" => nil,
                      "id" => chapter.id,

@@ -21,6 +21,13 @@ defmodule QuizGenerator.User do
     field(:institute_name, :string)
     field(:designation, :string)
     field(:teach_subject, :string)
+
+    belongs_to(:syllabus_provider, QuizGenerator.SyllabusProvider,
+      foreign_key: :syllabus_provider_id,
+      type: :binary_id,
+      references: :id
+    )
+
     timestamps()
   end
 
@@ -32,7 +39,8 @@ defmodule QuizGenerator.User do
       :last_name,
       :email,
       :institute_name,
-      :gender
+      :gender,
+      :syllabus_provider_id
     ])
     |> validate_required([:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@/, message: "Invalid email format.")
@@ -54,7 +62,8 @@ defmodule QuizGenerator.User do
       :hashed_password,
       :password,
       :designation,
-      :teach_subject
+      :teach_subject,
+      :syllabus_provider_id
     ])
     |> unique_constraint(:email, name: :unique_email_per_user, message: "Email is already taken.")
   end

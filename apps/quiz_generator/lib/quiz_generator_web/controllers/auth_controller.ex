@@ -3,7 +3,7 @@ defmodule QuizGeneratorWeb.AuthController do
 
   alias QuizGenerator.Guardian
   alias QuizGenerator.Guardian.Plug, as: GuardianPlug
-  alias Core.Utils.HeaderUtils
+  alias QuizGenerator.HeaderUtils
   alias QuizGenerator.AuthContext
   alias QuizGenerator.UserContext
   alias QuizGenerator.Utils.Auth

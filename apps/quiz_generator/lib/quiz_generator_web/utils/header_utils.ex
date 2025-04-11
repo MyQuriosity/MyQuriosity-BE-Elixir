@@ -5,7 +5,7 @@ defmodule QuizGenerator.HeaderUtils do
   # alias TenantApi.Constants.Headers
   alias QuizGenerator.GuardianHelper
 
-    @doc """
+  @doc """
    This function gets origin from request header
   """
   @spec get_origin_url(Plug.Conn.t()) :: String.t() | nil

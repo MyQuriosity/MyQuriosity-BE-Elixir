@@ -12,8 +12,8 @@ defmodule QuizGenerator.Repo.Migrations.CreateOptionsTableForQuestios do
     end
 
     create unique_index(:options, [:title, :question_id],
-    name: :unique_title_questions_index,
-    where: "deactivated_at IS NULL"
-  )
+             name: :unique_title_questions_index,
+             where: "deactivated_at IS NULL"
+           )
   end
 end

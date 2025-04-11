@@ -16,6 +16,7 @@ defmodule QuizGenerator.Repo.Migrations.AddQuizGeneratorUserTable do
       add(:institute_name, :string)
       add(:designation, :string)
       add(:teach_subject, :string)
+      add(:syllabus_provider_id, references(:syllabus_providers, column: :id, type: :uuid))
       timestamps()
     end
 
