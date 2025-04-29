@@ -30,6 +30,10 @@ defmodule QuizGenerator.Chapter do
     |> validate_length(:title, max: 255)
     |> validate_length(:description, max: 255)
     |> foreign_key_constraint(:subject_id)
+    |> unique_constraint(:title,
+      name: :unique_chapters_subject_index,
+      message: "Chapter already exists for this topic"
+    )
   end
 
   @spec deactivate_changeset(t(), map()) :: Ecto.Changeset.t()

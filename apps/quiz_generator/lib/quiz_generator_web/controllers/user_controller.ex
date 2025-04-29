@@ -6,10 +6,9 @@ defmodule QuizGeneratorWeb.UserController do
   alias QuizGeneratorWeb.SharedView
 
   @spec update(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def update(conn, params) do
-    user = HeaderUtils.get_current_user(conn)
-
-    with {:ok, _updated_user} <- UserContext.update(user, params) do
+  def update(conn, %{"id" => id} = params) do
+    with {:ok, user} = UserContext.get_user_by_id(id),
+    {:ok, _updated_user} <- UserContext.update(user, params) do
       conn
       |> put_view(SharedView)
       |> render("success.json", %{data: %{message: "User successfully updated"}})
@@ -20,12 +19,14 @@ defmodule QuizGeneratorWeb.UserController do
           {:error, false | :not_found | Ecto.Changeset.t()} | Plug.Conn.t()
   def update_password(
         conn,
-        %{"password" => password, "confirmed_password" => confirmed_password} = params
+        %{"current_password" => current_password, "updated_password" => password, "confirmed_password" => confirmed_password} = params
       ) do
     user = HeaderUtils.get_current_user(conn)
+    updated_params = %{password: password}
 
-    with {:ok, true} <- UserContext.verify_password(password, confirmed_password),
-         {:ok, _updated_user} <- UserContext.update_password(user, params) do
+    with {:ok, :password_verified} <- UserContext.validate_password(user.id, current_password),
+          {:ok, true} <- UserContext.verify_new_password(password, confirmed_password),
+         {:ok, updated_user} <- UserContext.update_password(user, updated_params) do
       conn
       |> put_view(SharedView)
       |> render("success.json", %{data: %{message: "Password updated successfully"}})

@@ -8,6 +8,8 @@ defmodule QuizGeneratorWeb.AuthController do
   alias QuizGenerator.UserContext
   alias QuizGenerator.Utils.Auth
   alias QuizGeneratorWeb.SharedView
+  alias QuizGenerator.OtpCodeContext
+  alias QuizGenerator.OtpUtils
 
   @spec login(Plug.Conn.t(), map) :: Plug.Conn.t()
   def login(
@@ -61,6 +63,126 @@ defmodule QuizGeneratorWeb.AuthController do
 
       {:error, :email_not_registered} ->
         Auth.not_authorized(conn, "Email not registered")
+    end
+  end
+
+   @doc """
+  This function is used to send pre info for forgot password
+  """
+  @spec forgot_password_pre_info(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def forgot_password_pre_info(conn, params) do
+    with {:ok, data} <- AuthContext.forgot_password_pre_info(params) do
+      render(conn, "forgot_password.json", data: data)
+    end
+  end
+
+  @spec forgot_password(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def forgot_password(conn, params) do
+   with {:ok, url} <- get_url(conn),
+   {:ok, :sent} <- validate_user_and_send_otp(url, params, "password_reset") do
+
+    render(conn, "forgot_password.json",  %{data: %{message: "reset link send successfully"}})
+   end
+  end
+
+  defp validate_user_and_send_otp(url, %{"email" => email} = params, action) do
+    query =
+      from(user in QuizGenerator.User,
+        where: user.email == ^email and is_nil(user.deactivated_at)
+      )
+
+    user = Repo.one(query)
+    do_send_otp(user, url, params, action)
+  end
+
+  defp do_send_otp(nil, _, _, _),
+    do: {:error, "This user is not registered. Please sign up first."}
+
+  defp do_send_otp(user, url, params, action) do
+    OtpCodeContext.deactivate_user_otps(user, action)
+
+    user.id
+    |> OtpCodeContext.create_unique_otp(action)
+    |> case do
+      {:ok, {otp, _} = _otp_data} ->
+        OtpUtils.send_otp(otp, user, url, params, action)
+
+      error ->
+        error
+    end
+  end
+
+  @spec reset_password(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def reset_password(
+        conn,
+        %{
+          "password" => password,
+          "email" => email,
+          "otp" => _otp
+        } = _params
+      ) do
+    query =
+      from(oc in QuizGenerator.OtpCode,
+        inner_join: user in QuizGenerator.User,
+        on: user.id == oc.user_id,
+        where:
+          user.email == ^email and
+            oc.reason == "password_reset" and
+            is_nil(oc.deactivated_at),
+        preload: [:user],
+        limit: 1
+      )
+
+    otp = Repo.one(query)
+
+    case otp do
+      nil ->
+        conn
+        |> put_status(404)
+        |> put_view(QuizGenerator.ErrorView)
+        |> render("error.json",
+          code: 404,
+          message: "Wrong Otp Code"
+        )
+
+      _ ->
+          multi_result =
+            Ecto.Multi.new()
+            |> Ecto.Multi.update(
+              :user,
+              QuizGenerator.User.update_password_changeset(otp.user, %{
+                password: password
+              })
+            )
+            |> Ecto.Multi.update(
+              :otp,
+              QuizGenerator.OtpCode.changeset(otp, %{
+                deactivated_at: DateTime.utc_now()
+              })
+            )
+            |> QuizGenerator.Repo.transaction()
+
+          case multi_result do
+            {:ok, _record} ->
+              send_resp(
+                conn,
+                200,
+                Jason.encode!(%{
+                  code: 200,
+                  message: "Password Reset"
+                })
+              )
+
+            {:error, _error_key, value, _} ->
+              conn
+              |> put_status(:unprocessable_entity)
+              |> put_view(QuizGenerator.ErrorView)
+              |> render("errors.json", %{
+                code: 422,
+                message: "Unprocessable entity",
+                changeset: value
+              })
+          end
     end
   end
 
@@ -150,4 +272,16 @@ defmodule QuizGeneratorWeb.AuthController do
   end
 
   defp token_valid?(_), do: {:error, "Invalid token"}
+
+  defp convert_email_hidden(nil), do: ""
+
+  defp convert_email_hidden(email) do
+    {index, _len} = :binary.match(email, "@")
+    str_end = String.slice(email, index..String.length(email))
+    str_start = String.slice(email, 0..3)
+    email = String.replace(email, str_end, "")
+    email = String.replace(email, str_start, "")
+    str = String.duplicate("*", String.length(email))
+    str_start <> str <> str_end
+  end
 end

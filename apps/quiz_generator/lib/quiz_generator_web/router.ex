@@ -28,6 +28,9 @@ defmodule QuizGeneratorWeb.Router do
     post("/setup_password", AuthController, :setup_password)
     post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/login", AuthController, :login)
+    post("/forgot_password_pre_info", AuthController, :forgot_password_pre_info)
+    post("/forgot_password", AuthController, :forgot_password)
+    post("/reset_password", AuthController, :reset_password)
   end
 
   scope "/api/v1", QuizGeneratorWeb do
@@ -42,9 +45,9 @@ defmodule QuizGeneratorWeb.Router do
 
   scope "/api/v1", QuizGeneratorWeb do
     pipe_through [:api, :validate_uuid, :token_auth]
-    put("/user", UserController, :update)
-    put("/user/update_password", UserController, :update_password)
-    put("/user/reset_password", UserController, :reset_password)
+    put("/user/:id", UserController, :update)
+    post("/user/update_password", UserController, :update_password)
+    put("/user/reset_password/:id", UserController, :reset_password)
     post("/logout", AuthController, :logout)
     post("/syllabus_providers", SyllabusProviderController, :create)
     get("/syllabus_providers", SyllabusProviderController, :index)

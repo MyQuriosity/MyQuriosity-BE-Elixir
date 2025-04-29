@@ -4,7 +4,7 @@ defmodule QuizGenerator.Repo.Migrations.CreateOtpCodeTable do
   def change do
     create table(:otp_codes, primary_key: false) do
       add(:id, :uuid, primary_key: true)
-      add(:otp, :integer, null: false)
+      add(:otp, :binary, null: false)
       add(:reason, :string, null: false)
       add(:deactivated_at, :utc_datetime)
 

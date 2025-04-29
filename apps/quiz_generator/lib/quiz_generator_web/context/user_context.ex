@@ -54,13 +54,52 @@ defmodule QuizGenerator.UserContext do
     end
   end
 
-  def verify_password(password, confirmed_password) do
+  def get_user_by_email(email), do: Repo.get_by(User, email: email)
+
+
+  def verify_new_password(password, confirmed_password) do
     if password == confirmed_password,
       do: {:ok, true},
       else: {:error, "Password and confirmed password does not match"}
   end
 
-  # defp append_hash_password(%{"password" => password} = params) do
-  #   params |> Map.put("hashed_password", AuthUtils.hash_password(password))
-  # end
+  def verify_current_password() do
+
+  end
+
+  def validate_password(current_user_id, plain_password) do
+    with {:ok, hashed_password} <- get_user_hashed_password(current_user_id),
+         {:ok, _} = response <- verify_user_password(hashed_password, plain_password) do
+      response
+    else
+      error -> error
+    end
+  end
+
+  @spec verify_user_password(String.t(), String.t()) ::
+          {:ok, :password_verified} | {:error, String.t()}
+  defp verify_user_password(hashed_password, password) do
+    if Bcrypt.verify_pass(password, hashed_password) do
+      {:ok, :password_verified}
+    else
+      {:error, "Incorrect Password"}
+    end
+  end
+
+  def get_user_hashed_password(current_user_id) do
+    query =
+      from(q in QuizGenerator.User,
+        where: q.id == ^current_user_id,
+        select: q.hashed_password
+      )
+
+    case Repo.one(query) do
+      nil ->
+        {:error, "User not found"}
+
+      hashed_password ->
+        {:ok, hashed_password}
+    end
+  end
+
 end

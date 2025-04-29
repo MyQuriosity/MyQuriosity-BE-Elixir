@@ -25,7 +25,10 @@ defmodule QuizGeneratorWeb.AuthView do
         last_name: user.last_name,
         email: user.email,
         gender: user.gender,
-        is_admin: user.is_admin
+        is_admin: user.is_admin,
+        syllabus_provider: render_one(user.syllabus_provider, QuizGeneratorWeb.SyllabusProviderView, "show.json",
+        as: :syllabus_provider
+      )
       },
       exp: exp,
       syllabus_providers:

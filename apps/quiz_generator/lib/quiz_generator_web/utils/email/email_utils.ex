@@ -4,7 +4,7 @@ defmodule QuizGenerator.EmailUtils do
   depending on :data app.
   """
   use Bamboo.Template,
-    view: Data.Email.AuthView
+    view: QuizGenerator.Email.AuthView
 
   alias QuizGenerator.Utils.ConfigUtils
 
@@ -25,30 +25,6 @@ defmodule QuizGenerator.EmailUtils do
   end
 
   @doc """
-    This method is used for send html email on tenant/institute approval
-  """
-  @spec send_institute_approval_email(String.t(), struct(), String.t(), String.t()) ::
-          {:ok, Bamboo.Email.t()} | {:error, any()}
-  def send_institute_approval_email(url, %{email: email} = user, tenant, password)
-      when is_binary(email) do
-    email_params = %{
-      "to" => email,
-      "subject" => "Registeration Completed",
-      "name" => "#{user.first_name} #{user.last_name}",
-      "email" => email,
-      "phone" => user.phone,
-      "username" => user.username,
-      "password" => password,
-      "sub_domain" => tenant,
-      "link" => url
-    }
-
-    send_email(email_params, :registeration_complete)
-  end
-
-  def send_institute_approval_email(_url, _user, _tenant, _password), do: :ok
-
-  @doc """
     This method is used to send email for email verification
   """
   @spec send_email_verification(map(), struct()) :: {:ok, Bamboo.Email.t()} | {:error, any()}
@@ -59,6 +35,14 @@ defmodule QuizGenerator.EmailUtils do
     email_params
     |> Map.put("subject", "Email Verify")
     |> send_email(:verify_email)
+  end
+
+  defp email_with_layout(params, "password_reset") do
+    params
+    |> email()
+    |> put_html_layout({QuizGenerator.Email.LayoutView, "quiz_generator_layout.html"})
+    |> assign(%{redirect_path: params["redirect_path"]})
+    |> render("forgot_password_email.html")
   end
 
   defp email_with_layout(params, :verify_email) do

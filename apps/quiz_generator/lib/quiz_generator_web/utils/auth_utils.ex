@@ -34,6 +34,7 @@ defmodule QuizGenerator.Utils.Auth do
     query =
       from(u in model,
         where: fragment("lower(?)", field(u, ^field_key)) == ^String.downcase(field_value),
+        preload: :syllabus_provider,
         limit: 1
       )
 

@@ -2,45 +2,13 @@ defmodule QuizGenerator.AuthContext do
   @moduledoc """
   This context is used to signup the institute
   """
-  # import Ecto.Query
   alias QuizGenerator.EmailUtils
-  # alias QuizGenerator.Repo
-  # alias Data.TenantInformation
   alias QuizGenerator.User
   alias QuizGenerator.UserContext
-  # alias Ecto.Multi
-  # alias TeamTenantApi.TenantInfoContext
+  alias QuizGenerator.Utils.DataMasking
+  alias QuizGenerator.Utils.DataMasking
 
   require Logger
-
-  # @sub_domain_reserve_keywords [
-  #   "dev",
-  #   "dev1",
-  #   "dev2",
-  #   "dev3",
-  #   "development",
-  #   "stage",
-  #   "staging",
-  #   "stagging",
-  #   "prod",
-  #   "production",
-  #   "test",
-  #   "testing",
-  #   "official",
-  #   "regbits",
-  #   "myquriosity",
-  #   "admin",
-  #   "api",
-  #   "logs",
-  #   "app",
-  #   "application",
-  #   "www",
-  #   "http",
-  #   "https",
-  #   "test",
-  #   "debug",
-  #   "mock"
-  # ]
 
   @doc """
   This function is used to verify the token and then update the user
@@ -80,6 +48,24 @@ defmodule QuizGenerator.AuthContext do
       {:error, error} ->
         Logger.info("[send_email_verification], user changeset error: #{error}")
         {:error, error}
+    end
+  end
+
+  @spec forgot_password_pre_info(map()) ::
+          {:error, <<_::408>>} | {:ok, %{optional(<<_::40, _::_*96>>) => false | binary()}}
+  def forgot_password_pre_info(%{"email" => email}) do
+    case UserContext.get_user_by_email(email) do
+      nil ->
+        {:error, "This email is not registered. Please sign up first."}
+
+      user ->
+        response = %{
+          "email" => DataMasking.convert_email_hidden(user.email),
+          "phone" => "",
+          "is_sms_configured" => false
+        }
+
+        {:ok, response}
     end
   end
 
