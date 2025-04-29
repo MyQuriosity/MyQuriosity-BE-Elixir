@@ -79,6 +79,7 @@ defmodule Core.MixProject do
       {:git_hooks, "~> 0.7.3", only: [:dev, :test], runtime: false},
       {:mock, "~> 0.3.7", only: :test},
       {:logger_papertrail_backend, "~> 1.1"},
+      {:logger_file_backend, "~> 0.0.11"},
       {:cachex, "~> 3.6"},
       {:decimal, "~> 2.1"},
       # {:hammer, "~> 6.1"},
