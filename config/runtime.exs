@@ -56,6 +56,47 @@ if config_env() == :prod do
     port: "MYQURIOSITY_DB_PORT" |> System.get_env("5432") |> String.to_integer(),
     pool_size: 10
 
+  config :logger,
+    backends: [
+      Sentry.LoggerBackend,
+      {LoggerFileBackend, :error_log},
+      {LoggerFileBackend, :info_log}
+    ],
+    level: :debug
+
+  # READ https://hexdocs.pm/logger_file_backend/readme.html#configuration for more details
+  config :logger, :error_log,
+    path: System.fetch_env!("MYQURIOSITY_ERROR_LOG_FILE"),
+    format: "$time $metadata[$level] $message\n",
+    metadata: [
+      :request_id,
+      :user_id,
+      :user_email,
+      :event,
+      :error,
+      :failed_operation,
+      :reason,
+      :message_id,
+      :uncaught_pattern
+    ],
+    level: :error
+
+  config :logger, :info_log,
+    path: System.fetch_env!("MYQURIOSITY_INFO_LOG_FILE"),
+    format: "$time $metadata[$level] $message\n",
+    metadata: [
+      :request_id,
+      :user_id,
+      :user_email,
+      :event,
+      :error,
+      :failed_operation,
+      :reason,
+      :message_id,
+      :uncaught_pattern
+    ],
+    level: :info
+
   # When generating build for macbook provide a different path or comment it out
   config :tzdata, :data_dir, "/home/ubuntu/elixir_tzdata_data"
 end

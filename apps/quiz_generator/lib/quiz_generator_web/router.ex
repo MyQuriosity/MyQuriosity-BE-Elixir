@@ -3,6 +3,7 @@ defmodule QuizGeneratorWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug(QuizGenerator.Plug.RequestLogger)
   end
 
   pipeline :token_auth do
