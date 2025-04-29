@@ -1,5 +1,5 @@
 # credo:disable-for-this-file Credo.Check.Readability.Specs
-defmodule QuizGenerator.Release do
+defmodule MyQuriosity.Release do
   @moduledoc false
 
   @start_apps [
