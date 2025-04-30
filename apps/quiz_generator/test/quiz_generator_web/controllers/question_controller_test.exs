@@ -21,6 +21,7 @@ defmodule QuizGeneratorWeb.QuestionControllerTest do
           "topic_id" => topic.id,
           "questions" => [
             %{
+              "question_number" => 1,
               "title" => "What is the primary purpose of narow growth in crystal formation?",
               "options" => %{
                 "A" => "Random arrangement of atoms",
@@ -100,6 +101,7 @@ defmodule QuizGeneratorWeb.QuestionControllerTest do
       topic: topic,
       chapter: chapter,
       subject: subject,
+      syllabus_provider: syllabus_provider,
       grade: grade,
       question: question
     } do
@@ -121,7 +123,13 @@ defmodule QuizGeneratorWeb.QuestionControllerTest do
                        "subject" => %{
                          "color" => "primary-purple",
                          "course_code" => "Eng",
-                         "grade" => nil,
+                         "grade" => %{
+                           "description" => "Primary class",
+                           "id" => grade.id,
+                           "syllabus_provider" => nil,
+                           "syllabus_provider_id" => syllabus_provider.id,
+                           "title" => "Grade 1"
+                         },
                          "grade_id" => grade.id,
                          "id" => subject.id,
                          "title" => "English"
@@ -161,7 +169,8 @@ defmodule QuizGeneratorWeb.QuestionControllerTest do
       chapter: chapter,
       grade: grade,
       subject: subject,
-      topic: topic
+      topic: topic,
+      syllabus_provider: syllabus_provider
     } do
       question_2 =
         insert(:question,
@@ -190,7 +199,13 @@ defmodule QuizGeneratorWeb.QuestionControllerTest do
                        "subject" => %{
                          "color" => "primary-purple",
                          "course_code" => "Eng",
-                         "grade" => nil,
+                         "grade" => %{
+                           "description" => "Primary class",
+                           "id" => grade.id,
+                           "syllabus_provider" => nil,
+                           "syllabus_provider_id" => syllabus_provider.id,
+                           "title" => "Grade 1"
+                         },
                          "grade_id" => grade.id,
                          "id" => subject.id,
                          "title" => "English"

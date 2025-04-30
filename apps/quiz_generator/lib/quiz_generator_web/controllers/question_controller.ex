@@ -5,8 +5,8 @@ defmodule QuizGeneratorWeb.QuestionController do
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"questions" => questions_params, "topic_id" => topic_id}) do
-    with {:ok, _} <- QuestionContext.validate_quiz_payload?(questions_params),
-         {:ok, _} <-
+    # with {:ok, _} <- QuestionContext.validate_quiz_payload?(questions_params),
+    with {:ok, _} <-
            QuestionContext.create_quiz_with_questions_and_options(
              questions_params,
              topic_id

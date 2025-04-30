@@ -1,4 +1,8 @@
 defmodule QuizGeneratorWeb.Utils.Email.NotificationPayload do
+  @moduledoc """
+  Utility module for generating email notification payloads related to user
+  """
+
   alias QuizGenerator.User
 
   @password_reset "password_reset"

@@ -88,6 +88,16 @@ defmodule QuizGenerator.FallbackController do
     |> render("error.json", %{code: code, message: message})
   end
 
+  def call(conn, {:error, message}) when is_list(message) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(QuizGenerator.ErrorView)
+    |> render("error.json", %{
+      code: 422,
+      errors: message
+    })
+  end
+
   def call(conn, {:error, message}) do
     conn
     |> put_status(:unprocessable_entity)

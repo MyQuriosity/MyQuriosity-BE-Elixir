@@ -6,6 +6,7 @@ defmodule QuizGenerator.Repo.Migrations.CreateOptionsTableForQuestios do
       add(:id, :uuid, primary_key: true)
       add(:title, :string)
       add(:is_correct, :boolean)
+      add(:key, :string)
       add(:question_id, references(:questions, column: :id, type: :uuid))
       add(:deactivated_at, :utc_datetime)
       timestamps()

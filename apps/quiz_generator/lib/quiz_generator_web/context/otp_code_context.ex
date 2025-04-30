@@ -3,7 +3,6 @@ defmodule QuizGenerator.OtpCodeContext do
   This module is used as context for otp code core functionalities
   """
   import Ecto.Query
-  alias MyQampus.DateTimeUtils
   alias QuizGenerator.User
   alias QuizGenerator.OtpCode
   alias QuizGenerator.OtpUtils

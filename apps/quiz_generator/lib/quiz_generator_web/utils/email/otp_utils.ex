@@ -38,6 +38,7 @@ defmodule QuizGenerator.OtpUtils do
   def generate_otp(options \\ []) do
     char_array = if options[:char_array], do: options[:char_array], else: @default_char_list
     length = if options[:length], do: options[:length], else: 6
+
     char_array
     |> Enum.take_random(length)
     |> Enum.join()

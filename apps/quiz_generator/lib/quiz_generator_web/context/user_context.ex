@@ -56,7 +56,6 @@ defmodule QuizGenerator.UserContext do
 
   def get_user_by_email(email), do: Repo.get_by(User, email: email)
 
-
   def verify_new_password(password, confirmed_password) do
     if password == confirmed_password,
       do: {:ok, true},
@@ -64,7 +63,6 @@ defmodule QuizGenerator.UserContext do
   end
 
   def verify_current_password() do
-
   end
 
   def validate_password(current_user_id, plain_password) do
@@ -101,5 +99,4 @@ defmodule QuizGenerator.UserContext do
         {:ok, hashed_password}
     end
   end
-
 end

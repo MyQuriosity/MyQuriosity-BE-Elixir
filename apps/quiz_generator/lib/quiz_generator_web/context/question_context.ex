@@ -12,17 +12,134 @@ defmodule QuizGenerator.QuestionContext do
   import Ecto.Query
 
   @spec create_quiz_with_questions_and_options(list(), String.t()) :: any()
-  def create_quiz_with_questions_and_options(questions, topic_id) do
-    current_dt = DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
+  def create_quiz_with_questions_and_options(params_list, topic_id) do
+    case check_duplicate_questions(params_list) do
+      [] -> insert_questions_transaction(params_list, topic_id)
+      errors -> {:error, errors}
+    end
+  end
 
-    Multi.new()
-    |> Multi.run(:insert_questions, fn _repo, _ ->
-      insert_questions(questions, topic_id, current_dt)
+  defp insert_questions_transaction(params_list, topic_id) do
+    multi = create_question_multi(params_list, topic_id)
+
+    case Repo.transaction(multi) do
+      {:ok, result} ->
+        {:ok, result}
+
+      {:error, {_type, question_number}, reason, _changes} ->
+        {:error, format_error(reason, question_number)}
+    end
+  end
+
+  defp format_error(%Ecto.Changeset{} = ch, question_number) do
+    translate_changeset_errors(ch, question_number)
+  end
+
+  defp format_error(msg, question_number) when is_binary(msg) do
+    [%{question_number: question_number, error: msg}]
+  end
+
+  defp create_question_multi(params_list, topic_id) do
+    Enum.reduce(params_list, Multi.new(), fn %{"question_number" => number} = params, multi_acc ->
+      question_key = {:question, number}
+      options_key = {:options, number}
+
+      params = Map.put(params, "topic_id", topic_id)
+      question_changeset = Question.insertion_updation_changeset(%Question{}, params)
+
+      multi_acc
+      |> Multi.insert(question_key, question_changeset)
+      |> Multi.run(options_key, fn repo, changes ->
+        insert_options(repo, changes, question_key, params)
+      end)
     end)
-    |> Multi.run(:insert_options, fn _repo, %{insert_questions: inserted_questions} ->
-      insert_options(inserted_questions, questions, current_dt)
+  end
+
+  defp insert_options(repo, changes, question_key, %{"options" => options, "answers" => answers}) do
+    question = Map.fetch!(changes, question_key)
+
+    options
+    |> Enum.map(fn {key, opt} ->
+      Option.changeset(%Option{}, %{
+        title: opt,
+        question_id: question.id,
+        is_correct: key in answers,
+        key: key
+      })
     end)
-    |> run_transaction()
+    |> Enum.reduce_while({:ok, []}, fn changeset, {:ok, acc} ->
+      case repo.insert(changeset) do
+        {:ok, opt} -> {:cont, {:ok, [opt | acc]}}
+        {:error, ch} -> {:halt, {:error, ch}}
+      end
+    end)
+  end
+
+  defp check_duplicate_questions(questions) do
+    {_, errors} =
+      Enum.reduce(questions, {%{}, []}, fn question, {seen_acc, err_acc} ->
+        number = question["question_number"]
+        title = question["title"]
+        options_map = question["options"] || %{}
+
+        err_acc =
+          case validate_options(options_map, number) do
+            :ok ->
+              err_acc
+
+            {:error, errors} ->
+              Enum.concat(err_acc, errors)
+          end
+
+        normalized_options = Enum.sort(options_map)
+        signature = {title, normalized_options}
+
+        if Map.has_key?(seen_acc, signature) do
+          {seen_acc,
+           [%{question_number: number, message: "Duplicate question with same options"} | err_acc]}
+        else
+          {Map.put(seen_acc, signature, true), err_acc}
+        end
+      end)
+
+    Enum.reverse(errors)
+  end
+
+  defp validate_options(options, number) do
+    values = Map.values(options)
+
+    errors =
+      []
+      |> maybe_add_error(Enum.any?(values, &(&1 == "")), %{
+        question_number: number,
+        message: "Options must not be empty"
+      })
+      |> maybe_add_error(Enum.uniq(values) != values, %{
+        question_number: number,
+        message: "Options must be unique"
+      })
+
+    if errors == [] do
+      :ok
+    else
+      {:error, errors}
+    end
+  end
+
+  defp maybe_add_error(errors, true, message), do: [message | errors]
+  defp maybe_add_error(errors, false, _), do: errors
+
+  defp translate_changeset_errors(changeset, question_number) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, _opts} -> msg end)
+    |> Enum.flat_map(fn {field, msgs} ->
+      Enum.map(msgs, fn msg ->
+        %{
+          question_number: question_number,
+          field: field,
+          error: msg
+        }
+      end)
+    end)
   end
 
   def update_question(question, %{"options" => options, "answers" => answers} = params) do
@@ -32,7 +149,7 @@ defmodule QuizGenerator.QuestionContext do
       Multi.new()
       |> Multi.run(:question, fn _repo, _ ->
         question
-        |> Question.changeset(params)
+        |> Question.insertion_updation_changeset(params)
         |> Repo.update()
       end)
       |> Multi.run(:delete_options, fn _repo, %{question: question} ->
@@ -71,7 +188,7 @@ defmodule QuizGenerator.QuestionContext do
 
   def update_question(question, params) do
     question
-    |> Question.changeset(params)
+    |> Question.insertion_updation_changeset(params)
     |> Repo.update()
   end
 
@@ -118,51 +235,6 @@ defmodule QuizGenerator.QuestionContext do
     params
     |> QuestionFilterContext.filtered_query()
     |> PaginationUtils.paginate(params)
-  end
-
-  defp insert_questions(questions, topic_id, dt) do
-    question_payloads =
-      Enum.map(questions, fn question ->
-        %{
-          title: question["title"],
-          topic_id: topic_id,
-          inserted_at: dt,
-          updated_at: dt
-        }
-      end)
-
-    case Repo.insert_all(Question, question_payloads, returning: [:id, :title]) do
-      {num, result} when num > 0 -> {:ok, result}
-      _ -> {:error, "Failed to insert questions"}
-    end
-  end
-
-  defp insert_options(inserted_questions, question_params_list, dt) do
-    options_list =
-      Enum.flat_map(Enum.zip(inserted_questions, question_params_list), fn {question, q_params} ->
-        Enum.map(q_params["options"], fn {key, opt_text} ->
-          %{
-            title: opt_text,
-            is_correct: key in q_params["answers"],
-            question_id: question.id,
-            inserted_at: dt,
-            updated_at: dt
-          }
-        end)
-      end)
-
-    case Repo.insert_all(Option, options_list) do
-      {num, _} when num > 0 -> {:ok, options_list}
-      _ -> {:error, "Failed to insert options"}
-    end
-  end
-
-  defp run_transaction(multi) do
-    try do
-      Repo.transaction(multi)
-    rescue
-      e in Postgrex.Error -> handle_error(e)
-    end
   end
 
   defp handle_error(%Postgrex.Error{postgres: %{detail: detail}}), do: {:error, detail}

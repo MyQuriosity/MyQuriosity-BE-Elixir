@@ -66,7 +66,7 @@ defmodule QuizGeneratorWeb.AuthController do
     end
   end
 
-   @doc """
+  @doc """
   This function is used to send pre info for forgot password
   """
   @spec forgot_password_pre_info(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -78,11 +78,10 @@ defmodule QuizGeneratorWeb.AuthController do
 
   @spec forgot_password(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def forgot_password(conn, params) do
-   with {:ok, url} <- get_url(conn),
-   {:ok, :sent} <- validate_user_and_send_otp(url, params, "password_reset") do
-
-    render(conn, "forgot_password.json",  %{data: %{message: "reset link send successfully"}})
-   end
+    with {:ok, url} <- get_url(conn),
+         {:ok, :sent} <- validate_user_and_send_otp(url, params, "password_reset") do
+      render(conn, "forgot_password.json", %{data: %{message: "reset link send successfully"}})
+    end
   end
 
   defp validate_user_and_send_otp(url, %{"email" => email} = params, action) do
@@ -146,43 +145,43 @@ defmodule QuizGeneratorWeb.AuthController do
         )
 
       _ ->
-          multi_result =
-            Ecto.Multi.new()
-            |> Ecto.Multi.update(
-              :user,
-              QuizGenerator.User.update_password_changeset(otp.user, %{
-                password: password
+        multi_result =
+          Ecto.Multi.new()
+          |> Ecto.Multi.update(
+            :user,
+            QuizGenerator.User.update_password_changeset(otp.user, %{
+              password: password
+            })
+          )
+          |> Ecto.Multi.update(
+            :otp,
+            QuizGenerator.OtpCode.changeset(otp, %{
+              deactivated_at: DateTime.utc_now()
+            })
+          )
+          |> QuizGenerator.Repo.transaction()
+
+        case multi_result do
+          {:ok, _record} ->
+            send_resp(
+              conn,
+              200,
+              Jason.encode!(%{
+                code: 200,
+                message: "Password Reset"
               })
             )
-            |> Ecto.Multi.update(
-              :otp,
-              QuizGenerator.OtpCode.changeset(otp, %{
-                deactivated_at: DateTime.utc_now()
-              })
-            )
-            |> QuizGenerator.Repo.transaction()
 
-          case multi_result do
-            {:ok, _record} ->
-              send_resp(
-                conn,
-                200,
-                Jason.encode!(%{
-                  code: 200,
-                  message: "Password Reset"
-                })
-              )
-
-            {:error, _error_key, value, _} ->
-              conn
-              |> put_status(:unprocessable_entity)
-              |> put_view(QuizGenerator.ErrorView)
-              |> render("errors.json", %{
-                code: 422,
-                message: "Unprocessable entity",
-                changeset: value
-              })
-          end
+          {:error, _error_key, value, _} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> put_view(QuizGenerator.ErrorView)
+            |> render("errors.json", %{
+              code: 422,
+              message: "Unprocessable entity",
+              changeset: value
+            })
+        end
     end
   end
 
@@ -272,16 +271,4 @@ defmodule QuizGeneratorWeb.AuthController do
   end
 
   defp token_valid?(_), do: {:error, "Invalid token"}
-
-  defp convert_email_hidden(nil), do: ""
-
-  defp convert_email_hidden(email) do
-    {index, _len} = :binary.match(email, "@")
-    str_end = String.slice(email, index..String.length(email))
-    str_start = String.slice(email, 0..3)
-    email = String.replace(email, str_end, "")
-    email = String.replace(email, str_start, "")
-    str = String.duplicate("*", String.length(email))
-    str_start <> str <> str_end
-  end
 end

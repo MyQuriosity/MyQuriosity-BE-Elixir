@@ -6,7 +6,6 @@ defmodule QuizGenerator.AuthContext do
   alias QuizGenerator.User
   alias QuizGenerator.UserContext
   alias QuizGenerator.Utils.DataMasking
-  alias QuizGenerator.Utils.DataMasking
 
   require Logger
 

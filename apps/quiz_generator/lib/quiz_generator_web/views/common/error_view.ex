@@ -29,6 +29,10 @@ defmodule QuizGenerator.ErrorView do
     %{error: %{code: code, message: message}}
   end
 
+  def render("error.json", %{code: code, errors: errors}) do
+    %{error: %{code: code, errors: errors}}
+  end
+
   def render("errors.json", %{code: code, message: message, errors: errors}) do
     %{error: %{code: code, message: message, errors: errors}}
   end
