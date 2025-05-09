@@ -48,8 +48,8 @@ defmodule QuizGenerator.EmailUtils do
   defp email_with_layout(params, :verify_email) do
     params
     |> email()
-    |> put_html_layout({Data.Email.LayoutView, "verify_email_layout.html"})
-    |> assign(%{redirect_path: params["redirect_path"], institute_name: params["institute_name"]})
+    |> put_html_layout({QuizGenerator.Email.LayoutView, "verify_email_layout.html"})
+    |> assign(%{redirect_path: params["redirect_path"]})
     |> render("verify_email.html")
   end
 
@@ -62,7 +62,6 @@ defmodule QuizGenerator.EmailUtils do
       phone: params["phone"],
       username: params["username"],
       password: params["password"],
-      sub_domain: params["sub_domain"],
       email: params["email"],
       link: params["link"]
     })

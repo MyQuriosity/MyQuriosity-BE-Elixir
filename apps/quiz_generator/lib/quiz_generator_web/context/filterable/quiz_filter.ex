@@ -1,4 +1,4 @@
-defmodule QuizGeneratorWeb.Filterable.QuizFilter do
+defmodule QuizGeneratorWeb.Filterable.QuestionFilter do
   @moduledoc """
     A dynamic filtering module for the `Quiz` schema using `FatEcto.Dynamics.FatBuildable`.
   """

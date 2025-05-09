@@ -35,7 +35,7 @@ defmodule QuizGenerator.Question do
     )
   end
 
-  def insertion_updation_changeset(%__MODULE__{} = question, params) do
+  def insertion_changeset(%__MODULE__{} = question, params) do
     question
     |> cast(params, [:title, :topic_id, :deactivated_at])
     |> validate_required([:title, :topic_id])

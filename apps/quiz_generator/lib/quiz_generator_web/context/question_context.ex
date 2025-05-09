@@ -45,7 +45,7 @@ defmodule QuizGenerator.QuestionContext do
       options_key = {:options, number}
 
       params = Map.put(params, "topic_id", topic_id)
-      question_changeset = Question.insertion_updation_changeset(%Question{}, params)
+      question_changeset = Question.insertion_changeset(%Question{}, params)
 
       multi_acc
       |> Multi.insert(question_key, question_changeset)
@@ -143,53 +143,68 @@ defmodule QuizGenerator.QuestionContext do
   end
 
   def update_question(question, %{"options" => options, "answers" => answers} = params) do
-    current_dt = DateTime.truncate(DateTime.utc_now(), :second) |> DateTime.to_naive()
-
     multi =
       Multi.new()
-      |> Multi.run(:question, fn _repo, _ ->
-        question
-        |> Question.insertion_updation_changeset(params)
-        |> Repo.update()
-      end)
-      |> Multi.run(:delete_options, fn _repo, %{question: question} ->
-        options_query = from o in Option, where: o.question_id == ^question.id
-
-        case Repo.delete_all(options_query, returning: [:id]) do
-          {num, deleted_options} when num > 0 -> {:ok, deleted_options}
-          _ -> {:error, "Failed to insert options"}
-        end
-      end)
-      |> Multi.run(:insert_options, fn _repo, %{question: question} ->
-        options_list =
-          Enum.map(options, fn {key, option_text} ->
-            %{
-              title: option_text,
-              is_correct: Enum.member?(answers, key),
-              question_id: question.id,
-              inserted_at: current_dt,
-              updated_at: current_dt
-            }
-          end)
-
-        case Repo.insert_all(Option, options_list, on_conflict: :raise) do
-          {num, _} when num > 0 -> {:ok, options_list}
-          _ -> {:error, "Failed to insert options"}
-        end
+      |> Multi.run(:question, fn _repo, _ -> update_question_changeset(question, params) end)
+      |> Multi.run(:delete_options, fn _repo, %{question: q} -> delete_existing_options(q) end)
+      |> Multi.run(:insert_options, fn _repo, %{question: q} ->
+        insert_new_options(q, options, answers)
       end)
 
     try do
       Repo.transaction(multi)
     rescue
-      e in Postgrex.Error ->
-        handle_error(e)
+      e in Postgrex.Error -> handle_error(e)
     end
   end
 
   def update_question(question, params) do
     question
-    |> Question.insertion_updation_changeset(params)
+    |> Question.changeset(params)
     |> Repo.update()
+  end
+
+  defp update_question_changeset(question, params) do
+    question
+    |> Question.changeset(params)
+    |> Repo.update()
+  end
+
+  defp delete_existing_options(question) do
+    from(o in Option, where: o.question_id == ^question.id)
+    |> Repo.delete_all(returning: [:id])
+    |> case do
+      {num, deleted_options} when num > 0 -> {:ok, deleted_options}
+      _ -> {:error, "Failed to delete options"}
+    end
+  end
+
+  defp insert_new_options(question, options, answers) do
+    case validate_options(options, 1) do
+      :ok ->
+        options
+        |> Enum.map(&build_option_changeset(&1, question.id, answers))
+        |> Enum.reduce_while({:ok, []}, &insert_option/2)
+
+      {:error, [%{message: msg} | _]} ->
+        {:error, msg}
+    end
+  end
+
+  defp build_option_changeset({key, title}, question_id, answers) do
+    Option.changeset(%Option{}, %{
+      title: title,
+      question_id: question_id,
+      is_correct: key in answers,
+      key: key
+    })
+  end
+
+  defp insert_option(changeset, {:ok, acc}) do
+    case Repo.insert(changeset) do
+      {:ok, opt} -> {:cont, {:ok, [opt | acc]}}
+      {:error, ch} -> {:halt, {:error, ch}}
+    end
   end
 
   @spec delete_question(any()) :: any()

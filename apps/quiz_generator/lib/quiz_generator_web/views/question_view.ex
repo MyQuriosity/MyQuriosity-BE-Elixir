@@ -27,6 +27,7 @@ defmodule QuizGeneratorWeb.QuestionView do
       id: option.id,
       title: option.title,
       is_correct: option.is_correct,
+      key: option.key,
       deactivated_at: option.deactivated_at
     }
   end
