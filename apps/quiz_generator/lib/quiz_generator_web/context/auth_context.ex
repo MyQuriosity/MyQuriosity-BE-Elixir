@@ -42,6 +42,7 @@ defmodule QuizGenerator.AuthContext do
     |> UserContext.update(%{"email_verify_token" => email_verify_token})
     |> case do
       {:ok, user} ->
+        Logger.info("[send_email_verification], email_verify_token: #{email_verify_token}")
         do_send_email_verification(user, email_verify_token, url)
 
       {:error, error} ->
