@@ -46,17 +46,17 @@ if config_env() == :prod do
     pool_size: 10
 
   if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
-    config :data, QuizGenerator.Mailer,
+    config :quiz_generator, QuizGenerator.Mailer,
       adapter: Bamboo.SesAdapter,
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   else
-    config :data, QuizGenerator.Mailer,
+    config :quiz_generator, QuizGenerator.Mailer,
       adapter: Bamboo.SendGridAdapter,
       api_key: System.fetch_env!("BAMBOO_API_KEY"),
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   end
 
-  config :data, QuizGenerator.Repo,
+  config :quiz_generator, QuizGenerator.Repo,
     # ssl: true,
     # TODO: only enable it for dev+stage server via config
     show_sensitive_data_on_connection_error: true,

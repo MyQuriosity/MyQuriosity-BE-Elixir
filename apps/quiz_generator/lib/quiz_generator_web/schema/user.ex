@@ -18,6 +18,7 @@ defmodule QuizGenerator.User do
     field(:email_verified_at, :utc_datetime)
     field(:deactivated_at, :utc_datetime)
     field(:institute_name, :string)
+    field(:is_admin, :boolean, default: false)
     field(:designation, :string)
     field(:teach_subject, :string)
 
@@ -57,6 +58,7 @@ defmodule QuizGenerator.User do
       :email_verify_token,
       :institute_name,
       :gender,
+      :is_admin,
       :hashed_password,
       :password,
       :designation,
