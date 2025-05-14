@@ -16,7 +16,7 @@ defmodule Campus.ModelCase do
 
   using do
     quote do
-      alias QuizGenerator.Repo
+      alias Web.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -27,10 +27,10 @@ defmodule Campus.ModelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(QuizGenerator.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Web.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(QuizGenerator.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Web.Repo, {:shared, self()})
     end
 
     :ok

@@ -33,11 +33,11 @@ end
 #   tags: %{
 #     env: System.get_env("SENTRY_SERVER_NAME")
 #   },
-#   included_environments: ["be.dev.QuizGenerator.com", "be.stage.QuizGenerator.com", "be.QuizGenerator.com"]
+#   included_environments: ["be.dev.Web.com", "be.stage.Web.com", "be.Web.com"]
 
 # config :notifire, Notifire.FCM,
 #   adapter: Pigeon.FCM,
-#   project_id: "QuizGenerator-dev-ad775",
+#   project_id: "Web-dev-ad775",
 #   service_account_json: File.read!("service-account-dev.json")
 
 # config :segment, Segment.HTTP.Trackable, client: Segment.HTTP.Segment.Client

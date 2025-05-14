@@ -1,4 +1,4 @@
-defmodule Quriosity.MixProject do
+defmodule MyQuriosity.MixProject do
   use Mix.Project
 
   def project do
@@ -120,7 +120,7 @@ defmodule Quriosity.MixProject do
           runtime_tools: :permanent,
           core: :permanent,
           data: :permanent,
-          quiz_generator: :permanent
+          web: :permanent
         ],
         path: "builds",
         # have Mix automatically create a tarball after assembly

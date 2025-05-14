@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :data, QuizGenerator.Repo,
+config :data, Web.Repo,
   username: "postgres",
   password: "postgres",
   database: "myquriosity_dev",
