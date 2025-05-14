@@ -45,7 +45,13 @@ if config_env() == :prod do
     port: "MYQURIOSITY_DB_PORT" |> System.get_env("5432") |> String.to_integer(),
     pool_size: 10
 
+  config :ex_aws,
+    access_key_id: System.fetch_env!("AWS_ACCESS_KEY_ID"),
+    secret_access_key: System.fetch_env!("AWS_SECRET_ACCESS_KEY"),
+    region: System.fetch_env!("AWS_S3_REGION")
+
   if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
+    # Rest of SES configs will be fetched from ex_aws
     config :quiz_generator, QuizGenerator.Mailer,
       adapter: Bamboo.SesAdapter,
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")

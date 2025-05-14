@@ -33,7 +33,13 @@ config :quiz_generator, QuizGenerator.AuthAccessPipeline,
 config :quiz_generator, :env,
   quiz_admin_password: System.get_env("QUIZ_ADMIN_PASSWORD") || "password"
 
+config :ex_aws,
+  access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+  region: System.get_env("AWS_S3_REGION")
+
 if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
+  # Rest of SES configs will be fetched from ex_aws
   config :quiz_generator, QuizGenerator.Mailer,
     adapter: Bamboo.SesAdapter,
     from_email: System.get_env("MYQAMPUS_DEFAULT_EMAIL")
