@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :data, Web.Repo,
+config :data, Data.Repo,
   username: "postgres",
   password: "postgres",
   database: "myquriosity_test",
