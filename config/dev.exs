@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :web, Web.Repo,
+config :data, Data.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -10,7 +10,7 @@ config :web, Web.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :web, Web.Endpoint,
+config :api, Api.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4002],
@@ -44,7 +44,7 @@ config :web, Web.Endpoint,
 # different ports.
 
 # Enable dev routes for dashboard and mailbox
-config :web, dev_routes: true
+config :api, dev_routes: true
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

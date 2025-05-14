@@ -8,15 +8,11 @@
 import Config
 
 config :data,
-  ecto_repos: [Web.Repo]
-
-# Pipeline for token auth
-config :data, Data.Auth.Pipeline.ApiAuthAccessPipeline,
-  module: Web.Guardian,
-  error_handler: Web.AuthErrorHandler
+  ecto_repos: [Data.Repo],
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configure your database
-config :data, Web.Repo,
+config :data, Data.Repo,
   migration_timestamps: [type: :utc_datetime],
   adapter: Ecto.Adapters.Postgres
 

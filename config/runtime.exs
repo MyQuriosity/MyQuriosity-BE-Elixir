@@ -18,7 +18,7 @@ import Config
 # script that automatically sets the env var above.
 
 if config_env() == :prod do
-  config :web, Web.Endpoint,
+  config :api, Api.Endpoint,
     server: true,
     http: [
       port: "MYQURIOSITY_SERVER_PORT" |> System.fetch_env!() |> String.to_integer(),
@@ -34,10 +34,10 @@ if config_env() == :prod do
     check_origin: false,
     secret_key_base: System.fetch_env!("MYQURIOSITY_SECRET_KEY_BASE")
 
-  config :web, Web.Repo,
+  config :data, Data.Repo,
     # ssl: true,
     # TODO: only enable it for dev+stage server via config
-    show_sensitive_data_on_connection_error: true,
+    show_sensitive_data_on_connection_error: false,
     username: System.fetch_env!("MYQURIOSITY_DB_USER"),
     password: System.fetch_env!("MYQURIOSITY_DB_PWD"),
     database: System.fetch_env!("MYQURIOSITY_DB_NAME"),
@@ -52,26 +52,15 @@ if config_env() == :prod do
 
   if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
     # Rest of SES configs will be fetched from ex_aws
-    config :web, Web.Mailer,
+    config :api, Api.Mailer,
       adapter: Bamboo.SesAdapter,
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   else
-    config :web, Web.Mailer,
+    config :api, Api.Mailer,
       adapter: Bamboo.SendGridAdapter,
       api_key: System.fetch_env!("BAMBOO_API_KEY"),
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   end
-
-  config :web, Web.Repo,
-    # ssl: true,
-    # TODO: only enable it for dev+stage server via config
-    show_sensitive_data_on_connection_error: true,
-    username: System.fetch_env!("MYQURIOSITY_DB_USER"),
-    password: System.fetch_env!("MYQURIOSITY_DB_PWD"),
-    database: System.fetch_env!("MYQURIOSITY_DB_NAME"),
-    hostname: System.fetch_env!("MYQURIOSITY_DB_HOST"),
-    port: "MYQURIOSITY_DB_PORT" |> System.get_env("5432") |> String.to_integer(),
-    pool_size: 10
 
   config :logger,
     backends: [

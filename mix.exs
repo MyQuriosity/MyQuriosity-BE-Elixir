@@ -120,7 +120,7 @@ defmodule MyQuriosity.MixProject do
           runtime_tools: :permanent,
           core: :permanent,
           data: :permanent,
-          web: :permanent
+          api: :permanent
         ],
         path: "builds",
         # have Mix automatically create a tarball after assembly
