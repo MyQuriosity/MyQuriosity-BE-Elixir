@@ -18,7 +18,7 @@ import Config
 # script that automatically sets the env var above.
 
 if config_env() == :prod do
-  config :quiz_generator, QuizGeneratorWeb.Endpoint,
+  config :web, Web.Endpoint,
     server: true,
     http: [
       port: "MYQURIOSITY_SERVER_PORT" |> System.fetch_env!() |> String.to_integer(),
@@ -29,12 +29,12 @@ if config_env() == :prod do
       host: System.fetch_env!("MYQURIOSITY_URL_HOST"),
       port: System.fetch_env!("MYQURIOSITY_URL_PORT")
     ],
-    # check_origin: [System.fetch_env!("MYQURIOSITY_SITE_ORIGINS") || "//*.QuizGenerator.com"],
+    # check_origin: [System.fetch_env!("MYQURIOSITY_SITE_ORIGINS") || "//*.Web.com"],
     # TODO: enable it with some flexible configuration later
     check_origin: false,
     secret_key_base: System.fetch_env!("MYQURIOSITY_SECRET_KEY_BASE")
 
-  config :quiz_generator, QuizGenerator.Repo,
+  config :web, Web.Repo,
     # ssl: true,
     # TODO: only enable it for dev+stage server via config
     show_sensitive_data_on_connection_error: true,
@@ -52,17 +52,17 @@ if config_env() == :prod do
 
   if System.get_env("MYQURIOSITYMAILER_EMAIL_ADAPTER") == "ses" do
     # Rest of SES configs will be fetched from ex_aws
-    config :quiz_generator, QuizGenerator.Mailer,
+    config :web, Web.Mailer,
       adapter: Bamboo.SesAdapter,
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   else
-    config :quiz_generator, QuizGenerator.Mailer,
+    config :web, Web.Mailer,
       adapter: Bamboo.SendGridAdapter,
       api_key: System.fetch_env!("BAMBOO_API_KEY"),
       from_email: System.get_env("MYQURIOSITY_DEFAULT_EMAIL")
   end
 
-  config :quiz_generator, QuizGenerator.Repo,
+  config :web, Web.Repo,
     # ssl: true,
     # TODO: only enable it for dev+stage server via config
     show_sensitive_data_on_connection_error: true,
@@ -115,5 +115,5 @@ if config_env() == :prod do
     level: :info
 
   # When generating build for macbook provide a different path or comment it out
-  config :tzdata, :data_dir, "/home/ubuntu/elixir_tzdata_data"
+  config :tzdata, :data_dir, System.get_env("TZ_DATA_DIR_PATH", "/home/ubuntu/elixir_tzdata_data")
 end
