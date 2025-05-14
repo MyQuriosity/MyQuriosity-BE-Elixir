@@ -1,9 +1,9 @@
-defmodule Api.Question do
+defmodule Data.Question do
   @moduledoc """
   This module is used as schema for question.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
   alias Data.Repo
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -12,13 +12,13 @@ defmodule Api.Question do
     field(:title, :string)
     field(:deactivated_at, :utc_datetime)
 
-    belongs_to(:topic, Api.Topic,
+    belongs_to(:topic, Data.Topic,
       foreign_key: :topic_id,
       references: :id,
       type: :binary_id
     )
 
-    has_many :options, Api.Option, on_replace: :delete
+    has_many :options, Data.Option, on_replace: :delete
     timestamps()
   end
 

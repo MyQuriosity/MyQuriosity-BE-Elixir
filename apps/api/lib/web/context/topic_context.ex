@@ -4,10 +4,10 @@ defmodule Api.TopicContext do
   """
   import Ecto.Query
 
-  alias Data.Repo
-  alias Api.Topic
   alias Api.TopicFilterContext
   alias Api.Utils.PaginationUtils
+  alias Data.Repo
+  alias Data.Topic
 
   @spec create(map()) :: {:ok, Topic.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do

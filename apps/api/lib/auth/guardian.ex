@@ -19,14 +19,14 @@ defmodule Api.Guardian do
   #   {:error, :reason_for_error}
   # end
 
-  @spec resource_from_claims(map()) :: {:error, :not_found} | {:ok, Api.User.t()}
+  @spec resource_from_claims(map()) :: {:error, :not_found} | {:ok, Data.User.t()}
   def resource_from_claims(claims) do
     # Here we'll look up our resource from the claims, the subject can be
     # found in the `"sub"` key. In `above subject_for_token/2` we returned
     # the resource id so here we'll rely on that to look it up.
     id = claims["sub"]
 
-    case Data.Repo.get(Web.User, id) do
+    case Data.Repo.get(Data.User, id) do
       nil -> {:error, :not_found}
       user -> {:ok, user}
     end

@@ -1,9 +1,9 @@
-defmodule Api.User do
+defmodule Data.User do
   @moduledoc """
   This module is used as schema for quiz generator users.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @type t :: %__MODULE__{}
@@ -22,7 +22,7 @@ defmodule Api.User do
     field(:designation, :string)
     field(:teach_subject, :string)
 
-    belongs_to(:syllabus_provider, Api.SyllabusProvider,
+    belongs_to(:syllabus_provider, Data.SyllabusProvider,
       foreign_key: :syllabus_provider_id,
       type: :binary_id,
       references: :id

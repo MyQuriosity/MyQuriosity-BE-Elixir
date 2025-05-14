@@ -1,8 +1,8 @@
 defmodule Api.GradeController do
   use MyQuriosityWeb, :controller
 
-  alias Api.SharedView
   alias Api.GradeContext
+  alias Api.SharedView
 
   plug Api.Plug.SyllabusProviderPlug when action in [:create]
 

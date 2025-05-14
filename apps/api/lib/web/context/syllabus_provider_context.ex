@@ -4,10 +4,10 @@ defmodule Api.SyllabusProviderContext do
   """
   import Ecto.Query
 
-  alias Data.Repo
-  alias Api.SyllabusProvider
   alias Api.SyllabusProviderFilterContext
   alias Api.Utils.PaginationUtils
+  alias Data.Repo
+  alias Data.SyllabusProvider
 
   @spec create(map()) :: {:ok, SyllabusProvider.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do

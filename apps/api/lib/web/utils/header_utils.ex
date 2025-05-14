@@ -23,7 +23,7 @@ defmodule Api.HeaderUtils do
     {:ok, GuardianHelper.current_user(conn).id}
   end
 
-  @spec get_current_user(Plug.Conn.t()) :: Api.User.t()
+  @spec get_current_user(Plug.Conn.t()) :: Data.User.t()
   def get_current_user(conn) do
     GuardianHelper.current_user(conn)
   end

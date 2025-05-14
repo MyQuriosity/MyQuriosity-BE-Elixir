@@ -30,7 +30,7 @@ defmodule Mix.Tasks.SuperAdminSeed do
   end
 
   defp insert_all_users(data) do
-    Data.Repo.insert_all(Web.User, data,
+    Data.Repo.insert_all(Data.User, data,
       on_conflict: {:replace_all_except, [:id]},
       returning: true,
       conflict_target: [:id]

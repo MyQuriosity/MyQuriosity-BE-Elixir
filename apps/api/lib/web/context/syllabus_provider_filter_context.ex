@@ -3,8 +3,8 @@ defmodule Api.SyllabusProviderFilterContext do
   This module provides context functions for filtering Syllabus Provider.
   """
 
-  alias Api.SyllabusProvider
   alias Api.Filterable.SyllabusProviderFilter
+  alias Data.SyllabusProvider
 
   import Ecto.Query
 

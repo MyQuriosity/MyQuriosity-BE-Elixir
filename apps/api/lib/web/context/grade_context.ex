@@ -5,9 +5,9 @@ defmodule Api.GradeContext do
   import Ecto.Query
 
   alias Api.GradeFilterContext
-  alias Api.Grade
-  alias Data.Repo
   alias Api.Utils.PaginationUtils
+  alias Data.Grade
+  alias Data.Repo
 
   @spec create(map()) :: {:ok, Grade.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do

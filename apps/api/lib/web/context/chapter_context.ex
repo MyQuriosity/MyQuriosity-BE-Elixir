@@ -5,9 +5,9 @@ defmodule Api.Context.ChapterContext do
   import Ecto.Query
 
   alias Api.ChapterFilterContext
-  alias Api.Chapter
-  alias Data.Repo
   alias Api.Utils.PaginationUtils
+  alias Data.Chapter
+  alias Data.Repo
 
   @spec create(map()) :: {:ok, Chapter.t()} | {:error, Ecto.Changeset.t()}
   def create(params) do

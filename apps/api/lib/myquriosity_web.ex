@@ -58,7 +58,7 @@ defmodule MyQuriosityWeb do
       alias CampusApiUtils.Guardian, as: GuardianUtils
       alias Data.Repo
       import Ecto.Query
-      action_fallback(Web.FallbackController)
+      action_fallback(Api.FallbackController)
     end
   end
 

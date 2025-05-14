@@ -4,10 +4,10 @@ defmodule Api.SubjectContext do
   """
   import Ecto.Query
 
-  alias Api.Subject
   alias Api.SubjectFilterContext
-  alias Data.Repo
   alias Api.Utils.PaginationUtils
+  alias Data.Repo
+  alias Data.Subject
 
   @colors [
     "primary-purple",

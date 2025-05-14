@@ -3,7 +3,7 @@ defmodule Api.Utils.Email.NotificationPayload do
   Utility module for generating email notification payloads related to user
   """
 
-  alias Api.User
+  alias Data.User
 
   @password_reset "password_reset"
   @password_setup "password_setup"

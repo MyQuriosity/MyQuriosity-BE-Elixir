@@ -1,15 +1,15 @@
 defmodule Api.AuthController do
   use MyQuriosityWeb, :controller
 
+  alias Api.AuthContext
   alias Api.Guardian
   alias Api.Guardian.Plug, as: GuardianPlug
   alias Api.HeaderUtils
-  alias Api.AuthContext
-  alias Api.UserContext
-  alias Api.Utils.Auth
-  alias Api.SharedView
   alias Api.OtpCodeContext
   alias Api.OtpUtils
+  alias Api.SharedView
+  alias Api.UserContext
+  alias Api.Utils.Auth
 
   @spec login(Plug.Conn.t(), map) :: Plug.Conn.t()
   def login(
@@ -86,7 +86,7 @@ defmodule Api.AuthController do
 
   defp validate_user_and_send_otp(url, %{"email" => email} = params, action) do
     query =
-      from(user in Api.User,
+      from(user in Data.User,
         where: user.email == ^email and is_nil(user.deactivated_at)
       )
 
@@ -121,8 +121,8 @@ defmodule Api.AuthController do
         } = _params
       ) do
     query =
-      from(oc in Api.OtpCode,
-        inner_join: user in Api.User,
+      from(oc in Data.OtpCode,
+        inner_join: user in Data.User,
         on: user.id == oc.user_id,
         where:
           user.email == ^email and
@@ -138,7 +138,7 @@ defmodule Api.AuthController do
       nil ->
         conn
         |> put_status(404)
-        |> put_view(Web.ErrorView)
+        |> put_view(Api.ErrorView)
         |> render("error.json",
           code: 404,
           message: "Wrong Otp Code"
@@ -149,13 +149,13 @@ defmodule Api.AuthController do
           Ecto.Multi.new()
           |> Ecto.Multi.update(
             :user,
-            Api.User.update_password_changeset(otp.user, %{
+            Data.User.update_password_changeset(otp.user, %{
               password: password
             })
           )
           |> Ecto.Multi.update(
             :otp,
-            Api.OtpCode.changeset(otp, %{
+            Data.OtpCode.changeset(otp, %{
               deactivated_at: DateTime.utc_now()
             })
           )
@@ -175,7 +175,7 @@ defmodule Api.AuthController do
           {:error, _error_key, value, _} ->
             conn
             |> put_status(:unprocessable_entity)
-            |> put_view(Web.ErrorView)
+            |> put_view(Api.ErrorView)
             |> render("errors.json", %{
               code: 422,
               message: "Unprocessable entity",

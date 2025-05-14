@@ -1,9 +1,9 @@
-defmodule Api.Chapter do
+defmodule Data.Chapter do
   @moduledoc """
   This module is used as schema for question bank chapter.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @type t :: %__MODULE__{}
@@ -13,7 +13,7 @@ defmodule Api.Chapter do
     field(:number, :integer)
     field(:deactivated_at, :utc_datetime)
 
-    belongs_to(:subject, Api.Subject,
+    belongs_to(:subject, Data.Subject,
       type: :binary_id,
       foreign_key: :subject_id,
       references: :id

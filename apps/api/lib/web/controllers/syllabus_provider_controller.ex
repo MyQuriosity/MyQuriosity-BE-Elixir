@@ -1,10 +1,9 @@
 defmodule Api.SyllabusProviderController do
-  alias Api.SyllabusProvider
   use MyQuriosityWeb, :controller
 
   alias Api.SharedView
-  alias Api.SyllabusProvider
   alias Api.SyllabusProviderContext
+  alias Data.SyllabusProvider
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do

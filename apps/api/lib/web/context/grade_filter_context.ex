@@ -3,8 +3,8 @@ defmodule Api.GradeFilterContext do
   This module provides context functions for filtering Grade.
   """
 
-  alias Api.Grade
   alias Api.Filterable.GradeFilter
+  alias Data.Grade
 
   import Ecto.Query
 

@@ -1,8 +1,8 @@
-defmodule Api.OtpCode do
+defmodule Data.OtpCode do
   @moduledoc """
   This module is used as schema for otp codes
   """
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
   use Core.Macros.PK
 
   @type t :: %__MODULE__{}
@@ -10,7 +10,7 @@ defmodule Api.OtpCode do
     field(:otp, :binary)
     field(:reason, :string)
     field(:deactivated_at, :utc_datetime)
-    belongs_to(:user, Api.User, foreign_key: :user_id, references: :id)
+    belongs_to(:user, Data.User, foreign_key: :user_id, references: :id)
 
     timestamps()
   end

@@ -14,12 +14,12 @@ defmodule Api.Utils.Auth do
 
   @spec auth_user_validate(String.t(), String.t()) ::
           {:error, :invalid_password | :user_not_found | :password_not_set}
-          | {:ok, Api.User.t()}
+          | {:ok, Data.User.t()}
 
   def auth_user_validate(_plaintext_pw, nil), do: {:error, :password_not_set}
 
   def auth_user_validate(plaintext_pw, field_value) do
-    case get_by_case_insensitive(Web.User, field_value, :email) do
+    case get_by_case_insensitive(Data.User, field_value, :email) do
       {:ok, user} ->
         if Bcrypt.verify_pass(plaintext_pw, user.hashed_password),
           do: {:ok, user},
@@ -48,7 +48,7 @@ defmodule Api.Utils.Auth do
   def not_authorized(conn, message) do
     conn
     |> put_status(401)
-    |> put_view(Web.ErrorView)
+    |> put_view(Api.ErrorView)
     |> render("error.json", code: 401, message: message)
   end
 end

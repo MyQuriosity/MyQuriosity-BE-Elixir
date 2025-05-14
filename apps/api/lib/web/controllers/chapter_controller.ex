@@ -1,8 +1,8 @@
 defmodule Api.ChapterController do
   use MyQuriosityWeb, :controller
 
-  alias Api.SharedView
   alias Api.Context.ChapterContext
+  alias Api.SharedView
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do

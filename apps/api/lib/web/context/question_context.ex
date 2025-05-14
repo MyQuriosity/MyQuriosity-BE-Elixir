@@ -3,12 +3,12 @@ defmodule Api.QuestionContext do
   This module is used to creates a new questions with options.
   """
 
-  alias Ecto.Multi
-  alias Api.Option
-  alias Api.Question
   alias Api.QuestionFilterContext
-  alias Data.Repo
   alias Api.Utils.PaginationUtils
+  alias Data.Option
+  alias Data.Question
+  alias Data.Repo
+  alias Ecto.Multi
   import Ecto.Query
 
   @spec create_quiz_with_questions_and_options(list(), String.t()) :: any()

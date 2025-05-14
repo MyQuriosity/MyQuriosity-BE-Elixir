@@ -1,9 +1,9 @@
-defmodule Api.Option do
+defmodule Data.Option do
   @moduledoc """
   This module is used as schema for question bank `options`.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @type t :: %__MODULE__{}
@@ -13,7 +13,7 @@ defmodule Api.Option do
     field(:is_correct, :boolean, default: false)
     field(:deactivated_at, :utc_datetime)
 
-    belongs_to(:question, Api.Question,
+    belongs_to(:question, Data.Question,
       foreign_key: :question_id,
       type: :binary_id,
       references: :id

@@ -1,9 +1,9 @@
-defmodule Api.Subject do
+defmodule Data.Subject do
   @moduledoc """
   This module is used as schema for question bank subject.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @type t :: %__MODULE__{}
@@ -13,7 +13,7 @@ defmodule Api.Subject do
     field(:color, :string)
     field(:deactivated_at, :utc_datetime)
 
-    belongs_to(:grade, Api.Grade,
+    belongs_to(:grade, Data.Grade,
       foreign_key: :grade_id,
       type: :binary_id,
       references: :id

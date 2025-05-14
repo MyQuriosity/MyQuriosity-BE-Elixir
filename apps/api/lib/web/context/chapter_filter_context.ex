@@ -3,8 +3,8 @@ defmodule Api.ChapterFilterContext do
   This module provides context functions for filtering Chapter.
   """
 
-  alias Api.Chapter
   alias Api.Filterable.ChapterFilter
+  alias Data.Chapter
 
   import Ecto.Query
 
@@ -15,9 +15,9 @@ defmodule Api.ChapterFilterContext do
     query =
       Chapter
       |> preload(subject: [grade: :syllabus_provider])
-      |> join(:inner, [c], s in Api.Subject, on: s.id == c.subject_id, as: :subject)
-      |> join(:inner, [c, s], g in Api.Grade, on: g.id == s.grade_id, as: :grade)
-      |> join(:inner, [c, s, g], sp in Api.SyllabusProvider,
+      |> join(:inner, [c], s in Data.Subject, on: s.id == c.subject_id, as: :subject)
+      |> join(:inner, [c, s], g in Data.Grade, on: g.id == s.grade_id, as: :grade)
+      |> join(:inner, [c, s, g], sp in Data.SyllabusProvider,
         on: sp.id == g.syllabus_provider_id,
         as: :syllabus_provider
       )

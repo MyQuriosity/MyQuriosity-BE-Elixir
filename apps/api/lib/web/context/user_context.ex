@@ -3,8 +3,8 @@ defmodule Api.UserContext do
   This module provides context functions for managing User records.
   It handles user creation, verification, password management, and user lookup operations.
   """
-  alias Api.User
   alias Data.Repo
+  alias Data.User
 
   import Ecto.Query
 
@@ -62,9 +62,6 @@ defmodule Api.UserContext do
       else: {:error, "Password and confirmed password does not match"}
   end
 
-  def verify_current_password() do
-  end
-
   def validate_password(current_user_id, plain_password) do
     with {:ok, hashed_password} <- get_user_hashed_password(current_user_id),
          {:ok, _} = response <- verify_user_password(hashed_password, plain_password) do
@@ -86,7 +83,7 @@ defmodule Api.UserContext do
 
   def get_user_hashed_password(current_user_id) do
     query =
-      from(q in Api.User,
+      from(q in Data.User,
         where: q.id == ^current_user_id,
         select: q.hashed_password
       )

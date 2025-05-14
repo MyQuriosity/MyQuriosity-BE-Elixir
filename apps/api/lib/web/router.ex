@@ -15,15 +15,15 @@ defmodule Api.Router do
   end
 
   pipeline :syllabus_provider_filter do
-    plug(Web.Plug.SyllabusProviderFilter)
+    plug(Api.Plug.SyllabusProviderFilter)
   end
 
-  scope "/", Web do
+  scope "/", Api do
     pipe_through [:api]
     get("/info", PublicInfoController, :version_info)
   end
 
-  scope "/api/v1", Web do
+  scope "/api/v1", Api do
     pipe_through :api
     post("/signup", AuthController, :signup)
     post("/setup_password", AuthController, :setup_password)
@@ -34,7 +34,7 @@ defmodule Api.Router do
     post("/reset_password", AuthController, :reset_password)
   end
 
-  scope "/api/v1", Web do
+  scope "/api/v1", Api do
     pipe_through [:api, :validate_uuid, :token_auth, :syllabus_provider_filter]
     post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/grades/filters", GradeController, :index)
@@ -44,7 +44,7 @@ defmodule Api.Router do
     post("/mcqs/filters", QuestionController, :index)
   end
 
-  scope "/api/v1", Web do
+  scope "/api/v1", Api do
     pipe_through [:api, :validate_uuid, :token_auth]
     put("/user/:id", UserController, :update)
     post("/user/update_password", UserController, :update_password)

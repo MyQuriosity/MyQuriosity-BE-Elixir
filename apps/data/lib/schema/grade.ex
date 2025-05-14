@@ -1,9 +1,9 @@
-defmodule Api.Grade do
+defmodule Data.Grade do
   @moduledoc """
   This module is used as schema for quiz generator grade.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @type t :: %__MODULE__{}
@@ -12,7 +12,7 @@ defmodule Api.Grade do
     field(:description, :string)
     field(:deactivated_at, :utc_datetime)
 
-    belongs_to(:syllabus_provider, Api.SyllabusProvider,
+    belongs_to(:syllabus_provider, Data.SyllabusProvider,
       foreign_key: :syllabus_provider_id,
       type: :binary_id,
       references: :id

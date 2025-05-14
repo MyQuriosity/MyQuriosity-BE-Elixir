@@ -3,8 +3,8 @@ defmodule Api.TopicFilterContext do
   This module provides context functions for filtering Syllabus Provider.
   """
 
-  alias Api.Topic
   alias Api.Filterable.TopicFilter
+  alias Data.Topic
 
   import Ecto.Query
 
@@ -15,10 +15,10 @@ defmodule Api.TopicFilterContext do
     query =
       Topic
       |> preload(chapter: [subject: [grade: :syllabus_provider]])
-      |> join(:inner, [t], c in Api.Chapter, on: c.id == t.chapter_id, as: :chapter)
-      |> join(:inner, [_t, c], s in Api.Subject, on: s.id == c.subject_id, as: :subject)
-      |> join(:inner, [_t, _c, s], g in Api.Grade, on: g.id == s.grade_id, as: :grade)
-      |> join(:inner, [_t, _c, _s, g], sp in Api.SyllabusProvider,
+      |> join(:inner, [t], c in Data.Chapter, on: c.id == t.chapter_id, as: :chapter)
+      |> join(:inner, [_t, c], s in Data.Subject, on: s.id == c.subject_id, as: :subject)
+      |> join(:inner, [_t, _c, s], g in Data.Grade, on: g.id == s.grade_id, as: :grade)
+      |> join(:inner, [_t, _c, _s, g], sp in Data.SyllabusProvider,
         on: sp.id == g.syllabus_provider_id,
         as: :syllabus_provider
       )

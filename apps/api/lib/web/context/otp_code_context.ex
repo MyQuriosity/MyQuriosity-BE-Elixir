@@ -3,10 +3,10 @@ defmodule Api.OtpCodeContext do
   This module is used as context for otp code core functionalities
   """
   import Ecto.Query
-  alias Api.User
-  alias Api.OtpCode
   alias Api.OtpUtils
+  alias Data.OtpCode
   alias Data.Repo
+  alias Data.User
 
   @hash_algorithm :sha256
   @token_validity_in_days 1

@@ -1,9 +1,9 @@
-defmodule Api.SyllabusProvider do
+defmodule Data.SyllabusProvider do
   @moduledoc """
   This module is used as schema for question bank syllabus provider.
   """
   use Core.Macros.PK
-  use MyQuriosityWeb, :model
+  use Data.Web, :model
 
   # @schema_prefix "quiz_generator"
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -13,7 +13,7 @@ defmodule Api.SyllabusProvider do
     field(:description, :string)
     field(:deactivated_at, :utc_datetime)
 
-    has_many :grades, Api.Grade
+    has_many :grades, Data.Grade
 
     timestamps()
   end

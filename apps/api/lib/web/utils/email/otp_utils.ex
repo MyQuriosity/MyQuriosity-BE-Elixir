@@ -3,9 +3,9 @@ defmodule Api.OtpUtils do
     This module containts methods to deal with otp codes
   """
 
-  alias Api.User
   alias Api.EmailUtils
   alias Api.Utils.Email.NotificationPayload
+  alias Data.User
 
   @default_char_list [1, 2, 3, 4, 5, 6, 7, 8, 9]
   @medium_email "email"

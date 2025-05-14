@@ -2,8 +2,8 @@ defmodule Api.UserController do
   use MyQuriosityWeb, :controller
 
   alias Api.HeaderUtils
-  alias Api.UserContext
   alias Api.SharedView
+  alias Api.UserContext
 
   @spec update(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def update(conn, %{"id" => id} = params) do

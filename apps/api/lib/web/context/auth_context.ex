@@ -3,9 +3,9 @@ defmodule Api.AuthContext do
   This context is used to signup the institute
   """
   alias Api.EmailUtils
-  alias Api.User
   alias Api.UserContext
   alias Api.Utils.DataMasking
+  alias Data.User
 
   require Logger
 

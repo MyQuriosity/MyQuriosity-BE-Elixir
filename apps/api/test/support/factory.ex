@@ -4,14 +4,14 @@ defmodule TenantData.Support.Factory do
   """
 
   use ExMachina.Ecto, repo: Data.Repo
-  alias Api.Chapter
-  alias Api.Grade
-  alias Api.Option
-  alias Api.Question
-  alias Api.Subject
-  alias Api.SyllabusProvider
-  alias Api.Topic
-  alias Api.User
+  alias Data.Chapter
+  alias Data.Grade
+  alias Data.Option
+  alias Data.Question
+  alias Data.Subject
+  alias Data.SyllabusProvider
+  alias Data.Topic
+  alias Data.User
 
   def user_factory do
     %User{

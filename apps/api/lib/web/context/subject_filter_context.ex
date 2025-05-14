@@ -3,8 +3,8 @@ defmodule Api.SubjectFilterContext do
   This module provides context functions for filtering Subject.
   """
 
-  alias Api.Subject
   alias Api.Filterable.SubjectFilter
+  alias Data.Subject
 
   import Ecto.Query
 
@@ -15,8 +15,8 @@ defmodule Api.SubjectFilterContext do
     query =
       Subject
       |> preload(grade: :syllabus_provider)
-      |> join(:inner, [q], g in Api.Grade, on: g.id == q.grade_id, as: :grade)
-      |> join(:inner, [q, g], sp in Api.SyllabusProvider,
+      |> join(:inner, [q], g in Data.Grade, on: g.id == q.grade_id, as: :grade)
+      |> join(:inner, [q, g], sp in Data.SyllabusProvider,
         on: sp.id == g.syllabus_provider_id,
         as: :syllabus_provider
       )
