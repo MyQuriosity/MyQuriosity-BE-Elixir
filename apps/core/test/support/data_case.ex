@@ -16,11 +16,6 @@ defmodule Core.DataCase do
   end
 
   setup _tags do
-    if Triplex.exists?("test_sub_domain") == false do
-      Triplex.create("test_sub_domain", TenantData.Repo)
-      Triplex.migrate("test_sub_domain", TenantData.Repo)
-    end
-
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 

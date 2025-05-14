@@ -6,6 +6,7 @@ defmodule Data.Web do
   def model do
     quote do
       use Ecto.Schema
+      require Core.Macros.CommonField
 
       import Ecto
       import Ecto.Changeset

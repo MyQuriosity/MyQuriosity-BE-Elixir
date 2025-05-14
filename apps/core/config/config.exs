@@ -1,10 +1,5 @@
 import Config
 
-# config :api, :fat_ecto,
-#   repo: Data.Repo,
-#   default_limit: 100,
-#   max_limit: 200
-
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
@@ -18,7 +13,17 @@ config :phoenix, :json_library, Jason
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :schema_prefix, :user_id],
+  metadata: [
+    :request_id,
+    :user_id,
+    :user_email,
+    :event,
+    :error,
+    :failed_operation,
+    :reason,
+    :message_id,
+    :uncaught_pattern
+  ],
   backends: [:console]
 
 config :logger, level: :debug
@@ -50,7 +55,7 @@ config :logger, :logger_papertrail_backend,
     :logged_user_first_name,
     :logged_user_last_name,
     :tenant_prefix,
-    :myqampus_site,
+    :myquriosity_site,
     :personal_site,
     :event,
     :error,
@@ -63,9 +68,5 @@ config :logger, :logger_papertrail_backend,
 config :logger,
   backends: [:console],
   level: :debug
-
-config :core, ENDPOINT,
-  url_scheme: System.get_env("MYQAMPUS_URL_SCHEME") || "https",
-  url_host: System.get_env("MYQAMPUS_URL_HOST") || "be.myqampus.com"
 
 import_config "#{config_env()}.exs"
