@@ -40,7 +40,7 @@ defmodule Api.EmailUtils do
   defp email_with_layout(params, "password_reset") do
     params
     |> email()
-    |> put_html_layout({Web.Email.LayoutView, "quiz_generator_layout.html"})
+    |> put_html_layout({Api.Email.LayoutView, "quiz_generator_layout.html"})
     |> assign(%{redirect_path: params["redirect_path"]})
     |> render("forgot_password_email.html")
   end
@@ -48,7 +48,7 @@ defmodule Api.EmailUtils do
   defp email_with_layout(params, :verify_email) do
     params
     |> email()
-    |> put_html_layout({Web.Email.LayoutView, "verify_email_layout.html"})
+    |> put_html_layout({Api.Email.LayoutView, "verify_email_layout.html"})
     |> assign(%{redirect_path: params["redirect_path"]})
     |> render("verify_email.html")
   end
