@@ -26,7 +26,7 @@ defmodule Data.SyllabusProvider do
     |> validate_length(:title, max: 255)
     |> unique_constraint(:title,
       name: :unique_syllabus_providers_title,
-      message: "Syllabus provider with this title already exists"
+      message: "of Syllabus provider already exists"
     )
   end
 

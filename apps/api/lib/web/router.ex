@@ -32,6 +32,7 @@ defmodule Api.Router do
     post("/forgot_password_pre_info", AuthController, :forgot_password_pre_info)
     post("/forgot_password", AuthController, :forgot_password)
     post("/reset_password", AuthController, :reset_password)
+    post("/resend_email", AuthController, :resend_email)
   end
 
   scope "/api/v1", Api do

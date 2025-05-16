@@ -44,7 +44,7 @@ defmodule Data.User do
     ])
     |> validate_required([:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@/, message: "Invalid email format.")
-    |> unique_constraint(:email, name: :unique_email_per_user, message: "Email is already taken.")
+    |> unique_constraint(:email, name: :unique_email_per_user, message: "is already taken.")
   end
 
   @spec update_changeset(t(), map()) :: Ecto.Changeset.t()
@@ -65,7 +65,7 @@ defmodule Data.User do
       :teach_subject,
       :syllabus_provider_id
     ])
-    |> unique_constraint(:email, name: :unique_email_per_user, message: "Email is already taken.")
+    |> unique_constraint(:email, name: :unique_email_per_user, message: "is already taken.")
   end
 
   @spec update_password_changeset(t(), map()) :: Ecto.Changeset.t()

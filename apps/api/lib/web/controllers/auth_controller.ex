@@ -27,6 +27,27 @@ defmodule Api.AuthController do
     end
   end
 
+  def resend_email(conn, %{"email" => email} = _params) do
+    case UserContext.get_user_by_email(email) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> put_view(Api.ErrorView)
+        |> render("error.json",
+          code: 404,
+          message: "This email is not registered. Please sign up first."
+        )
+
+      user ->
+        with {:ok, url} <- get_url(conn),
+             {:ok, :email_sent} <- AuthContext.send_email_verification(user, url) do
+          conn
+          |> put_view(SharedView)
+          |> render("success.json", %{data: %{message: "Email has been sent"}})
+        end
+    end
+  end
+
   def setup_password(conn, %{"token" => token} = params) do
     with {:ok, :valid} <- token_valid?(token),
          {:ok, user} <- AuthContext.verify_and_update_user(token),
