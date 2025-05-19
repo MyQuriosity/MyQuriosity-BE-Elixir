@@ -235,7 +235,7 @@ defmodule Api.AuthController do
         Auth.not_authorized(conn, "Registration setup is not competed")
 
       {:error, _} ->
-        Auth.not_authorized(conn, "Invalid id or password.")
+        Auth.not_authorized(conn, "Invalid id or password")
     end
   end
 
