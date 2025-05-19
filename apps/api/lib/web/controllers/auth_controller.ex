@@ -39,11 +39,20 @@ defmodule Api.AuthController do
         )
 
       user ->
-        with {:ok, url} <- get_url(conn),
-             {:ok, :email_sent} <- AuthContext.send_email_verification(user, url) do
+        if user_setup_complete?(user) do
           conn
-          |> put_view(SharedView)
-          |> render("success.json", %{data: %{message: "Email has been sent"}})
+          |> put_view(Api.ErrorView)
+          |> render("error.json",
+            code: 400,
+            message: "Your account is already verified. Please sign in."
+          )
+        else
+          with {:ok, url} <- get_url(conn),
+               {:ok, :email_sent} <- AuthContext.send_email_verification(user, url) do
+            conn
+            |> put_view(SharedView)
+            |> render("success.json", %{data: %{message: "Email has been sent"}})
+          end
         end
     end
   end
@@ -292,4 +301,7 @@ defmodule Api.AuthController do
   end
 
   defp token_valid?(_), do: {:error, "Invalid token"}
+
+  defp user_setup_complete?(%{email_verified_at: nil}), do: false
+  defp user_setup_complete?(_), do: true
 end

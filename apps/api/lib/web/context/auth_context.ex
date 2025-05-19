@@ -93,7 +93,7 @@ defmodule Api.AuthContext do
   end
 
   defp build_new_email_link(token, email, url) do
-    "#{url}/quiz/complete-registration?token=#{token}&email=#{email}"
+    "#{url}/complete-registration?token=#{token}&email=#{email}"
   end
 
   defp set_email_params(redirect_path, email, subject) do

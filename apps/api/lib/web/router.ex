@@ -26,13 +26,13 @@ defmodule Api.Router do
   scope "/api/v1", Api do
     pipe_through :api
     post("/signup", AuthController, :signup)
+    post("/resend_email", AuthController, :resend_email)
     post("/setup_password", AuthController, :setup_password)
     post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/login", AuthController, :login)
     post("/forgot_password_pre_info", AuthController, :forgot_password_pre_info)
     post("/forgot_password", AuthController, :forgot_password)
     post("/reset_password", AuthController, :reset_password)
-    post("/resend_email", AuthController, :resend_email)
   end
 
   scope "/api/v1", Api do
