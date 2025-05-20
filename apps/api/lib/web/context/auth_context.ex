@@ -12,22 +12,25 @@ defmodule Api.AuthContext do
   @doc """
   This function is used to verify the token and then update the user
   """
-  @spec verify_and_update_user(String.t()) :: {:ok, User.t()} | {:error, any()}
-  def verify_and_update_user(token) do
+  @spec verify_and_update_user(map()) :: {:ok, User.t()} | {:error, any()}
+  def verify_and_update_user(%{"token" => token} = params) do
     token
     |> UserContext.get_user_by_token()
-    |> do_update_user()
+    |> do_update_user(params)
   end
 
-  defp do_update_user(nil), do: {:error, "Invalid token"}
+  defp do_update_user(nil, _params), do: {:error, "Invalid token"}
 
-  defp do_update_user(%User{email_verified_at: nil} = user) do
+  defp do_update_user(%User{email_verified_at: nil} = user, params) do
     email_verified_at = DateTime.utc_now()
-    params = %{"email_verified_at" => email_verified_at, "email_verify_token" => ""}
+    params =
+    params
+    |> Map.put("email_verified_at", email_verified_at)
+    |> Map.put("email_verify_token", "")
     UserContext.update(user, params)
   end
 
-  defp do_update_user(_),
+  defp do_update_user(_, _params),
     do: {:error, "This email is already registered. Please try to login."}
 
   @doc """

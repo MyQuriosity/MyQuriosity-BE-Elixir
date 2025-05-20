@@ -59,7 +59,7 @@ defmodule Api.AuthController do
 
   def setup_password(conn, %{"token" => token} = params) do
     with {:ok, :valid} <- token_valid?(token),
-         {:ok, user} <- AuthContext.verify_and_update_user(token),
+     {:ok, user} <- AuthContext.verify_and_update_user(params),
          {:ok, _record} <- AuthContext.setup_password(user, params) do
       conn
       |> put_view(SharedView)

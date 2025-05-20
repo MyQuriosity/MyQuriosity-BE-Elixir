@@ -59,8 +59,6 @@ defmodule Data.User do
       :institute_name,
       :gender,
       :is_admin,
-      :hashed_password,
-      :password,
       :designation,
       :teach_subject,
       :syllabus_provider_id
