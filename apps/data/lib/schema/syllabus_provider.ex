@@ -24,6 +24,10 @@ defmodule Data.SyllabusProvider do
     |> cast(params, [:title, :description])
     |> validate_required([:title])
     |> validate_length(:title, max: 255)
+    |> unique_constraint(:title,
+      name: :unique_syllabus_providers_title,
+      message: "of Syllabus provider already exists"
+    )
   end
 
   @spec deactivate_changeset(t(), map()) :: Ecto.Changeset.t()

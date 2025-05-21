@@ -16,7 +16,7 @@ defmodule Api.Utils.Email.NotificationPayload do
   @spec set_redirect_path(String.t(), String.t(), String.t(), String.t()) ::
           String.t()
   def set_redirect_path(email, otp, url, @password_reset = _action) do
-    "#{url}/quiz/user/reset-password?otp=#{otp}&email=#{email}"
+    "#{url}/user/reset-password?otp=#{otp}&email=#{email}"
   end
 
   @spec set_message_body(String.t(), String.t()) :: String.t()

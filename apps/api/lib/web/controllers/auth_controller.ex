@@ -27,9 +27,39 @@ defmodule Api.AuthController do
     end
   end
 
+  def resend_email(conn, %{"email" => email} = _params) do
+    case UserContext.get_user_by_email(email) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> put_view(Api.ErrorView)
+        |> render("error.json",
+          code: 404,
+          message: "This email is not registered. Please sign up first."
+        )
+
+      user ->
+        if user_setup_complete?(user) do
+          conn
+          |> put_view(Api.ErrorView)
+          |> render("error.json",
+            code: 400,
+            message: "Your account is already verified. Please sign in."
+          )
+        else
+          with {:ok, url} <- get_url(conn),
+               {:ok, :email_sent} <- AuthContext.send_email_verification(user, url) do
+            conn
+            |> put_view(SharedView)
+            |> render("success.json", %{data: %{message: "Email has been sent"}})
+          end
+        end
+    end
+  end
+
   def setup_password(conn, %{"token" => token} = params) do
     with {:ok, :valid} <- token_valid?(token),
-         {:ok, user} <- AuthContext.verify_and_update_user(token),
+     {:ok, user} <- AuthContext.verify_and_update_user(params),
          {:ok, _record} <- AuthContext.setup_password(user, params) do
       conn
       |> put_view(SharedView)
@@ -205,7 +235,7 @@ defmodule Api.AuthController do
         Auth.not_authorized(conn, "Registration setup is not competed")
 
       {:error, _} ->
-        Auth.not_authorized(conn, "Invalid id or password.")
+        Auth.not_authorized(conn, "Invalid id or password")
     end
   end
 
@@ -271,4 +301,7 @@ defmodule Api.AuthController do
   end
 
   defp token_valid?(_), do: {:error, "Invalid token"}
+
+  defp user_setup_complete?(%{email_verified_at: nil}), do: false
+  defp user_setup_complete?(_), do: true
 end

@@ -26,6 +26,7 @@ defmodule Api.Router do
   scope "/api/v1", Api do
     pipe_through :api
     post("/signup", AuthController, :signup)
+    post("/resend_email", AuthController, :resend_email)
     post("/setup_password", AuthController, :setup_password)
     post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/login", AuthController, :login)

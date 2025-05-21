@@ -91,7 +91,10 @@ defmodule Api.SyllabusProviderControllerTest do
 
     test "filter syllabus_provider with inserted_at", %{conn: conn} do
       syllabus_provider_2 =
-        insert(:syllabus_provider, inserted_at: DateTime.add(DateTime.utc_now(), 2, :day))
+        insert(:syllabus_provider,
+          inserted_at: DateTime.add(DateTime.utc_now(), 2, :day),
+          title: "Future #{System.unique_integer([:positive])}"
+        )
 
       resp =
         conn
@@ -103,9 +106,9 @@ defmodule Api.SyllabusProviderControllerTest do
                "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
                "records" => [
                  %{
-                   "description" => "For Punjab schools",
+                   "description" => syllabus_provider_2.description,
                    "id" => syllabus_provider_2.id,
-                   "title" => "Punjab Textbook Board"
+                   "title" => syllabus_provider_2.title
                  }
                ]
              } == json_response(resp, 200)

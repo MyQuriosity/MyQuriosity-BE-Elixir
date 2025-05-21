@@ -28,12 +28,21 @@ defmodule Api.UserController do
     user = HeaderUtils.get_current_user(conn)
     updated_params = %{password: password}
 
-    with {:ok, :password_verified} <- UserContext.validate_password(user.id, current_password),
+    with {:ok, _} <- validate_not_same_as_current(current_password, password),
+         {:ok, :password_verified} <- UserContext.validate_password(user.id, current_password),
          {:ok, true} <- UserContext.verify_new_password(password, confirmed_password),
          {:ok, _updated_user} <- UserContext.update_password(user, updated_params) do
       conn
       |> put_view(SharedView)
       |> render("success.json", %{data: %{message: "Password updated successfully"}})
+    end
+  end
+
+  defp validate_not_same_as_current(current_password, new_password) do
+    if current_password == new_password do
+      {:error, "New password cannot be same as current password"}
+    else
+      {:ok, true}
     end
   end
 end
