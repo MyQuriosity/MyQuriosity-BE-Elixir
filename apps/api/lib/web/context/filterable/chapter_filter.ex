@@ -1,11 +1,11 @@
 defmodule Api.Filterable.ChapterFilter do
   @moduledoc """
-    A dynamic filtering module for the `Chapter` schema using `FatEcto.Builder.FatDynamicsBuildable`.
+    A dynamic filtering module for the `Chapter` schema using `FatEcto.Query.Dynamics.Buildable`.
   """
 
   import Ecto.Query
 
-  use FatEcto.Builder.FatDynamicsBuildable,
+  use FatEcto.Query.Dynamics.Buildable,
     filterable: [
       title: "$ILIKE",
       number: "$EQUAL",
@@ -24,18 +24,18 @@ defmodule Api.Filterable.ChapterFilter do
     ]
 
   @impl true
-  def after_whereable(dynamics) do
+  def after_buildable(dynamics) do
     if dynamics, do: dynamics, else: true
   end
 
   @impl true
-  def override_buildable(_dynamics, "syllabus_provider_id", "$EQUAL", value) do
+  def override_buildable("syllabus_provider_id", "$EQUAL", value) do
     dynamic([syllabus_provider: syllabus_provider], syllabus_provider.id == ^value)
   end
 
-  def override_buildable(_dynamics, "grade_id", "$EQUAL", value) do
+  def override_buildable("grade_id", "$EQUAL", value) do
     dynamic([grade: grade], grade.id == ^value)
   end
 
-  def override_buildable(dynamics, _field, _operator, _value), do: dynamics
+  def override_buildable(_field, _operator, _value), do: nil
 end

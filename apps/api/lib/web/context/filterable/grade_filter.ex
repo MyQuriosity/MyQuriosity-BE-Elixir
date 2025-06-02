@@ -1,9 +1,9 @@
 defmodule Api.Filterable.GradeFilter do
   @moduledoc """
-    A dynamic filtering module for the `Grade` schema using `FatEcto.Builder.FatDynamicsBuildable`.
+    A dynamic filtering module for the `Grade` schema using `FatEcto.Query.Dynamics.Buildable`.
   """
 
-  use FatEcto.Builder.FatDynamicsBuildable,
+  use FatEcto.Query.Dynamics.Buildable,
     filterable: [
       title: "$ILIKE",
       syllabus_provider_id: "$EQUAL",
@@ -19,7 +19,7 @@ defmodule Api.Filterable.GradeFilter do
     ]
 
   @impl true
-  def after_whereable(dynamics) do
+  def after_buildable(dynamics) do
     if dynamics, do: dynamics, else: true
   end
 end
