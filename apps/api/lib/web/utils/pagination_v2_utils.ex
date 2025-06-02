@@ -14,6 +14,7 @@ defmodule Api.Utils.PaginationV2Utils do
       from(q in query,
         where: is_nil(q.deactivated_at)
       )
+
     params = [offset: params["skip"], limit: params["limit"]]
     paginate(query, params)
   end

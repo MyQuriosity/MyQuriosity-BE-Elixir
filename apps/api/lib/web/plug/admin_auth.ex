@@ -3,6 +3,7 @@ defmodule Api.Plug.AdminAuth do
   # TODO: Write proper moduledoc
   """
   use Plug.Builder
+  alias Api.Guardian.Plug, as: GuardianPlug
   @doc false
   @spec init(map()) :: map()
   def init(opts \\ %{}), do: Enum.into(opts, %{})
@@ -10,7 +11,7 @@ defmodule Api.Plug.AdminAuth do
   @doc false
   @spec call(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def call(conn, _opts) do
-    claims = Api.Guardian.Plug.current_claims(conn)
+    claims = GuardianPlug.current_claims(conn)
     is_admin = claims["is_admin"]
 
     if is_admin == true do

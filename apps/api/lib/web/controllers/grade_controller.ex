@@ -8,9 +8,9 @@ defmodule Api.GradeController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = GradeContext.apply_filter(params)
+    {:ok, result} = GradeContext.apply_filter(params)
 
-    render(conn, "index.json", records: records, meta: meta)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -48,7 +48,7 @@ defmodule Api.GradeController do
   end
 
   def filter(conn, params) do
-    {records, meta} = GradeContext.apply_filter(params)
-    render(conn, "index.json", records: records, meta: meta)
+    {:ok, result} = GradeContext.apply_filter(params)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 end

@@ -78,7 +78,7 @@ defmodule Api.SyllabusProviderControllerTest do
         |> post("/api/v1/syllabus_providers/filters", %{"title" => %{"$ILIKE" => "%a%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => "For Punjab schools",
@@ -103,7 +103,7 @@ defmodule Api.SyllabusProviderControllerTest do
         })
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => syllabus_provider_2.description,

@@ -5,7 +5,7 @@ defmodule Api.SyllabusProviderContext do
   import Ecto.Query
 
   alias Api.SyllabusProviderFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Repo
   alias Data.SyllabusProvider
 
@@ -19,7 +19,7 @@ defmodule Api.SyllabusProviderContext do
   def apply_filter(params) do
     params
     |> SyllabusProviderFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec fetch_by_id(String.t()) :: nil | SyllabusProvider.t()
@@ -37,7 +37,7 @@ defmodule Api.SyllabusProviderContext do
   def fetch_active_paginated(params) do
     SyllabusProvider
     |> where([s], is_nil(s.deactivated_at))
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec deactivate(SyllabusProvider.t()) ::
