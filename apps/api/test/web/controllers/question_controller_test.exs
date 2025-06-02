@@ -109,7 +109,7 @@ defmodule Api.QuestionControllerTest do
         post(conn, "/api/v1/mcqs/filters", %{"title" => %{"$ILIKE" => "%the following elements%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "id" => question.id,
@@ -158,7 +158,7 @@ defmodule Api.QuestionControllerTest do
         |> post("/api/v1/mcqs/filters", %{"title" => %{"$ILIKE" => "%quiz 2%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0},
+               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total" => 0},
                "records" => []
              } ==
                json_response(resp, 200)
@@ -186,7 +186,7 @@ defmodule Api.QuestionControllerTest do
         })
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "id" => question_2.id,

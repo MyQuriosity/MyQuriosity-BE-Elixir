@@ -35,7 +35,7 @@ defmodule Api.QuestionController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = QuestionContext.fetch_paginated(params)
-    render(conn, "index.json", records: records, meta: meta)
+    {:ok, result} = QuestionContext.fetch_paginated(params)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 end
