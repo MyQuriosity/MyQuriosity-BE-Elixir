@@ -3,6 +3,7 @@ defmodule Api.Plug.RequestLogger do
   # TODO: Write proper moduledoc
   """
   use Plug.Builder
+  alias Api.Guardian.Plug, as: GuardianPlug
 
   @doc false
   @spec init(map()) :: map()
@@ -11,7 +12,7 @@ defmodule Api.Plug.RequestLogger do
   @doc false
   @spec call(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def call(conn, _opts) do
-    user = Api.Guardian.Plug.current_resource(conn)
+    user = GuardianPlug.current_resource(conn)
 
     # Setting user context
     Sentry.Context.set_extra_context(%{
