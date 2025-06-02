@@ -6,9 +6,9 @@ defmodule Api.TopicController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = TopicContext.apply_filter(params)
+    {:ok, result} = TopicContext.apply_filter(params)
 
-    render(conn, "index.json", records: records, meta: meta)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -51,8 +51,8 @@ defmodule Api.TopicController do
 
   @spec chapter_topics(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def chapter_topics(conn, %{"id" => id} = params) do
-    {records, meta} = TopicContext.fetch_paginated_chapter_topics(id, params)
+    {:ok, result} = TopicContext.fetch_paginated_chapter_topics(id, params)
 
-    render(conn, "index.json", records: records, meta: meta)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 end

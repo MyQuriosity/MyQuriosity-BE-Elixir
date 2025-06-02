@@ -5,7 +5,7 @@ defmodule Api.Context.ChapterContext do
   import Ecto.Query
 
   alias Api.ChapterFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Chapter
   alias Data.Repo
 
@@ -30,7 +30,7 @@ defmodule Api.Context.ChapterContext do
   def apply_filter(params) do
     params
     |> ChapterFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec fetch_active_paginated(map()) :: {list(Chapter.t()), map()}
@@ -38,7 +38,7 @@ defmodule Api.Context.ChapterContext do
     base_query()
     |> where([s], is_nil(s.deactivated_at))
     |> preload(subject: :grade)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec deactivate(Chapter.t()) ::
@@ -59,7 +59,7 @@ defmodule Api.Context.ChapterContext do
   def fetch_paginated_subject_chapters(subject_id, params) do
     Chapter
     |> where([s], s.subject_id == ^subject_id)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec update(Chapter.t(), map()) ::

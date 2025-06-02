@@ -5,7 +5,7 @@ defmodule Api.GradeContext do
   import Ecto.Query
 
   alias Api.GradeFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Grade
   alias Data.Repo
 
@@ -46,13 +46,13 @@ defmodule Api.GradeContext do
   def fetch_paginated_grade(grade_id, params) do
     Grade
     |> where([s], s.grade_id == ^grade_id)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   def apply_filter(params) do
     params
     |> GradeFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec update(Grade.t(), map()) ::

@@ -59,7 +59,7 @@ defmodule Api.AuthController do
 
   def setup_password(conn, %{"token" => token} = params) do
     with {:ok, :valid} <- token_valid?(token),
-     {:ok, user} <- AuthContext.verify_and_update_user(params),
+         {:ok, user} <- AuthContext.verify_and_update_user(params),
          {:ok, _record} <- AuthContext.setup_password(user, params) do
       conn
       |> put_view(SharedView)
@@ -254,14 +254,14 @@ defmodule Api.AuthController do
       |> put_resp_header("authorization", "Bearer #{jwt}")
       |> put_resp_header("x-expires", "#{exp}")
 
-    {syllabus_providers, _meta} =
+    {:ok, result} =
       Api.SyllabusProviderContext.fetch_active_paginated(%{})
 
     data = %{
       jwt: jwt,
       user: user,
       exp: exp,
-      syllabus_providers: syllabus_providers
+      syllabus_providers: result.records
     }
 
     render(conn, "login.json", data)
@@ -278,14 +278,14 @@ defmodule Api.AuthController do
       |> put_resp_header("authorization", "Bearer #{jwt}")
       |> put_resp_header("x-expires", "#{exp}")
 
-    {syllabus_providers, _meta} =
+    {:ok, result} =
       Api.SyllabusProviderContext.fetch_active_paginated(%{})
 
     data = %{
       jwt: jwt,
       user: user,
       exp: exp,
-      syllabus_providers: syllabus_providers
+      syllabus_providers: result.records
     }
 
     render(conn, "login.json", data)
