@@ -9,6 +9,7 @@ defmodule Api.Filterable.QuestionFilter do
     filterable: [
       title: "$ILIKE",
       topic_id: "$EQUAL",
+      inserted_at: "*",
       id: "$EQUAL"
     ],
     overrideable: [
@@ -16,8 +17,7 @@ defmodule Api.Filterable.QuestionFilter do
       "grade_id",
       "subject_id",
       "chapter_id",
-      "topic_title",
-      "inserted_at"
+      "topic_title"
     ],
     ignoreable: [
       title: ["%%", nil],
