@@ -1,22 +1,22 @@
 defmodule Api.Filterable.SyllabusProviderFilter do
   @moduledoc """
-    A dynamic filtering module for the `Syllabus Provider` schema using `FatEcto.Dynamics.FatBuildable`.
+    A dynamic filtering module for the `Syllabus Provider` schema using `FatEcto.Query.Dynamics.Buildable`.
   """
-  use FatEcto.Dynamics.FatBuildable,
-    filterable_fields: %{
-      "title" => "$ILIKE",
-      "id" => "$EQUAL",
-      "inserted_at" => "*"
-    },
-    overrideable_fields: [],
-    ignoreable_fields_values: %{
-      "title" => ["%%", nil],
-      "inserted_at" => ["", nil],
-      "id" => ["", nil]
-    }
+  use FatEcto.Query.Dynamics.Buildable,
+    filterable: [
+      title: "$ILIKE",
+      id: "$EQUAL",
+      inserted_at: "*"
+    ],
+    overrideable: [],
+    ignoreable: [
+      title: ["%%", nil],
+      inserted_at: ["", nil],
+      id: ["", nil]
+    ]
 
   @impl true
-  def after_whereable(dynamics) do
+  def after_buildable(dynamics) do
     if dynamics, do: dynamics, else: true
   end
 end

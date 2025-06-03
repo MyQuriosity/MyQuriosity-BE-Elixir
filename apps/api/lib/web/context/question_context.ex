@@ -4,7 +4,7 @@ defmodule Api.QuestionContext do
   """
 
   alias Api.QuestionFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Option
   alias Data.Question
   alias Data.Repo
@@ -249,7 +249,7 @@ defmodule Api.QuestionContext do
   def fetch_paginated(params) do
     params
     |> QuestionFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   defp handle_error(%Postgrex.Error{postgres: %{detail: detail}}), do: {:error, detail}

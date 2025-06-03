@@ -6,9 +6,9 @@ defmodule Api.SubjectController do
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, params) do
-    {records, meta} = SubjectContext.apply_filter(params)
+    {:ok, result} = SubjectContext.apply_filter(params)
 
-    render(conn, "index.json", records: records, meta: meta)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -48,8 +48,8 @@ defmodule Api.SubjectController do
 
   @spec grade_subjects(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def grade_subjects(conn, %{"id" => id} = params) do
-    {records, meta} = SubjectContext.fetch_paginated_grade_subjects(id, params)
+    {:ok, result} = SubjectContext.fetch_paginated_grade_subjects(id, params)
 
-    render(conn, "index.json", records: records, meta: meta)
+    render(conn, "index.json", records: result.records, meta: result.meta)
   end
 end

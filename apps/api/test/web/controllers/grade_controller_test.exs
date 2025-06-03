@@ -82,7 +82,7 @@ defmodule Api.GradeControllerTest do
         |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%a%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => "Primary class",
@@ -102,7 +102,7 @@ defmodule Api.GradeControllerTest do
         |> post("/api/v1/grades/filters", %{"title" => %{"$ILIKE" => "%primary%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0},
+               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total" => 0},
                "records" => []
              } ==
                json_response(resp, 200)
@@ -123,7 +123,7 @@ defmodule Api.GradeControllerTest do
         })
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => "Primary class",

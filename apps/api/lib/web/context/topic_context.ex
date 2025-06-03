@@ -5,7 +5,7 @@ defmodule Api.TopicContext do
   import Ecto.Query
 
   alias Api.TopicFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Repo
   alias Data.Topic
 
@@ -32,14 +32,14 @@ defmodule Api.TopicContext do
     base_query()
     |> where([s], is_nil(s.deactivated_at))
     |> preload(chapter: [subject: :grade])
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec apply_filter(map()) :: {list(Topic.t()), map()}
   def apply_filter(params) do
     params
     |> TopicFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec deactivate(Topic.t()) ::
@@ -60,7 +60,7 @@ defmodule Api.TopicContext do
   def fetch_paginated_chapter_topics(chapter_id, params) do
     Topic
     |> where([s], s.chapter_id == ^chapter_id)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec update(Topic.t(), map()) ::

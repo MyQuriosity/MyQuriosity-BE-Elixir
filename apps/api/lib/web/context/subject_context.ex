@@ -5,7 +5,7 @@ defmodule Api.SubjectContext do
   import Ecto.Query
 
   alias Api.SubjectFilterContext
-  alias Api.Utils.PaginationUtils
+  alias Api.Utils.PaginationV2Utils
   alias Data.Repo
   alias Data.Subject
 
@@ -46,7 +46,7 @@ defmodule Api.SubjectContext do
   def apply_filter(params) do
     params
     |> SubjectFilterContext.filtered_query()
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec fetch_active_paginated(map()) :: {list(Subject.t()), map()}
@@ -54,7 +54,7 @@ defmodule Api.SubjectContext do
     Subject
     |> where([s], is_nil(s.deactivated_at))
     |> preload(:grade)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec deactivate(Subject.t()) ::
@@ -76,7 +76,7 @@ defmodule Api.SubjectContext do
   def fetch_paginated_grade_subjects(grade_id, params) do
     Subject
     |> where([s], s.grade_id == ^grade_id)
-    |> PaginationUtils.paginate(params)
+    |> PaginationV2Utils.paginated(params)
   end
 
   @spec update(Subject.t(), map()) ::

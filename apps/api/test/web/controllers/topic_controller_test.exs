@@ -104,7 +104,7 @@ defmodule Api.TopicControllerTest do
         |> post("/api/v1/topics/filters", %{"title" => %{"$ILIKE" => "%hood%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => nil,
@@ -149,7 +149,7 @@ defmodule Api.TopicControllerTest do
         |> post("/api/v1/topics/filters", %{"title" => %{"$ILIKE" => "%primary%"}})
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total_records" => 0},
+               "meta" => %{"limit" => 10, "pages" => 0, "skip" => 0, "total" => 0},
                "records" => []
              } ==
                json_response(resp, 200)
@@ -176,7 +176,7 @@ defmodule Api.TopicControllerTest do
         })
 
       assert %{
-               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total_records" => 1},
+               "meta" => %{"limit" => 10, "pages" => 1, "skip" => 0, "total" => 1},
                "records" => [
                  %{
                    "description" => nil,

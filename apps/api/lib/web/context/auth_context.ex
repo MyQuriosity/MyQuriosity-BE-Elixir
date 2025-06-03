@@ -23,10 +23,12 @@ defmodule Api.AuthContext do
 
   defp do_update_user(%User{email_verified_at: nil} = user, params) do
     email_verified_at = DateTime.utc_now()
+
     params =
-    params
-    |> Map.put("email_verified_at", email_verified_at)
-    |> Map.put("email_verify_token", "")
+      params
+      |> Map.put("email_verified_at", email_verified_at)
+      |> Map.put("email_verify_token", "")
+
     UserContext.update(user, params)
   end
 
