@@ -8,7 +8,10 @@ defmodule Api.QuestionFilterContext do
   alias Data.Question
 
   def filtered_query(params) do
+    IO.inspect(params, label: "params")
     dynamics = QuestionFilter.build(params)
+
+    IO.inspect(inspect(dynamics), label: "dynamics")
 
     query =
       Question
