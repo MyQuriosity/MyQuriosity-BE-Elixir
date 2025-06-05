@@ -11,16 +11,16 @@ defmodule Api.QuestionContext do
   alias Ecto.Multi
   import Ecto.Query
 
-  @spec create_quiz_with_questions_and_options(list(), String.t()) :: any()
-  def create_quiz_with_questions_and_options(params_list, topic_id) do
-    case check_duplicate_questions(params_list) do
-      [] -> insert_questions_transaction(params_list, topic_id)
+  @spec create_quiz_with_questions_and_options(list()) :: any()
+  def create_quiz_with_questions_and_options(%{"questions" => questions_params} = params) do
+    case check_duplicate_questions(questions_params) do
+      [] -> insert_questions_transaction(questions_params, params)
       errors -> {:error, errors}
     end
   end
 
-  defp insert_questions_transaction(params_list, topic_id) do
-    multi = create_question_multi(params_list, topic_id)
+  defp insert_questions_transaction(params_list, params) do
+    multi = create_question_multi(params_list, params)
 
     case Repo.transaction(multi) do
       {:ok, result} ->
@@ -39,21 +39,46 @@ defmodule Api.QuestionContext do
     [%{question_number: question_number, error: msg}]
   end
 
-  defp create_question_multi(params_list, topic_id) do
-    Enum.reduce(params_list, Multi.new(), fn %{"question_number" => number} = params, multi_acc ->
+  defp create_question_multi(params_list, params) do
+    Enum.reduce(params_list, Multi.new(), fn %{"question_number" => number} = question_params,
+                                             multi_acc ->
       question_key = {:question, number}
       options_key = {:options, number}
+      updated_question_params = put_params_multilevel(question_params, params)
+      question_changeset = Question.insertion_changeset(%Question{}, updated_question_params)
 
-      params = Map.put(params, "topic_id", topic_id)
-      question_changeset = Question.insertion_changeset(%Question{}, params)
+      current_question_options_and_answers = %{
+        "options" => question_params["options"],
+        "answers" => question_params["answers"]
+      }
 
       multi_acc
       |> Multi.insert(question_key, question_changeset)
       |> Multi.run(options_key, fn repo, changes ->
-        insert_options(repo, changes, question_key, params)
+        insert_options(repo, changes, question_key, current_question_options_and_answers)
       end)
     end)
   end
+
+  defp put_params_multilevel(question_params, %{"chapter_id" => chapter_id} = params) do
+    new_params = Map.put(question_params, "chapter_id", chapter_id)
+    {_val, remaining_params} = Map.pop(params, "chapter_id")
+    put_params_multilevel(new_params, remaining_params)
+  end
+
+  defp put_params_multilevel(question_params, %{"topic_id" => topic_id} = params) do
+    new_params = Map.put(question_params, "topic_id", topic_id)
+    {_val, remaining_params} = Map.pop(params, "topic_id")
+    put_params_multilevel(new_params, remaining_params)
+  end
+
+  defp put_params_multilevel(question_params, %{"subject_id" => subject_id} = params) do
+    new_params = Map.put(question_params, "subject_id", subject_id)
+    {_val, remaining_params} = Map.pop(params, "subject_id")
+    put_params_multilevel(new_params, remaining_params)
+  end
+
+  defp put_params_multilevel(question_params, _), do: question_params
 
   defp insert_options(repo, changes, question_key, %{"options" => options, "answers" => answers}) do
     question = Map.fetch!(changes, question_key)
