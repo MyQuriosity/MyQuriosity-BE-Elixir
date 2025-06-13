@@ -38,8 +38,8 @@ defmodule Data.Question do
   def changeset(%__MODULE__{} = question, params) do
     question
     |> cast(params, [:title, :topic_id, :chapter_id, :subject_id, :deactivated_at])
-    |> validate_required([:title])
-    |> validate_question_relation()
+    |> validate_required([:title, :subject_id])
+    |> validate_question()
     |> validate_length(:title, max: 255)
     |> foreign_key_constraint(:topic_id)
     |> unique_constraint([:topic_id, :title],
@@ -59,8 +59,8 @@ defmodule Data.Question do
   def insertion_changeset(%__MODULE__{} = question, params) do
     question
     |> cast(params, [:title, :topic_id, :chapter_id, :subject_id, :deactivated_at])
-    |> validate_required([:title])
-    |> validate_question_relation()
+    |> validate_required([:title, :subject_id])
+    |> validate_question()
     |> validate_length(:title, max: 255)
     |> foreign_key_constraint(:topic_id)
     |> unique_constraint([:topic_id, :title],
@@ -110,13 +110,14 @@ defmodule Data.Question do
     end
   end
 
-  defp validate_question_relation(changeset) do
-    if Enum.any?([:topic_id, :subject_id, :chapter_id], fn field ->
-         not is_nil(get_field(changeset, field))
-       end) do
-      changeset
+  defp validate_question(changeset) do
+    topic_id = get_field(changeset, :topic_id)
+    chapter_id = get_field(changeset, :chapter_id)
+
+    if topic_id && is_nil(chapter_id) do
+      add_error(changeset, :chapter_id, "chapter must be present when topic is selected")
     else
-      add_error(changeset, :base, "At least one of topic, subject, or chapter must be selected")
+      changeset
     end
   end
 end

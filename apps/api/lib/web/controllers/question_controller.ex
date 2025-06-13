@@ -4,7 +4,7 @@ defmodule Api.QuestionController do
   alias Api.QuestionContext
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"questions" => _} = params) do
+  def create(conn, %{"questions" => questions} = params) when length(questions) > 0 do
     with {:ok, _} <-
            QuestionContext.create_quiz_with_questions_and_options(params) do
       conn

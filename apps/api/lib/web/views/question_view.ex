@@ -1,4 +1,6 @@
 defmodule Api.QuestionView do
+  alias Api.ChapterView
+  alias Api.SubjectView
   alias Api.TopicView
   use MyQuriosityWeb, :view
 
@@ -15,6 +17,12 @@ defmodule Api.QuestionView do
       title: question.title,
       topic_id: question.topic_id,
       deactivated_at: question.deactivated_at,
+      subject:
+        (Ecto.assoc_loaded?(question.subject) &&
+           render_one(question.subject, SubjectView, "show.json", as: :subject)) || nil,
+      chapter:
+        (Ecto.assoc_loaded?(question.chapter) &&
+           render_one(question.chapter, ChapterView, "show.json", as: :chapter)) || nil,
       topic:
         (Ecto.assoc_loaded?(question.topic) &&
            render_one(question.topic, TopicView, "show.json", as: :topic)) || nil,

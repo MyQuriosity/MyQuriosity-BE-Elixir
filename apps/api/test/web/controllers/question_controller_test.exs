@@ -15,10 +15,10 @@ defmodule Api.QuestionControllerTest do
       :create_topic
     ]
 
-    test "Returns created message", %{conn: conn, topic: topic} do
+    test "Returns created message", %{conn: conn, subject: subject} do
       resp =
         post(conn, "/api/v1/generate_quiz", %{
-          "topic_id" => topic.id,
+          "subject_id" => subject.id,
           "questions" => [
             %{
               "question_number" => 1,
@@ -38,6 +38,95 @@ defmodule Api.QuestionControllerTest do
         })
 
       assert %{"message" => "Quiz created successfully"} == json_response(resp, 201)
+    end
+
+    test "Returns created message without answers", %{conn: conn, subject: subject} do
+      resp =
+        post(conn, "/api/v1/generate_quiz", %{
+          "subject_id" => subject.id,
+          "questions" => [
+            %{
+              "question_number" => 1,
+              "title" => "What is the primary purpose of narow growth in crystal formation?",
+              "options" => %{
+                "A" => "Random arrangement of atoms",
+                "B" => "Controlled directional growth",
+                "C" => "Rapid uncontrolled growth",
+                "D" => "Spherical expansion"
+              },
+              "answers" => []
+            }
+          ]
+        })
+
+      assert %{"message" => "Quiz created successfully"} == json_response(resp, 201)
+    end
+
+    test "Returns created message with chapter and topic", %{
+      conn: conn,
+      subject: subject,
+      chapter: chapter,
+      topic: topic
+    } do
+      resp =
+        post(conn, "/api/v1/generate_quiz", %{
+          "subject_id" => subject.id,
+          "chapter_id" => chapter.id,
+          "topic_id" => topic.id,
+          "questions" => [
+            %{
+              "question_number" => 1,
+              "title" => "What is the primary purpose of narow growth in crystal formation?",
+              "options" => %{
+                "A" => "Random arrangement of atoms",
+                "B" => "Controlled directional growth",
+                "C" => "Rapid uncontrolled growth",
+                "D" => "Spherical expansion"
+              },
+              "answers" => []
+            }
+          ]
+        })
+
+      assert %{"message" => "Quiz created successfully"} == json_response(resp, 201)
+    end
+
+    test "Returns error without chapter and with topic", %{
+      conn: conn,
+      subject: subject,
+      topic: topic
+    } do
+      resp =
+        post(conn, "/api/v1/generate_quiz", %{
+          "subject_id" => subject.id,
+          "topic_id" => topic.id,
+          "questions" => [
+            %{
+              "question_number" => 1,
+              "title" => "What is the primary purpose of narrow growth in crystal formation?",
+              "options" => %{
+                "A" => "Random arrangement of atoms",
+                "B" => "Controlled directional growth",
+                "C" => "Rapid uncontrolled growth",
+                "D" => "Spherical expansion"
+              },
+              "answers" => []
+            }
+          ]
+        })
+
+      assert %{
+               "error" => %{
+                 "code" => 422,
+                 "errors" => [
+                   %{
+                     "error" => "chapter must be present when topic is selected",
+                     "field" => "chapter_id",
+                     "question_number" => 1
+                   }
+                 ]
+               }
+             } = json_response(resp, 422)
     end
 
     test "Return error without title", %{conn: conn} do
@@ -115,28 +204,30 @@ defmodule Api.QuestionControllerTest do
                    "id" => question.id,
                    "title" =>
                      "Which of the following elements has the highest electronegativity?",
-                   "topic" => %{
-                     "chapter" => %{
-                       "description" => nil,
-                       "id" => chapter.id,
-                       "number" => 1,
-                       "subject" => %{
-                         "color" => "primary-purple",
-                         "course_code" => "Eng",
-                         "grade" => %{
-                           "description" => "Primary class",
-                           "id" => grade.id,
-                           "syllabus_provider" => nil,
-                           "syllabus_provider_id" => syllabus_provider.id,
-                           "title" => "Grade 1"
-                         },
-                         "grade_id" => grade.id,
-                         "id" => subject.id,
-                         "title" => "English"
-                       },
-                       "subject_id" => subject.id,
-                       "title" => "Short Tales"
+                   "subject" => %{
+                     "color" => "primary-purple",
+                     "course_code" => "Eng",
+                     "grade" => %{
+                       "description" => "Primary class",
+                       "id" => grade.id,
+                       "syllabus_provider" => nil,
+                       "syllabus_provider_id" => syllabus_provider.id,
+                       "title" => "Grade 1"
                      },
+                     "grade_id" => grade.id,
+                     "id" => subject.id,
+                     "title" => "English"
+                   },
+                   "chapter" => %{
+                     "description" => nil,
+                     "id" => chapter.id,
+                     "number" => 1,
+                     "subject" => nil,
+                     "subject_id" => subject.id,
+                     "title" => "Short Tales"
+                   },
+                   "topic" => %{
+                     "chapter" => nil,
                      "chapter_id" => chapter.id,
                      "description" => nil,
                      "number" => 1,
@@ -166,16 +257,14 @@ defmodule Api.QuestionControllerTest do
 
     test "filter quiz with inserted_at", %{
       conn: conn,
-      chapter: chapter,
       grade: grade,
       subject: subject,
-      topic: topic,
       syllabus_provider: syllabus_provider
     } do
       question_2 =
         insert(:question,
           title: "What is the primary purpose of narow growth in crystal formation?",
-          topic_id: topic.id,
+          subject_id: subject.id,
           inserted_at: DateTime.add(DateTime.utc_now(), 2, :day)
         )
 
@@ -191,35 +280,23 @@ defmodule Api.QuestionControllerTest do
                  %{
                    "id" => question_2.id,
                    "title" => "What is the primary purpose of narow growth in crystal formation?",
-                   "topic" => %{
-                     "chapter" => %{
-                       "description" => nil,
-                       "id" => chapter.id,
-                       "number" => 1,
-                       "subject" => %{
-                         "color" => "primary-purple",
-                         "course_code" => "Eng",
-                         "grade" => %{
-                           "description" => "Primary class",
-                           "id" => grade.id,
-                           "syllabus_provider" => nil,
-                           "syllabus_provider_id" => syllabus_provider.id,
-                           "title" => "Grade 1"
-                         },
-                         "grade_id" => grade.id,
-                         "id" => subject.id,
-                         "title" => "English"
-                       },
-                       "subject_id" => subject.id,
-                       "title" => "Short Tales"
+                   "subject" => %{
+                     "color" => "primary-purple",
+                     "course_code" => "Eng",
+                     "grade" => %{
+                       "description" => "Primary class",
+                       "id" => grade.id,
+                       "syllabus_provider" => nil,
+                       "syllabus_provider_id" => syllabus_provider.id,
+                       "title" => "Grade 1"
                      },
-                     "chapter_id" => chapter.id,
-                     "description" => nil,
-                     "number" => 1,
-                     "id" => topic.id,
-                     "title" => "The Riding Hood"
+                     "grade_id" => grade.id,
+                     "id" => subject.id,
+                     "title" => "English"
                    },
-                   "topic_id" => topic.id,
+                   "chapter" => nil,
+                   "topic" => nil,
+                   "topic_id" => nil,
                    "options" => [],
                    "deactivated_at" => nil
                  }
@@ -242,6 +319,8 @@ defmodule Api.QuestionControllerTest do
      question:
        insert(:question, %{
          topic_id: context.topic.id,
+         subject_id: context.subject.id,
+         chapter_id: context.chapter.id,
          title: "Which of the following elements has the highest electronegativity?"
        })}
   end

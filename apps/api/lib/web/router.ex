@@ -28,7 +28,6 @@ defmodule Api.Router do
     post("/signup", AuthController, :signup)
     post("/resend_email", AuthController, :resend_email)
     post("/setup_password", AuthController, :setup_password)
-    post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/login", AuthController, :login)
     post("/forgot_password_pre_info", AuthController, :forgot_password_pre_info)
     post("/forgot_password", AuthController, :forgot_password)
@@ -36,7 +35,7 @@ defmodule Api.Router do
   end
 
   scope "/api/v1", Api do
-    pipe_through [:api, :validate_uuid, :token_auth, :syllabus_provider_filter]
+    pipe_through [:api, :validate_uuid, :syllabus_provider_filter]
     post("/syllabus_providers/filters", SyllabusProviderController, :index)
     post("/grades/filters", GradeController, :index)
     post("/subjects/filters", SubjectController, :index)
