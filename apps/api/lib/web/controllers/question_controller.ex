@@ -4,13 +4,9 @@ defmodule Api.QuestionController do
   alias Api.QuestionContext
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"questions" => questions_params, "topic_id" => topic_id}) do
-    # with {:ok, _} <- QuestionContext.validate_quiz_payload?(questions_params),
+  def create(conn, %{"questions" => questions} = params) when length(questions) > 0 do
     with {:ok, _} <-
-           QuestionContext.create_quiz_with_questions_and_options(
-             questions_params,
-             topic_id
-           ) do
+           QuestionContext.create_quiz_with_questions_and_options(params) do
       conn
       |> put_status(:created)
       |> json(%{message: "Quiz created successfully"})

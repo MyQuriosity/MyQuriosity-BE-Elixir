@@ -10,13 +10,13 @@ defmodule Api.Filterable.QuestionFilter do
       title: "$ILIKE",
       topic_id: "$EQUAL",
       inserted_at: "*",
-      id: "$EQUAL"
+      id: "$EQUAL",
+      subject_id: "$EQUAL",
+      chapter_id: "$EQUAL"
     ],
     overrideable: [
       "syllabus_provider_id",
       "grade_id",
-      "subject_id",
-      "chapter_id",
       "topic_title"
     ],
     ignoreable: [
@@ -41,14 +41,6 @@ defmodule Api.Filterable.QuestionFilter do
 
   def override_buildable("grade_id", "$EQUAL", value) do
     dynamic([grade: grade], grade.id == ^value)
-  end
-
-  def override_buildable("subject_id", "$EQUAL", value) do
-    dynamic([subject: subject], subject.id == ^value)
-  end
-
-  def override_buildable("chapter_id", "$EQUAL", value) do
-    dynamic([chapter: chapter], chapter.id == ^value)
   end
 
   def override_buildable("topic_title", "$ILIKE", value) do
